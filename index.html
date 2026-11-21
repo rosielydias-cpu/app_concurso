@@ -1477,6 +1477,926 @@ questions: [
       return { topics:topics, cards:cards, questions:questions };
     })();
 
+    /* ===== Conhecimentos Básicos de Perito (edital 2025) — mesmo formato por tópico ===== */
+    var BASICOS = (function(){
+      var topics = [], cards = [], questions = [];
+      var n = {};
+      function T(id, name){ topics.push({ id:id, node:id.split('-')[0], name:name }); }
+      function C(t, front, back, more, tip){
+        n[t] = (n[t] || 0) + 1;
+        cards.push({ id:'b-' + t + '-' + n[t], syllabusId:t.split('-')[0], topic:t, front:front, back:back, more:more, tip:tip });
+      }
+      function Q(t, obj){
+        n['q' + t] = (n['q' + t] || 0) + 1;
+        obj.id = obj.type + '-' + t + '-' + n['q' + t];
+        obj.syllabusId = t.split('-')[0];
+        obj.topic = t;
+        questions.push(obj);
+      }
+      function MC(t, stem, options, answer, explanation){ Q(t, { type:'mc', stem:stem, options:options, answer:answer, explanation:explanation }); }
+      function CLZ(t, stem, options, answer, explanation){ Q(t, { type:'cloze', stem:stem, options:options, answer:answer, explanation:explanation }); }
+      function ORD(t, stem, items, explanation){ Q(t, { type:'order', stem:stem, items:items, explanation:explanation }); }
+
+      /* ---------- Língua Portuguesa e Redação Oficial ---------- */
+      T('pt-int', 'Interpretação, tipologia e reescrita');
+      C('pt-int', 'Quais são os tipos textuais e como reconhecê-los?',
+        'Narrativo (fatos no tempo, com personagens), descritivo (características), dissertativo-argumentativo (defende uma tese), expositivo (explica e informa sem defender tese) e injuntivo (instrui, com verbos no imperativo).',
+        'Os tipos são poucos e estáveis; os gêneros são muitos e definidos pela função social (notícia, editorial, artigo científico, receita, ofício). Um mesmo gênero mistura tipos, e a banca pergunta qual predomina. O texto sobre inteligência artificial da prova de 2025 foi considerado predominantemente expositivo.',
+        'Item 1 de 2025 (tipologia expositiva majoritária) é CERTO. Expor é informar; argumentar é defender um ponto de vista.');
+      C('pt-int', 'Qual a diferença entre compreender e interpretar um texto?',
+        'Compreender é identificar o que está dito explicitamente; interpretar é deduzir o que está implícito (pressupostos e subentendidos).',
+        'Pressuposto é a informação implícita marcada por palavras do texto ("ele parou de fumar" pressupõe que fumava). Subentendido depende do contexto e da intenção. A Cebraspe pergunta se a afirmação "decorre do texto", "está de acordo com as ideias" ou "extrapola" o que foi dito.',
+        'Desconfie de afirmações absolutas ("sempre", "todos", "apenas") que o texto não sustenta: costumam extrapolar.');
+      C('pt-int', 'O que a banca cobra em significação das palavras?',
+        'Sinônimos, antônimos, homônimos, parônimos, sentido literal (denotativo) e figurado (conotativo) e o sentido da palavra no contexto.',
+        'Parônimos são palavras parecidas com sentidos diferentes: descrição/discrição, eminente/iminente, ratificar/retificar. Homônimos têm a mesma grafia ou som: sessão/seção/cessão. Na reescrita, o sinônimo precisa caber no contexto e manter a correção.',
+        'Iminente = prestes a acontecer; eminente = ilustre. Retificar = corrigir; ratificar = confirmar.');
+      C('pt-int', 'Como a Cebraspe cobra a reescrita de trechos?',
+        'Propõe trocar palavras, reorganizar orações ou mudar a pontuação e pergunta se a nova versão mantém a correção gramatical e o sentido original.',
+        'São duas verificações independentes: a reescrita está gramaticalmente correta? O sentido foi preservado? O item pode estar errado por um só desses critérios. Trocar a voz verbal, o conectivo ou o tempo verbal costuma alterar o sentido.',
+        'Item 8 de 2025: a reescrita manteria a correção mas prejudicaria o sentido, e o gabarito foi CERTO. Leia sempre as duas condições.');
+      MC('pt-int', 'Um texto que explica o funcionamento da inteligência artificial, com conceitos e dados, sem defender uma tese, é predominantemente:',
+        ['Expositivo', 'Narrativo', 'Injuntivo', 'Descritivo', 'Dissertativo-argumentativo'], 0,
+        'Ele informa e explica sem defender um ponto de vista: é expositivo.');
+      CLZ('pt-int', 'O perigo era ___: estava prestes a acontecer.',
+        ['iminente', 'eminente', 'emitente', 'imanente'], 0,
+        'Iminente = que está para acontecer. Eminente = ilustre, elevado.');
+
+      T('pt-coe', 'Coesão, conectores e tempos verbais');
+      C('pt-coe', 'O que é coesão referencial?',
+        'É a retomada ou a antecipação de elementos do texto por pronomes, sinônimos, expressões nominais ou elipse, evitando repetições.',
+        'Anáfora retoma o que já foi dito ("Os peritos chegaram. Eles..."); catáfora antecipa ("Disse apenas isto: ..."). Expressões como "esses programas" e "esse desenvolvimento" retomam ideias anteriores e contribuem para a coesão (item 6 de 2025, CERTO). Referência ambígua é um erro comum.',
+        'Em regra, "este" anuncia o que vem a seguir e "esse" retoma o que já foi dito.');
+      C('pt-coe', 'Quais as principais relações expressas pelos conectores?',
+        'Adição (e, além disso), oposição (mas, porém, contudo, no entanto), concessão (embora, ainda que, apesar de), causa (porque, já que, visto que), consequência (de modo que, tanto que), conclusão (logo, portanto), condição (se, caso), finalidade (para que, a fim de que) e proporção (à medida que).',
+        'Trocar um conector por outro da mesma relação mantém o sentido (porém ↔ contudo); de relação diferente, altera. "À medida que" indica proporção; "na medida em que", causa. A concessiva admite um fato contrário que não impede a ideia principal.',
+        '"À medida que" (proporção) ≠ "na medida em que" (causa).');
+      C('pt-coe', 'Como os tempos e modos verbais contribuem para a coesão?',
+        'O indicativo expressa certeza; o subjuntivo, hipótese ou desejo; o imperativo, ordem. A correlação entre os tempos mantém a lógica temporal do texto.',
+        'Correlações típicas: "Se eu tivesse tempo, estudaria" (imperfeito do subjuntivo + futuro do pretérito); "Quando eu tiver tempo, estudarei" (futuro do subjuntivo + futuro do presente). O acento diferencial marca o plural de ter e vir: ele tem / eles têm.',
+        'Item 3 de 2025: o sujeito era singular ("o rápido desenvolvimento"), então trocar "tem" por "têm" prejudicaria a correção. Gabarito CERTO.');
+      C('pt-coe', 'Qual a diferença entre coesão e coerência?',
+        'Coerência é a lógica do sentido global (ideias sem contradição e com progressão); coesão é a ligação gramatical entre as partes (conectores e retomadas).',
+        'Um texto pode ser coeso e incoerente (bem conectado, mas contraditório) ou coerente com pouca coesão explícita. A progressão exige retomar o que já foi dito e acrescentar informação nova. Expressões como "em seguida" e "por fim" fazem a coesão sequencial.',
+        'Conector trocado por outro de sentido diferente pode manter a gramática e quebrar a coerência.');
+      MC('pt-coe', 'Qual conector mantém o sentido de "porém" em "O exame foi rápido, porém inconclusivo"?',
+        ['contudo', 'portanto', 'porque', 'à medida que', 'logo'], 0,
+        '"Contudo" também é adversativo. "Portanto" e "logo" são conclusivos; "porque" é causal; "à medida que" é proporcional.');
+      CLZ('pt-coe', '___ chovesse muito, a equipe preservou o local. (relação de concessão)',
+        ['Embora', 'Porque', 'Portanto', 'Assim que'], 0,
+        '"Embora" introduz concessão e pede o verbo no subjuntivo.');
+
+      T('pt-sin', 'Sintaxe do período e pontuação');
+      C('pt-sin', 'Quais são os tipos de orações coordenadas?',
+        'Aditivas (e, nem), adversativas (mas, porém), alternativas (ou... ou), conclusivas (logo, portanto) e explicativas (pois antes do verbo, porque).',
+        'Coordenadas são sintaticamente independentes. As sindéticas têm conjunção; as assindéticas, não ("Cheguei, vi, venci"). O "pois" é explicativo antes do verbo e conclusivo depois do verbo, entre vírgulas ("Estudou; foi, pois, aprovado").',
+        '"Pois" deslocado, depois do verbo, é conclusivo.');
+      C('pt-sin', 'Quais são os tipos de orações subordinadas?',
+        'Substantivas (funcionam como sujeito, objeto, complemento nominal, predicativo ou aposto), adjetivas (restritivas ou explicativas) e adverbiais (causa, condição, concessão, finalidade, tempo, consequência, comparação, conformidade, proporção).',
+        'Substantivas costumam começar por "que" ou "se" integrantes. Adjetivas, por pronomes relativos (que, o qual, cujo, onde). Em "é necessário desenvolver ferramentas", a oração "desenvolver ferramentas" é o sujeito de "é necessário".',
+        'Item 4 de 2025 chamou essa oração de "complemento do adjetivo": ERRADO. É oração subordinada substantiva subjetiva.');
+      C('pt-sin', 'Qual a diferença entre oração adjetiva restritiva e explicativa?',
+        'A restritiva delimita o termo e não tem vírgulas ("Os peritos que estavam no local"); a explicativa acrescenta informação sobre todo o termo e vem entre vírgulas ("Os peritos, que estavam no local, ...").',
+        'Pôr ou tirar as vírgulas muda o sentido: com vírgulas, todos os peritos estavam no local; sem elas, apenas uma parte. É um item clássico de reescrita da Cebraspe.',
+        'Retirar as vírgulas de uma adjetiva explicativa mantém a gramática, mas MUDA o sentido.');
+      C('pt-sin', 'Quais as principais regras de uso da vírgula?',
+        'Não se separa sujeito de verbo nem verbo de complemento. Usa-se vírgula em adjunto adverbial deslocado (facultativa se curto), aposto, vocativo, oração explicativa, termos intercalados e orações coordenadas com sujeitos diferentes ligadas por "e".',
+        'A vírgula também separa itens de enumeração e marca a omissão do verbo ("Ele estudou Direito; ela, Farmácia"). Termos intercalados exigem vírgula dos dois lados: tirar só uma delas gera erro.',
+        'Item 7 de 2025: retirar a vírgula depois do "e", que abria uma intercalação, prejudicaria a correção. Gabarito ERRADO para "seria preservada".');
+      MC('pt-sin', 'Em "Os servidores, que fizeram o curso, foram promovidos", retirar as vírgulas:',
+        ['Muda o sentido: passa a indicar que só parte dos servidores foi promovida', 'Mantém o sentido original', 'Torna a frase gramaticalmente incorreta', 'Transforma a oração em adverbial', 'Exige o uso de crase'], 0,
+        'Sem vírgulas, a oração fica restritiva: só os servidores que fizeram o curso foram promovidos.');
+
+      T('pt-con', 'Concordância e regência');
+      C('pt-con', 'Quais as regras de concordância verbal mais cobradas?',
+        'O verbo concorda com o sujeito em número e pessoa, esteja ele antes ou depois do verbo. "Haver" com sentido de existir e "fazer" indicando tempo são impessoais (ficam no singular).',
+        'Exemplos: "Havia muitos vestígios"; "Faz dez anos". Com "se" apassivador, o verbo concorda com o sujeito ("Vendem-se casas"); com "se" de indeterminação, fica no singular ("Precisa-se de peritos"). Sujeito composto antes do verbo leva o verbo ao plural.',
+        '"Existir" é pessoal: "Existiam muitos vestígios". "Haver" é impessoal: "Havia muitos vestígios".');
+      C('pt-con', 'Quais as regras de concordância nominal mais cobradas?',
+        'O adjetivo concorda com o substantivo. "Anexo", "incluso", "obrigado", "mesmo" e "quite" variam; "menos" e "alerta" são invariáveis; "é proibido / é necessário / é bom" ficam invariáveis quando o substantivo não tem determinante.',
+        'Exemplos: "Seguem anexas as cópias"; "Ela disse: obrigada"; "É proibido entrada", mas "É proibida a entrada". "Meio" como advérbio (= um pouco) não varia ("meio cansada"); como numeral, varia ("meia hora").',
+        '"Menas" não existe: "menos" é sempre invariável.');
+      C('pt-con', 'Quais os casos clássicos de regência verbal?',
+        'Assistir (ver) a; visar (ter como objetivo) a; aspirar (desejar) a; obedecer a; implicar (acarretar) algo, sem preposição; preferir uma coisa a outra.',
+        'Assistir no sentido de ajudar é transitivo direto ("assistir o paciente"). Visar no sentido de mirar ou dar visto também ("visar o passaporte"). Chegar e ir regem "a" ("chegar ao local"). Lembrar e esquecer pedem "de" quando pronominais ("lembrar-se de").',
+        '"Preferir mais... do que" é erro: prefere-se uma coisa A outra.');
+      C('pt-con', 'O que é regência nominal e como aparece em reescritas?',
+        'É a preposição exigida por substantivos e adjetivos: apto a/para, favorável a, acessível a, compatível com, residente em, situado em.',
+        'Quando o complemento é uma oração com pronome relativo, a preposição vem antes do relativo: "o cargo a que aspiro", "a norma de que precisamos", "o laboratório em que trabalho". É um ponto muito cobrado.',
+        '"A lei que precisamos" está errado; o correto é "a lei de que precisamos".');
+      MC('pt-con', 'Assinale a frase correta quanto à concordância:',
+        ['Havia muitos vestígios no local.', 'Haviam muitos vestígios no local.', 'Existia muitos vestígios no local.', 'Fazem dez anos que o crime ocorreu.', 'Precisam-se de peritos.'], 0,
+        '"Haver" no sentido de existir e "fazer" indicando tempo são impessoais; "existir" concorda; com "se" indeterminador o verbo fica no singular.');
+      CLZ('pt-con', 'Os peritos assistiram ___ reconstituição do crime.',
+        ['à', 'a', 'na', 'da'], 0,
+        '"Assistir" no sentido de ver exige a preposição "a", que se funde com o artigo "a": à reconstituição.');
+
+      T('pt-cra', 'Crase e colocação pronominal');
+      C('pt-cra', 'Quando ocorre a crase?',
+        'Na fusão da preposição "a" com o artigo feminino "a(s)" ou com os pronomes aquele(s), aquela(s), aquilo e a(s) qual(is).',
+        'Teste prático: troque a palavra feminina por uma masculina; se aparecer "ao", há crase ("Fui à praia" → "Fui ao clube"). Locuções femininas levam acento ("às vezes", "à medida que", "à custa de"). Hora determinada: "às 10h".',
+        '"Fui à Bahia" (volto DA Bahia) x "Fui a Brasília" (volto DE Brasília).');
+      C('pt-cra', 'Quando a crase é proibida?',
+        'Antes de palavras masculinas, de verbos, da maioria dos pronomes (pessoais, de tratamento, indefinidos), de artigo indefinido e entre palavras repetidas ("cara a cara").',
+        'Também não há crase antes de "Vossa Excelência", de "uma", e quando o "a" está no singular antes de palavra no plural ("refiro-me a normas"). "Distância" só leva crase se for determinada ("à distância de 10 metros").',
+        '"A" singular antes de palavra no plural é só preposição: "Refiro-me a normas".');
+      C('pt-cra', 'Quando a crase é facultativa?',
+        'Antes de pronome possessivo feminino no singular ("à/a minha equipe"), antes de nome próprio feminino de pessoa ("à/a Maria") e depois de "até" ("até à/a sala").',
+        'A crase é facultativa porque o artigo é opcional nesses casos. No plural, segue-se a regra geral.',
+        'Se a banca perguntar se retirar o acento antes de possessivo "prejudica a correção", a resposta é não.');
+      C('pt-cra', 'Quais as regras de colocação pronominal?',
+        'Próclise (pronome antes do verbo) é obrigatória com palavras atrativas: negação, advérbios, pronomes relativos e indefinidos e conjunções subordinativas. Ênclise (depois do verbo) é a regra no início de frase. Mesóclise, com futuro do presente ou do pretérito sem atrativo.',
+        'Na norma culta não se começa a oração com pronome oblíquo átono ("Me disseram" → "Disseram-me"). Exemplos de próclise: "Não se sabe", "Aqui se trabalha", "O perito que me atendeu". Mesóclise: "Far-se-á a perícia".',
+        'Com particípio não há ênclise: "tinha-se feito" ou "se tinha feito", nunca "feito-se".');
+      MC('pt-cra', 'Em qual frase o acento grave está correto?',
+        ['O laudo foi entregue às 14h.', 'Ele começou à estudar cedo.', 'Refiro-me à Vossa Excelência.', 'Fui à pé até o local.', 'Entregou o material à uma perita.'], 0,
+        'Hora determinada leva crase. Antes de verbo, pronome de tratamento, palavra masculina e artigo indefinido, não.');
+
+      T('pt-red', 'Redação oficial');
+      C('pt-red', 'Quais os atributos da redação oficial?',
+        'Clareza, precisão, objetividade, concisão, coesão e coerência, impessoalidade, formalidade e padronização, com uso da norma padrão.',
+        'O Manual de Redação da Presidência (3ª ed., 2018) afirma que não existe propriamente um "padrão oficial de linguagem": usa-se a norma padrão com formalidade. A impessoalidade decorre do caráter público: o texto fala em nome do órgão, não da pessoa.',
+        'Item 12 de 2025 ("deve ser empregado o padrão oficial de linguagem") está ERRADO.');
+      C('pt-red', 'Como é o padrão ofício na 3ª edição do Manual?',
+        'A 3ª edição unificou ofício, aviso e memorando num só padrão, o ofício, com partes fixas: cabeçalho (só na 1ª página), identificação do expediente, local e data, endereçamento, assunto, texto, fecho, assinatura e numeração de páginas.',
+        'O cabeçalho traz o brasão de Armas da República, o nome do órgão principal e, se for o caso, de órgãos secundários. As páginas são numeradas a partir da segunda. Exposição de motivos e mensagem continuam como expedientes próprios.',
+        'Item 11 de 2025 (cabeçalho em todas as páginas) está ERRADO.');
+      C('pt-red', 'Quais os fechos e os pronomes de tratamento corretos?',
+        'Fechos: "Respeitosamente" para autoridades de hierarquia superior e "Atenciosamente" para a mesma hierarquia ou inferior. Tratamento: "Vossa Excelência" para altas autoridades e "Senhor/Senhora" para as demais.',
+        'O vocativo "Excelentíssimo Senhor" é reservado aos chefes de Poder. O Manual aboliu "Digníssimo", "Ilustríssimo" e "DD". Com pronome de tratamento, verbo e possessivos vão para a 3ª pessoa ("Vossa Excelência sabe que seu..."). Usa-se "Vossa" ao falar com a autoridade e "Sua" ao falar dela.',
+        'Item 9 de 2025 (dois fechos regulados pela hierarquia) é CERTO.');
+      C('pt-red', 'O que é a exposição de motivos?',
+        'É o expediente dirigido ao Presidente ou ao Vice-Presidente da República para informar sobre um assunto, propor uma medida ou submeter projeto de ato normativo.',
+        'Em regra é assinada por Ministro de Estado (ou por vários, se interministerial). Quando submete ato normativo, deve justificar a proposta. A mensagem é o expediente do Presidente para se comunicar com o Congresso.',
+        'Item 10 de 2025 é CERTO.');
+      MC('pt-red', 'Segundo o Manual de Redação (3ª ed.), o cabeçalho com o brasão de Armas da República deve constar:',
+        ['Apenas na primeira página do expediente', 'Em todas as páginas', 'Apenas na última página', 'Somente em expedientes sigilosos', 'Em nenhuma página'], 0,
+        'O cabeçalho vai só na primeira página; as demais trazem numeração.');
+      CLZ('pt-red', 'Dirigindo-se a um Ministro: "Vossa Excelência ___ ciente do prazo."',
+        ['está', 'estais', 'estás', 'estou'], 0,
+        'Pronomes de tratamento levam o verbo para a 3ª pessoa.');
+
+      /* ---------- Informática ---------- */
+      T('inf-hw', 'Hardware, sistemas operacionais e Microsoft 365');
+      C('inf-hw', 'Qual a diferença entre RAM, ROM, armazenamento e processador?',
+        'RAM: memória principal, volátil, guarda o que está em uso. ROM: não volátil, guarda o firmware (BIOS/UEFI). HD/SSD: armazenamento permanente. CPU: executa as instruções.',
+        'A memória cache é pequena e muito rápida, entre a CPU e a RAM. O SSD não tem partes móveis e é mais rápido que o HD. Hardware é a parte física; software são os programas (sistema operacional, aplicativos, firmware).',
+        'Ao desligar o computador, a RAM perde o conteúdo; o SSD não.');
+      C('inf-hw', 'Quais as características do Windows, do Android e do iOS?',
+        'Windows: sistema da Microsoft para computadores, com Explorador de Arquivos e sistema de arquivos NTFS. Android: sistema móvel do Google, baseado em Linux e de código aberto. iOS: sistema móvel fechado da Apple, só para iPhone.',
+        'No Windows, um arquivo pertence a um único volume; o que pode ocupar vários discos é o volume estendido. Atalhos úteis: Win+E (Explorador), Win+L (bloquear a tela), Ctrl+Shift+Esc (Gerenciador de Tarefas). No Android, os apps vêm da Play Store, e é possível permitir outras fontes.',
+        'Item 13 de 2025 (um arquivo distribuído em vários volumes) está ERRADO.');
+      C('inf-hw', 'Para que servem OneDrive, Teams e Outlook no Microsoft 365?',
+        'OneDrive: armazenamento e compartilhamento de arquivos na nuvem. Teams: chat, reuniões e trabalho em equipe. Outlook: e-mail, calendário e contatos.',
+        'Arquivos no OneDrive permitem coautoria em tempo real no Word, Excel e PowerPoint e guardam histórico de versões. No Teams, equipes e canais organizam conversas e arquivos. No Excel, "Rastrear Precedentes" e "Rastrear Dependentes" mostram as células ligadas a uma fórmula.',
+        'Coautoria em tempo real exige o arquivo salvo na nuvem (OneDrive ou SharePoint).');
+      C('inf-hw', 'Quais as funções e referências do Excel mais cobradas?',
+        'SOMA, MÉDIA, MÁXIMO, MÍNIMO, CONT.VALORES, CONT.SE, SOMASE, SE, PROCV/PROCX e referências relativas (A1), absolutas ($A$1) e mistas ($A1, A$1).',
+        'Ao copiar uma fórmula, as referências relativas se ajustam e as absolutas não. Toda fórmula começa com "=". Erros comuns: #DIV/0! (divisão por zero), #N/D (valor não encontrado), #REF! (referência inválida) e #NOME? (função inexistente).',
+        'No Excel em português, os argumentos são separados por ponto e vírgula: =SE(teste; se_verdadeiro; se_falso).');
+      MC('inf-hw', 'Ao desligar o computador, qual memória perde o conteúdo?',
+        ['RAM', 'ROM', 'SSD', 'HD', 'Pendrive'], 0,
+        'A RAM é volátil: depende de energia para manter os dados.');
+      CLZ('inf-hw', 'No Excel, a referência ___ não muda em nenhuma direção quando a fórmula é copiada.',
+        ['$A$1', 'A1', 'A$1', '$A1'], 0,
+        'O cifrão fixa a coluna e/ou a linha; em $A$1, as duas ficam fixas.');
+
+      T('inf-seg', 'Malware e engenharia social');
+      C('inf-seg', 'Quais os principais tipos de malware?',
+        'Vírus (precisa de hospedeiro e de execução), worm (se propaga sozinho pela rede), cavalo de Troia (disfarçado de programa legítimo), spyware (espiona), keylogger (registra as teclas), ransomware (sequestra dados com criptografia) e backdoor (acesso remoto oculto).',
+        'Bots formam redes de máquinas "zumbis" controladas à distância (botnets). Rootkits escondem a presença do invasor. Um cavalo de Troia pode instalar backdoor ou ransomware.',
+        'Worm não precisa de hospedeiro nem de ação do usuário; vírus precisa.');
+      C('inf-seg', 'O que é engenharia social e quais as suas formas?',
+        'É a manipulação psicológica para obter informações ou acesso. Formas: phishing (mensagens falsas), spear phishing (direcionado a alvo específico), smishing (SMS), vishing (voz), baiting (isca, como pendrive infectado) e pretexting (história falsa).',
+        'O phishing imita bancos, órgãos públicos e empresas para roubar senhas ou instalar malware. Sinais de alerta: urgência, links encurtados, remetente estranho e erros de escrita. O baiting explora a curiosidade, como um pendrive "esquecido" no estacionamento.',
+        'Baiting = isca; phishing = mensagem fraudulenta.');
+      C('inf-seg', 'O que é um ataque zero-day?',
+        'É a exploração de uma vulnerabilidade ainda desconhecida pelo fornecedor do software, para a qual não existe correção.',
+        'Antivírus baseados só em assinaturas não o detectam; ferramentas que analisam comportamento, como o EDR, ajudam. A defesa inclui atualizar logo que a correção sai, segmentar a rede e dar a cada usuário apenas os privilégios necessários.',
+        'O item 18 de 2025 foi anulado, mas o conceito é o que a banca cobra.');
+      C('inf-seg', 'Quais os deveres do usuário de serviços de TI?',
+        'Proteger suas credenciais, não compartilhar senhas, bloquear a tela ao sair, usar só software autorizado, manter o sistema atualizado, desconfiar de links e anexos e comunicar incidentes.',
+        'No serviço público, o usuário responde pelo uso dos recursos, conforme a política de segurança da informação e a LGPD. Senhas fortes e únicas, guardadas em gerenciador de senhas, e a autenticação multifator reduzem muito o risco.',
+        'Contra ransomware, a principal defesa é um backup atualizado e isolado (offline).');
+      MC('inf-seg', 'Um programa que se replica sozinho pela rede, sem precisar infectar outro arquivo, é um:',
+        ['Worm', 'Vírus', 'Cavalo de Troia', 'Spyware', 'Keylogger'], 0,
+        'O worm se propaga de forma autônoma; o vírus depende de um arquivo hospedeiro.');
+
+      T('inf-prot', 'Proteção, autenticação e certificação digital');
+      C('inf-prot', 'Qual a diferença entre antivírus, firewall e EDR?',
+        'Antivírus detecta e remove malware nos arquivos. Firewall controla o tráfego de rede, permitindo ou bloqueando conexões. EDR monitora continuamente os dispositivos, detecta comportamentos suspeitos e responde a incidentes.',
+        'O antivírus tradicional usa assinaturas e heurística; o EDR registra eventos (processos, conexões) e permite investigar e isolar a máquina. Anti-spyware é especializado em programas espiões. Firewall pode ser do computador ou da rede.',
+        'Item 17 de 2025: antivírus NÃO controla o tráfego da rede. ERRADO.');
+      C('inf-prot', 'O que é autenticação multifator (MFA)?',
+        'É a combinação de fatores de categorias diferentes: algo que você sabe (senha, PIN), algo que você tem (celular, token) e algo que você é (biometria).',
+        'Duas senhas são o mesmo fator e não formam MFA. Códigos de aplicativo autenticador ou chave física são mais seguros que SMS. A MFA bloqueia a maior parte dos ataques com senhas vazadas.',
+        'Senha + pergunta secreta = um fator só (as duas são "algo que você sabe").');
+      C('inf-prot', 'O que garantem a assinatura e o certificado digital?',
+        'A assinatura digital garante autenticidade (autoria), integridade (não alteração) e não repúdio. O certificado digital, emitido por Autoridade Certificadora (ICP-Brasil), vincula a chave pública ao titular.',
+        'Assina-se com a chave PRIVADA do signatário, sobre o resumo (hash) do documento, e confere-se com a chave PÚBLICA dele. A assinatura não garante sigilo; para isso, cifra-se com a chave pública do destinatário. Certificado A1 fica em arquivo; A3, em token ou cartão.',
+        'Assinatura digital NÃO garante confidencialidade.');
+      C('inf-prot', 'Para que serve um gerenciador de senhas?',
+        'Guarda senhas fortes e diferentes para cada serviço num cofre cifrado, protegido por uma senha mestra (de preferência com MFA).',
+        'Também gera senhas aleatórias e preenche automaticamente só nos sites legítimos, o que ajuda contra phishing. A senha mestra deve ser longa e única.',
+        'Reutilizar a mesma senha em vários serviços é o maior risco depois de um vazamento.');
+      MC('inf-prot', 'Na assinatura digital, o documento é assinado com:',
+        ['A chave privada do signatário', 'A chave pública do signatário', 'A chave pública do destinatário', 'A chave privada do destinatário', 'Uma senha compartilhada'], 0,
+        'Só o titular tem a chave privada, e qualquer pessoa confere com a chave pública dele.');
+      CLZ('inf-prot', 'Senha + código no celular é um exemplo de ___.',
+        ['autenticação multifator', 'criptografia simétrica', 'firewall', 'backup incremental'], 0,
+        'Combina "algo que você sabe" com "algo que você tem".');
+
+      T('inf-net', 'Redes, nuvem e acesso remoto');
+      C('inf-net', 'Quais os tipos de rede por abrangência?',
+        'LAN (local: casa, escritório), MAN (metropolitana: uma cidade) e WAN (longa distância: países; a internet é a maior delas).',
+        'Fala-se também em PAN (pessoal, como o Bluetooth). Intranet é uma rede privada que usa as tecnologias da internet, com acesso restrito; extranet é a parte da intranet aberta a parceiros autorizados.',
+        'Intranet usa os mesmos protocolos da internet (TCP/IP, HTTP); o que muda é o acesso restrito.');
+      C('inf-net', 'O que são TCP/IP e NAT?',
+        'TCP/IP é a arquitetura de protocolos da internet (camadas de aplicação, transporte, internet e acesso à rede). NAT traduz os endereços IP privados da rede interna para um IP público.',
+        'TCP é orientado à conexão e confiável; UDP é mais rápido e não garante a entrega. Protocolos de aplicação: HTTP/HTTPS (web), SMTP (envio de e-mail), POP3 e IMAP (recebimento) e DNS (traduz nomes em endereços IP). O NAT permite que muitos dispositivos compartilhem um IP público.',
+        'HTTPS é HTTP com criptografia TLS; não deixa a rede mais rápida.');
+      C('inf-net', 'O que são VPN e RDP?',
+        'VPN cria um túnel cifrado pela internet para acessar uma rede privada com segurança. RDP é o protocolo de Área de Trabalho Remota da Microsoft, para controlar outro computador.',
+        'RDP exposto diretamente na internet é alvo frequente de ataques; o recomendado é usá-lo dentro de uma VPN e com MFA. A VPN protege os dados no caminho, mas não protege contra malware no próprio dispositivo.',
+        'VPN não é antivírus: cifra o tráfego, não limpa a máquina.');
+      C('inf-net', 'Quais os modelos, vantagens e desvantagens da computação em nuvem?',
+        'Modelos de serviço: IaaS (infraestrutura), PaaS (plataforma) e SaaS (software pronto, como o Microsoft 365). Vantagens: elasticidade, pagamento por uso e acesso de qualquer lugar. Desvantagens: dependência da internet e do provedor e cuidados com privacidade.',
+        'Modelos de implantação: pública, privada, híbrida e comunitária. A segurança é responsabilidade compartilhada entre provedor e cliente; no SaaS, o cliente cuida dos dados e dos acessos.',
+        'Gmail e Microsoft 365 são SaaS; uma máquina virtual alugada é IaaS.');
+      MC('inf-net', 'O Microsoft 365 usado pelo navegador é um exemplo de:',
+        ['SaaS', 'IaaS', 'PaaS', 'LAN', 'NAT'], 0,
+        'É software pronto, entregue como serviço pela internet.');
+
+      T('inf-db', 'Bancos de dados');
+      C('inf-db', 'Qual a diferença entre dados estruturados, semiestruturados e não estruturados?',
+        'Estruturados seguem um esquema fixo (tabelas com linhas e colunas). Não estruturados não têm modelo predefinido (textos livres, imagens, vídeos, áudios). Semiestruturados têm marcação flexível (JSON, XML).',
+        'Bancos relacionais (SQL) guardam dados estruturados; bancos NoSQL lidam melhor com semiestruturados e grandes volumes. A maior parte dos dados produzidos hoje é não estruturada.',
+        'Planilha e tabela de banco = estruturados; o texto livre de um e-mail = não estruturado.');
+      C('inf-db', 'O que são chave primária e chave estrangeira?',
+        'A chave primária identifica cada registro de forma única e não pode ser nula. A chave estrangeira é um campo que aponta para a chave primária de outra tabela, criando o relacionamento.',
+        'A integridade referencial impede, por exemplo, cadastrar um laudo para um caso inexistente. Chave composta usa mais de um campo. Chaves candidatas são campos que poderiam ser a primária.',
+        'Chave estrangeira pode se repetir; a primária, não.');
+      C('inf-db', 'Quais os tipos de relacionamento (cardinalidade)?',
+        '1:1 (um para um), 1:N (um para muitos) e N:N (muitos para muitos), este implementado com uma tabela associativa.',
+        'Exemplo: um perito emite muitos laudos (1:N); laudos e vestígios podem ser N:N. N:1 é o mesmo 1:N visto do outro lado.',
+        'Item 20 de 2025 (quatro variações, incluindo N:1) está ERRADO.');
+      C('inf-db', 'Para que serve a normalização?',
+        'Para organizar as tabelas reduzindo redundância e anomalias de inserção, atualização e exclusão, preservando a integridade dos dados.',
+        'Formas normais: 1FN (valores atômicos), 2FN (sem dependência parcial da chave) e 3FN (sem dependência transitiva). Normalizar demais pode exigir muitas junções e piorar consultas; às vezes se desnormaliza de propósito.',
+        'O objetivo central é integridade e menos redundância (o item 19 de 2025, que incluía "otimização de desempenho", foi anulado).');
+      MC('inf-db', 'Um campo da tabela LAUDO que guarda o código do PERITO e aponta para a tabela PERITO é:',
+        ['Chave estrangeira', 'Chave primária', 'Atributo multivalorado', 'Índice obrigatório', 'Chave candidata'], 0,
+        'Ele referencia a chave primária de outra tabela, criando o relacionamento.');
+
+      T('inf-ia', 'Python, metadados, dados e IA');
+      C('inf-ia', 'Quais as características da linguagem Python?',
+        'É de alto nível, interpretada e de tipagem dinâmica, e a indentação define os blocos de código.',
+        'Tipos básicos: int, float, str, bool. Coleções: list (mutável, []), tuple (imutável, ()), dict (chave e valor, {}) e set. Comentários com #. É muito usada em ciência de dados, automação e análise forense (bibliotecas como pandas).',
+        'Lista é mutável; tupla é imutável.');
+      C('inf-ia', 'O que são metadados e por que importam em perícia?',
+        'São "dados sobre dados": informações que descrevem um arquivo, como autor, datas de criação e modificação e programa usado; em fotos, os dados EXIF (câmera, data, GPS).',
+        'Ajudam a datar e atribuir documentos e imagens, mas podem ser alterados ou apagados; por isso devem ser confrontados com outras evidências. Ao compartilhar arquivos, metadados podem expor informações sensíveis, como a localização.',
+        'Data de metadado pode ser alterada: sozinha, não é prova absoluta.');
+      C('inf-ia', 'O que são mineração de dados e big data?',
+        'Mineração de dados é a descoberta de padrões em grandes bases (classificação, agrupamento, associação, detecção de anomalias). Big data se caracteriza pelos 5 Vs: volume, velocidade, variedade, veracidade e valor.',
+        'Classificação é supervisionada (categorias conhecidas); agrupamento (clustering) é não supervisionado (descobre grupos sem rótulos prévios). Regras de associação encontram itens que ocorrem juntos. Aprendizado de máquina é o campo que permite aos sistemas aprender com dados.',
+        'Item 15 de 2025 (clustering "atribui categorias") está ERRADO: isso é classificação.');
+      C('inf-ia', 'O que são IA generativa e low-code?',
+        'IA generativa cria conteúdo novo (texto, imagem, código) a partir de padrões aprendidos, como os grandes modelos de linguagem. Low-code/no-code permite criar aplicações com pouca ou nenhuma programação, por interfaces visuais.',
+        'Modelos generativos podem "alucinar" (inventar informações plausíveis), reproduzir vieses e expor dados sigilosos colocados nos comandos. Low-code acelera soluções internas, mas exige governança de segurança e manutenção.',
+        'Texto fluente gerado por IA não é garantia de verdade: precisa ser verificado.');
+      MC('inf-ia', 'Agrupar ocorrências semelhantes sem categorias definidas previamente é uma tarefa de:',
+        ['Clustering (agrupamento)', 'Classificação', 'Normalização', 'Criptografia', 'Regressão'], 0,
+        'O clustering é não supervisionado: descobre os grupos sem rótulos prévios.');
+
+      /* ---------- Direitos Humanos ---------- */
+      T('dh-cf', 'Direitos humanos na CF e sistema internacional');
+      C('dh-cf', 'Como a CF/1988 trata os tratados de direitos humanos?',
+        'Os aprovados em cada Casa do Congresso, em dois turnos, por 3/5 dos votos, equivalem a emendas constitucionais (art. 5º, §3º). Os demais, segundo o STF, têm status supralegal.',
+        'O art. 5º, §2º, diz que os direitos expressos não excluem os decorrentes de tratados. O art. 4º, II, põe a prevalência dos direitos humanos entre os princípios das relações internacionais, e o §4º do art. 5º submete o Brasil ao Tribunal Penal Internacional. Por ser supralegal, o Pacto de São José afastou a prisão do depositário infiel (Súmula Vinculante 25).',
+        'Supralegal = acima das leis e abaixo da Constituição (item 42 de 2025, CERTO).');
+      C('dh-cf', 'Como é o sistema internacional de proteção dos direitos humanos?',
+        'Há o sistema global (ONU) e os regionais (interamericano, europeu e africano), que se complementam. No global, destacam-se a Declaração Universal (1948) e os Pactos de 1966 (direitos civis e políticos; direitos econômicos, sociais e culturais).',
+        'O sistema interamericano tem a Comissão Interamericana, que recebe petições individuais, e a Corte Interamericana, que julga Estados que aceitaram sua jurisdição (o Brasil aceitou em 1998). Os mecanismos internacionais são subsidiários: atuam quando o Estado falha. O duplo grau de jurisdição está no art. 8.2.h da Convenção Americana.',
+        'O indivíduo peticiona à COMISSÃO; só a Comissão e os Estados levam casos à CORTE.');
+      C('dh-cf', 'Quais os requisitos para peticionar à Comissão Interamericana?',
+        'Esgotamento dos recursos internos, prazo de 6 meses da decisão definitiva, ausência de litispendência internacional e identificação do peticionário (art. 46 da Convenção Americana).',
+        'O esgotamento é dispensado quando não há devido processo legal para o direito violado, quando o acesso aos recursos foi negado ou impedido e quando há demora injustificada na decisão (art. 46.2). Qualquer pessoa, grupo ou ONG reconhecida pode peticionar.',
+        'Item 45 de 2025 ("não basta a simples mora, ainda que injustificada") está ERRADO.');
+      C('dh-cf', 'Quais as características dos direitos humanos?',
+        'Universalidade, indivisibilidade, interdependência, inalienabilidade, imprescritibilidade, historicidade e vedação do retrocesso.',
+        'Indivisibilidade e interdependência: direitos civis e políticos e direitos sociais formam um todo. A doutrina fala em gerações ou dimensões: 1ª, liberdades individuais; 2ª, direitos sociais; 3ª, direitos difusos (meio ambiente, paz).',
+        'Em regra, os direitos não são absolutos (admitem ponderação), mas a proibição da tortura é absoluta.');
+      MC('dh-cf', 'Um tratado de direitos humanos aprovado sem o rito do art. 5º, §3º, tem, segundo o STF, status:',
+        ['Supralegal', 'Constitucional', 'De lei ordinária', 'De decreto regulamentar', 'Sem efeito interno'], 0,
+        'Fica acima das leis e abaixo da Constituição (RE 466.343).');
+
+      T('dh-conv', 'Convenções internacionais');
+      C('dh-conv', 'O que diz a Convenção para a Prevenção e Punição do Genocídio (1948)?',
+        'Genocídio são atos cometidos com a intenção de destruir, no todo ou em parte, um grupo nacional, étnico, racial ou religioso: matar membros, causar lesão grave, impor condições de vida destrutivas, impedir nascimentos ou transferir crianças à força.',
+        'É crime de direito internacional, em tempo de paz ou de guerra. Também são puníveis a conspiração, a incitação direta e pública, a tentativa e a cumplicidade. Grupos políticos não estão na definição. No Brasil, a Lei 2.889/1956 tipifica o genocídio.',
+        'O que caracteriza o genocídio é a intenção específica de destruir o grupo.');
+      C('dh-conv', 'O que preveem a Convenção dos Refugiados (1951) e o Protocolo de 1967?',
+        'Refugiado é quem, por fundado temor de perseguição por raça, religião, nacionalidade, grupo social ou opinião política, está fora do seu país e não pode ou não quer voltar. O princípio central é a não devolução (non-refoulement).',
+        'O Protocolo de 1967 retirou as limitações temporal (eventos antes de 1951) e geográfica. Refugiados que residem regularmente devem ter, quanto a profissões liberais, tratamento tão favorável quanto possível e não menos favorável que o dado aos estrangeiros em geral (art. 19). A Lei 9.474/1997 amplia o conceito para grave e generalizada violação de direitos humanos.',
+        'Item 40 de 2025 é CERTO.');
+      C('dh-conv', 'O que dizem as convenções sobre discriminação racial e contra a mulher?',
+        'A Convenção sobre Discriminação Racial (1965) proíbe distinções por raça, cor, descendência ou origem nacional ou étnica. A CEDAW (1979) proíbe a discriminação contra a mulher e protege, por exemplo, a sua nacionalidade no casamento (art. 9º).',
+        'As duas admitem ações afirmativas temporárias para acelerar a igualdade, que não são consideradas discriminação. Pela CEDAW, casar com estrangeiro ou a mudança de nacionalidade do marido não alteram automaticamente a nacionalidade da esposa, não a tornam apátrida e não a obrigam a adotar a do marido.',
+        'Ações afirmativas temporárias NÃO violam essas convenções (item 43 de 2025, CERTO).');
+      C('dh-conv', 'O que dizem as convenções contra a tortura e contra o desaparecimento forçado?',
+        'A Convenção contra a Tortura (ONU, 1984) traz proibição absoluta: nenhuma circunstância excepcional ou ordem superior justifica a tortura. Desaparecimento forçado é a privação de liberdade por agentes do Estado seguida da recusa em reconhecê-la ou da ocultação do paradeiro.',
+        'A Convenção contra a Tortura proíbe devolver alguém a Estado onde corra risco de tortura, e declarações obtidas sob tortura não valem como prova. O desaparecimento forçado é crime de natureza permanente enquanto não se esclarece o destino da vítima, e os familiares têm direito à verdade. No Brasil, a Lei 9.455/1997 define os crimes de tortura.',
+        'Ordem de superior hierárquico NÃO justifica tortura.');
+      MC('dh-conv', 'O Protocolo de 1967 sobre o Estatuto dos Refugiados:',
+        ['Retirou as limitações temporal e geográfica da Convenção de 1951', 'Criou o Tribunal Penal Internacional', 'Proibiu as ações afirmativas', 'Excluiu a perseguição religiosa do conceito', 'Permitiu a devolução de refugiados'], 0,
+        'Com o Protocolo, a proteção deixou de valer só para eventos anteriores a 1951 e para a Europa.');
+
+      T('dh-forca', 'Presos e uso da força');
+      C('dh-forca', 'O que dizem as Regras de Mandela?',
+        'São as Regras Mínimas da ONU para o Tratamento de Presos (revistas em 2015): tratamento com dignidade, proibição de tortura, separação de categorias de presos, acesso à saúde e limites ao isolamento.',
+        'O confinamento solitário prolongado (mais de 15 dias seguidos) é proibido. Presos com deficiência devem receber adaptações razoáveis para terem acesso igual à vida na prisão. Instrumentos de contenção não podem ser usados como punição.',
+        'Item 41 de 2025 ("vedam qualquer tratamento diferenciado a presos com deficiência") está ERRADO.');
+      C('dh-forca', 'O que preveem os Princípios Básicos sobre o Uso da Força e Armas de Fogo (Havana, 1990)?',
+        'Os agentes devem tentar meios não violentos antes da força; a força deve ser necessária e proporcional; armas de fogo só em legítima defesa própria ou de terceiros contra ameaça iminente de morte ou ferimento grave.',
+        'O uso letal intencional só é admitido quando estritamente inevitável para proteger a vida. Os governos devem fornecer equipamentos menos letais e treinamento. Depois do uso da força, deve haver socorro médico aos feridos e relatório.',
+        'Arma de fogo é o último recurso, não o primeiro.');
+      C('dh-forca', 'O que diz a Lei 13.060/2014?',
+        'Disciplina o uso dos instrumentos de menor potencial ofensivo pelos agentes de segurança pública, que devem priorizá-los, desde que isso não ponha em risco a integridade física ou psíquica dos policiais.',
+        'Não é legítimo usar arma de fogo contra pessoa em fuga desarmada ou que não represente risco imediato de morte ou lesão, nem contra veículo que desrespeite bloqueio policial sem representar esse risco. Princípios: legalidade, necessidade, razoabilidade e proporcionalidade.',
+        'Atirar em veículo que só furou um bloqueio, sem oferecer risco, não é legítimo.');
+      C('dh-forca', 'O que é o Decreto 12.341/2024?',
+        'É o decreto que regulamenta a Lei 13.060/2014, disciplinando o uso da força e dos instrumentos de menor potencial ofensivo pelos profissionais de segurança pública, com foco na legalidade, na necessidade, na proporcionalidade e na proteção da vida.',
+        'Reforça o uso diferenciado da força, a prioridade da comunicação e da negociação, a arma de fogo como último recurso, a capacitação e o registro e a apuração dos casos de uso da força. Por ser norma recente do edital, leia o texto do decreto para os detalhes.',
+        'A banca costuma explorar normas novas listadas no edital.');
+      MC('dh-forca', 'Pela Lei 13.060/2014, NÃO é legítimo o uso de arma de fogo contra:',
+        ['Pessoa em fuga desarmada que não represente risco imediato', 'Agressor armado que ameaça matar um refém', 'Quem atira contra policiais', 'Agressor que tenta ferir gravemente alguém com uma faca', 'Agressor em situação de legítima defesa de terceiro'], 0,
+        'A lei proíbe expressamente o tiro contra pessoa em fuga desarmada que não ofereça risco imediato.');
+
+      /* ---------- Noções de Criminalística ---------- */
+      T('crim-con', 'Conceitos, vestígios e princípio de Locard');
+      C('crim-con', 'Qual a relação entre ciências forenses, criminalística e perícia?',
+        'Ciências forenses são todas as ciências aplicadas à Justiça. Criminalística é a disciplina que estuda os vestígios materiais do crime para esclarecer o fato e a autoria. Perícia é o exame técnico feito por especialista para produzir prova.',
+        'A criminalística reúne áreas como local de crime, balística, documentoscopia, genética, química, informática e engenharia forense. A medicina legal estuda o corpo humano, vivo ou morto, e é disciplina correlata. A perícia criminal federal é feita pelos peritos da Polícia Federal.',
+        'Perícia criminal (processo penal, perito oficial) ≠ perícia civil (perito nomeado pelo juiz, com assistentes das partes).');
+      C('crim-con', 'Qual a diferença entre vestígio, evidência e indício?',
+        'Vestígio é todo objeto ou material, visível ou latente, ligado à infração (CPP, art. 158-A, §3º). Evidência é o vestígio cuja relação com o fato foi demonstrada pela análise. Indício é a circunstância conhecida e provada que permite concluir, por indução, a existência de outra (CPP, art. 239).',
+        'Sequência pericial: vestígio (material bruto) → análise → evidência → uso no processo. Indício é conceito jurídico: prova indireta, que pode sustentar condenação quando múltiplo e convergente.',
+        'Nem todo vestígio vira evidência: só o que se mostra ligado ao fato.');
+      C('crim-con', 'O que diz o princípio de Locard?',
+        'É o princípio da troca: todo contato deixa uma marca. O autor leva algo do local e deixa algo nele.',
+        'Fundamenta a busca de vestígios: fibras, pelos, DNA, impressões, solo. Por isso não existe "crime perfeito" no sentido técnico; o desafio é encontrar e interpretar os vestígios. A visão moderna inclui estudos de transferência e persistência, como o do DNA sob as unhas.',
+        'Item 36 de 2025 é CERTO.');
+      C('crim-con', 'Como se classificam os vestígios?',
+        'Quanto à natureza: biológicos (sangue, sêmen, saliva, pelos), físicos (fragmentos, vidros), químicos (drogas, resíduos de tiro, explosivos), morfológicos (formas e marcas, como pegadas, impressões e marcas de ferramenta) e microvestígios (fibras, partículas).',
+        'Quanto à relação com o fato: verdadeiros (produzidos pelo crime), forjados (plantados para enganar) e ilusórios (sem relação com o fato, como os deixados por quem entrou depois). Microvestígios exigem lupa, microscópio ou luz forense.',
+        'Fluidos corporais são vestígios biológicos, não morfológicos (item 35 de 2025, ERRADO).');
+      MC('crim-con', 'Pegadas, marcas de ferramenta e impressões são classificadas como vestígios:',
+        ['Morfológicos', 'Biológicos', 'Químicos', 'Ilusórios', 'Microvestígios'], 0,
+        'Vestígios morfológicos são formas e marcas deixadas por contato.');
+
+      T('crim-loc', 'Local de crime e fotografia pericial');
+      C('crim-loc', 'O que é local de crime e como ele se classifica?',
+        'É toda área onde ocorreu um fato que pode configurar infração penal e que guarda vestígios dele. Classifica-se em imediato (onde o fato ocorreu), mediato (as adjacências) e relacionado (outro lugar ligado ao fato).',
+        'Também se fala em local interno (ambiente fechado) e externo, e em idôneo (preservado) ou inidôneo (violado). O local é fonte de informação: posição dos objetos, manchas, trajetórias, sinais de luta.',
+        'O tempo decorrido não dispensa o isolamento e a preservação (item 39 de 2025, ERRADO).');
+      C('crim-loc', 'Quais as etapas do processamento pericial do local?',
+        'Isolamento e preservação, busca de vestígios, documentação (fixação: fotografia, croqui e descrição), coleta, acondicionamento, transporte e liberação do local.',
+        'Métodos de busca: espiral, linhas paralelas, quadrantes (grade) e setores. A fixação registra a posição exata dos vestígios antes de qualquer movimentação. O local só é liberado depois que o perito conclui o exame.',
+        'Fixe antes de coletar: vestígio retirado sem registro perde o contexto.');
+      C('crim-loc', 'O que diz a lei e a técnica sobre a fotografia pericial?',
+        'O CPP manda fotografar os cadáveres na posição em que forem encontrados e, na medida do possível, as lesões externas e os vestígios do local (art. 164), e permite instruir os laudos com fotografias, desenhos ou esquemas (arts. 165 e 169).',
+        'A técnica segue a sequência: fotos gerais (panorâmicas), médias (relação entre objetos) e de detalhe, estas com e sem escala métrica. Imagens raster (formadas por pixels) perdem nitidez quando ampliadas demais (pixelização); por isso se fotografa em alta resolução e se preservam os arquivos originais.',
+        'Item 37 de 2025 (pixelização da imagem raster) é CERTO.');
+      C('crim-loc', 'Como deve ser feito o isolamento do local?',
+        'De forma ampla, com cordão e controle de acesso, registro de quem entra e sai e proibição de mexer em qualquer coisa até a chegada e a liberação da perícia (CPP, arts. 6º, I, e 169).',
+        'O primeiro policial a chegar deve socorrer vítimas, garantir a segurança e isolar. Alterações inevitáveis, como o socorro, devem ser registradas e informadas ao perito. O CPP proíbe a entrada em local isolado e a remoção de vestígios antes da liberação pelo perito, e tipifica essa conduta como fraude processual (art. 158-C, §2º).',
+        'Mexer no local antes da liberação pela perícia configura fraude processual.');
+      MC('crim-loc', 'A sequência correta das fotografias periciais num local de crime é:',
+        ['Gerais, médias e de detalhe (com e sem escala)', 'Apenas de detalhe', 'De detalhe, médias e gerais', 'Apenas panorâmicas', 'Somente depois da coleta dos vestígios'], 0,
+        'Do geral para o particular, e antes de mexer em qualquer vestígio.');
+      ORD('crim-loc', 'Ordene as etapas do processamento pericial do local de crime.',
+        ['Isolamento e preservação', 'Busca de vestígios', 'Documentação (fixação)', 'Coleta', 'Acondicionamento e transporte', 'Liberação do local'],
+        'Primeiro se preserva e documenta; só depois se coleta. O local é liberado por último.');
+
+      T('crim-tan', 'Tanatologia e traumatologia forense');
+      C('crim-tan', 'O que é o exame perinecroscópico?',
+        'É o exame do cadáver no próprio local do crime, antes da necropsia: posição, vestes, lesões aparentes, fenômenos cadavéricos e vestígios ao redor do corpo.',
+        'Ajuda a estimar o tempo de morte e a dinâmica do fato (luta, arrasto, posição da vítima). O corpo é fotografado na posição em que foi encontrado. A necropsia, no IML, completa a investigação da causa da morte.',
+        'Perinecroscopia = no local; necropsia = no IML.');
+      C('crim-tan', 'Quais são os fenômenos cadavéricos?',
+        'Abióticos imediatos (parada cardiorrespiratória, perda da consciência) e consecutivos (resfriamento, desidratação, livores e rigidez). Transformativos destrutivos (autólise, putrefação) e conservadores (saponificação, mumificação).',
+        'Valores aproximados: livores (manchas por gravidade) surgem em 1 a 3 h e se fixam em 8 a 12 h. A rigidez começa em 1 a 3 h pela mandíbula e nuca, em sentido craniocaudal (lei de Nysten), é máxima em 8 a 12 h e se desfaz em 24 a 36 h. A putrefação começa pela mancha verde abdominal (fossa ilíaca direita), por volta de 18 a 24 h. O ambiente altera muito esses tempos.',
+        'Livor que muda de lugar quando o corpo é virado ainda não se fixou: morte recente.');
+      C('crim-tan', 'O que é cronotanatognose?',
+        'É a estimativa do tempo decorrido desde a morte, a partir dos fenômenos cadavéricos, da temperatura do corpo, do conteúdo gástrico, da fauna cadavérica e de outros sinais.',
+        'O resfriamento é de cerca de 0,5 a 1,5 °C por hora nas primeiras horas, conforme o ambiente e as roupas. A entomologia forense (ciclo de vida das moscas) ajuda em intervalos longos. Todos os métodos dão faixas, não horários exatos.',
+        'A cronotanatognose dá um intervalo estimado, nunca a hora exata.');
+      C('crim-tan', 'Como se classificam as lesões por agentes mecânicos?',
+        'Perfurante (lesão punctória: agulha), cortante (incisa: lâmina), contundente (contusa: martelo, soco), perfurocortante (perfuroincisa: faca de ponta), perfurocontundente (perfurocontusa: projétil de arma de fogo) e cortocontundente (cortocontusa: facão, machado).',
+        'Agentes físicos: temperatura, eletricidade, pressão e radiação. Físico-químicos: asfixias (esganadura, estrangulamento, enforcamento, afogamento, sufocação). Químicos: cáusticos e venenos. A lesão incisa tem bordas regulares e termina numa cauda de escoriação.',
+        'Projétil de arma de fogo = perfurocontundente; faca de ponta = perfurocortante.');
+      MC('crim-tan', 'O projétil de arma de fogo é classificado como instrumento:',
+        ['Perfurocontundente', 'Perfurocortante', 'Cortante', 'Cortocontundente', 'Perfurante'], 0,
+        'Ele perfura e contunde ao mesmo tempo, sem gume cortante.');
+
+      T('crim-bal', 'Balística forense');
+      C('crim-bal', 'O que é arma de fogo e qual a diferença entre calibre real e nominal?',
+        'Arma de fogo é o engenho que lança projéteis pela força expansiva dos gases da queima de um propelente. Calibre real é o diâmetro interno do cano (medido entre os cheios, nas armas raiadas); calibre nominal é a designação comercial (.38, 9 mm, .40).',
+        'Nas armas de alma lisa (espingardas), o calibre é dado em "gauge" (ex.: 12): o número de esferas de chumbo do diâmetro do cano que pesam uma libra. O raiamento (raias e cheios) faz o projétil girar e deixa marcas nele.',
+        'No sistema gauge, o calibre 12 é MAIOR que o calibre 20.');
+      C('crim-bal', 'Quais os elementos do cartucho de munição?',
+        'Estojo, espoleta (com a mistura iniciadora), carga de projeção (pólvora) e projétil.',
+        'O percussor atinge a espoleta, que inflama a pólvora; os gases empurram o projétil pelo cano. Espoletas com chumbo, bário e antimônio geram os resíduos de tiro clássicos, analisados por microscopia eletrônica de varredura (MEV/EDS). Cartuchos de espingarda têm bucha e vários projéteis de chumbo.',
+        'Projétil é só o que sai pelo cano; "bala" é termo leigo.');
+      C('crim-bal', 'Como se identifica uma arma de fogo?',
+        'Diretamente, por marca, modelo e número de série (inclusive revelando números raspados). Indiretamente, comparando as microestrias do projétil e as marcas do percussor, culatra, extrator e ejetor no estojo com padrões disparados no laboratório.',
+        'O comparador balístico mostra dois projéteis lado a lado. Sistemas automatizados alimentam o banco de perfis balísticos; no Brasil, há o Sistema Nacional de Análise Balística (SINAB) e o Banco Nacional de Perfis Balísticos. Números raspados podem ser revelados por métodos químicos ou magnéticos.',
+        'Microestrias no projétil vêm do cano; marcas no estojo vêm do mecanismo da arma.');
+      C('crim-bal', 'Como se estima a distância do tiro?',
+        'Tiro encostado: câmara de mina (sinal de Hofmann), marca da boca do cano (Puppe-Werkgartner) e resíduos dentro do ferimento. Curta distância: chamuscamento, esfumaçamento e tatuagem (grãos de pólvora). Longa distância: apenas orla de contusão e de enxugo, sem resíduos.',
+        'A tatuagem (grãos incrustados) não sai com lavagem; o esfumaçamento sai. As orlas de contusão e de enxugo aparecem no orifício de entrada em qualquer distância. O orifício de saída costuma ser maior, irregular e sem orlas.',
+        'Tatuagem não sai com lavagem; esfumaçamento sai.');
+      MC('crim-bal', 'Grãos de pólvora incrustados na pele ao redor do orifício de entrada, que não saem com lavagem, indicam:',
+        ['Zona de tatuagem: tiro a curta distância', 'Tiro a longa distância', 'Orla de enxugo, que aparece em qualquer distância', 'Orifício de saída', 'Arma de alma lisa'], 0,
+        'A tatuagem só se forma quando a boca do cano está próxima o bastante para os grãos atingirem a pele.');
+      CLZ('crim-bal', 'O calibre ___ é a designação comercial da munição, como .38 ou 9 mm.',
+        ['nominal', 'real', 'gauge', 'raiado'], 0,
+        'O calibre real é o diâmetro interno medido no cano.');
+
+      T('crim-lau', 'Laudo pericial e avanços em ciências forenses');
+      C('crim-lau', 'Quais as partes de um laudo pericial?',
+        'Preâmbulo (quem, quando e a pedido de quem), histórico (contexto), descrição (o que foi examinado), discussão (análise técnica), conclusão e respostas aos quesitos.',
+        'O laudo deve ser claro, objetivo, fundamentado e reprodutível, descrevendo métodos e limitações. O prazo é de 10 dias, prorrogável em casos excepcionais a pedido dos peritos (CPP, art. 160, parágrafo único). O juiz não fica preso ao laudo (art. 182).',
+        'Laudo é o documento do perito oficial; parecer é o documento do assistente técnico.');
+      C('crim-lau', 'Quais os objetivos principais de um laudo pericial?',
+        'Constatar a materialidade do fato, esclarecer a dinâmica (como ocorreu), contribuir para a autoria (quem) e fornecer elementos sobre o tempo e o meio empregado.',
+        'O laudo responde ao que foi perguntado, sem extrapolar a área técnica: o perito não julga culpa. As conclusões devem indicar o grau de certeza e as limitações (por exemplo, perfil parcial ou mistura).',
+        'O perito conclui sobre fatos técnicos, não sobre culpabilidade.');
+      C('crim-lau', 'Como a análise de isótopos ajuda a perícia?',
+        'As razões de isótopos estáveis (carbono, nitrogênio, oxigênio, hidrogênio, estrôncio) funcionam como "assinaturas" de origem geográfica, dieta e processo de fabricação.',
+        'Aplicações: origem de drogas, explosivos, alimentos e madeira; região onde viveu uma pessoa não identificada, a partir de cabelo, ossos e dentes (estrôncio e oxigênio refletem o solo e a água). É medida por espectrometria de massas de razão isotópica (IRMS).',
+        'Para origem, usam-se isótopos ESTÁVEIS, não radioativos.');
+      C('crim-lau', 'O que é a rastreabilidade de metais preciosos?',
+        'É a determinação da origem do ouro e de outros metais pela sua composição química e isotópica, para combater a extração e o comércio ilegais, como o garimpo em terras indígenas.',
+        'A Polícia Federal desenvolve um banco de assinaturas de amostras de ouro de diferentes regiões (projeto Ouro Alvo) para comparar com o ouro apreendido. Bancos de dados em criminalística também incluem perfis genéticos e perfis balísticos.',
+        'Bancos de dados da criminalística: perfis genéticos, perfis balísticos, impressões digitais e assinaturas de ouro.');
+      MC('crim-lau', 'Para estimar a região de origem de uma amostra de ouro apreendido, usa-se principalmente:',
+        ['A composição química e isotópica comparada a um banco de referência', 'O teste de Kastle-Meyer', 'A comparação de microestrias', 'A coloração de Gram', 'O teste de amilase'], 0,
+        'Cada jazida tem uma assinatura química e isotópica característica.');
+      ORD('crim-lau', 'Ordene as partes do laudo pericial.',
+        ['Preâmbulo', 'Histórico', 'Descrição', 'Discussão', 'Conclusão', 'Respostas aos quesitos'],
+        'Do contexto para a análise e daí para as conclusões.');
+
+      /* ---------- Direito Processual Penal ---------- */
+      T('dpp-ip', 'Inquérito policial');
+      C('dpp-ip', 'Quais as características do inquérito policial?',
+        'Procedimento administrativo, escrito, inquisitivo (sem contraditório pleno), sigiloso quando necessário, oficioso, indisponível para a autoridade policial e dispensável para a ação penal.',
+        'A autoridade policial não pode mandar arquivar o inquérito (CPP, art. 17). O advogado tem acesso aos elementos de prova já documentados (Súmula Vinculante 14). O inquérito é dispensável quando o titular da ação já tem elementos suficientes.',
+        'Delegado NÃO arquiva inquérito.');
+      C('dpp-ip', 'Como o inquérito é instaurado?',
+        'De ofício (crime de ação pública incondicionada), por requisição da autoridade judiciária ou do Ministério Público, por requerimento do ofendido ou por auto de prisão em flagrante. Na ação privada ou pública condicionada, depende de requerimento ou representação.',
+        'Notitia criminis: de cognição imediata (a polícia toma conhecimento diretamente), mediata (comunicação formal) ou coercitiva (prisão em flagrante). Delatio criminis: comunicação feita por qualquer pessoa do povo (art. 5º, §3º). Denúncia anônima exige verificação preliminar antes da instauração.',
+        'Denúncia anônima sozinha não basta: faz-se uma verificação preliminar.');
+      C('dpp-ip', 'Quais os prazos e o valor probatório do inquérito?',
+        'CPP: 10 dias com o indiciado preso e 30 dias se solto (prorrogáveis). Na Polícia Federal: 15 dias com preso, prorrogáveis por mais 15 (Lei 5.010/1966). O valor probatório é relativo.',
+        'O juiz não pode fundamentar a decisão exclusivamente nos elementos do inquérito, ressalvadas as provas cautelares, não repetíveis e antecipadas (art. 155), como as perícias, que têm contraditório diferido.',
+        'Perícias feitas no inquérito valem no processo: são provas não repetíveis.');
+      C('dpp-ip', 'O que é o indiciamento?',
+        'É ato privativo do delegado de polícia, fundamentado, que aponta o investigado como provável autor com base em análise técnico-jurídica do fato (Lei 12.830/2013, art. 2º, §6º).',
+        'Deve indicar autoria, materialidade e circunstâncias. O juiz e o Ministério Público não podem requisitar o indiciamento (entendimento do STF). A autoridade pode negar diligências pedidas pelo ofendido, exceto o exame de corpo de delito (arts. 14 e 184).',
+        'O exame de corpo de delito pedido pelo ofendido não pode ser negado.');
+      MC('dpp-ip', 'A autoridade policial que conclui que o fato não é crime pode:',
+        ['Relatar o inquérito e remetê-lo, mas não arquivá-lo', 'Arquivar o inquérito por despacho próprio', 'Destruir os autos', 'Arquivar depois de ouvir a vítima', 'Arquivar se o crime for de menor potencial ofensivo'], 0,
+        'O arquivamento não cabe à autoridade policial (art. 17 do CPP).');
+
+      T('dpp-per', 'Prova pericial e corpo de delito');
+      C('dpp-per', 'Quando o exame de corpo de delito é obrigatório?',
+        'Quando a infração deixar vestígios: o exame direto ou indireto é indispensável e não pode ser suprido pela confissão do acusado (CPP, art. 158).',
+        'Tem prioridade quando envolver violência doméstica e familiar contra a mulher ou violência contra criança, adolescente, idoso ou pessoa com deficiência. Se os vestígios desapareceram, a prova testemunhal pode suprir a falta (art. 167).',
+        'A confissão NÃO supre o exame de corpo de delito.');
+      C('dpp-per', 'Quem faz a perícia e quais as formalidades?',
+        'Um perito oficial com diploma de curso superior. Na falta, duas pessoas idôneas com diploma superior, preferencialmente na área, que prestam compromisso (CPP, art. 159, caput e §1º).',
+        'O laudo sai em até 10 dias, prorrogáveis. Os peritos descrevem minuciosamente o que examinarem e respondem aos quesitos; podem ser recusados por suspeição. A Lei 12.030/2009 garante aos peritos oficiais autonomia técnica, científica e funcional.',
+        'Perito oficial: basta UM. Peritos nomeados (não oficiais): DOIS.');
+      C('dpp-per', 'Como atua o assistente técnico?',
+        'Indicado pelas partes, atua depois de admitido pelo juiz e após a conclusão dos exames e a elaboração do laudo pelos peritos oficiais (art. 159, §4º). Pode apresentar parecer e responder a quesitos.',
+        'Havendo requerimento, o material probatório fica disponível no ambiente do órgão oficial, que mantém a sua guarda, na presença de perito oficial, para exame pelos assistentes, salvo se for impossível conservá-lo (§6º).',
+        'Item 32 de 2025 é CERTO.');
+      C('dpp-per', 'E se o laudo tiver falhas ou for contestado?',
+        'Havendo omissões, obscuridades ou contradições, o juiz manda suprir, complementar ou esclarecer o laudo e pode determinar nova perícia (art. 181). O juiz não fica preso ao laudo: pode aceitá-lo ou rejeitá-lo, no todo ou em parte (art. 182).',
+        'Se os peritos divergirem, cada um registra sua opinião, e a autoridade pode nomear um terceiro (art. 180). Em perícia complexa, de mais de uma área, pode haver mais de um perito oficial e mais de um assistente (art. 159, §7º).',
+        'O juiz não é obrigado a seguir o laudo (sistema liberatório).');
+      MC('dpp-per', 'Na falta de perito oficial, o exame será feito por:',
+        ['Duas pessoas idôneas com diploma superior, preferencialmente na área', 'Uma pessoa idônea qualquer', 'O delegado de polícia', 'O escrivão', 'O assistente técnico da defesa'], 0,
+        'É a regra do art. 159, §1º, do CPP.');
+
+      T('dpp-prova', 'Provas, ônus e busca e apreensão');
+      C('dpp-prova', 'Como funcionam o ônus da prova e as provas ilícitas?',
+        'A prova da alegação cabe a quem a fizer (art. 156). Provas ilícitas, obtidas com violação de normas constitucionais ou legais, são inadmissíveis e devem ser desentranhadas, assim como as delas derivadas (art. 157).',
+        'Exceções para as derivadas: quando não há nexo de causalidade com a ilícita ou quando poderiam ser obtidas por fonte independente. Para o STJ, a quebra da cadeia de custódia não gera nulidade automática: o juiz avalia a confiabilidade da prova.',
+        'Teoria dos frutos da árvore envenenada: a prova derivada da ilícita também é ilícita, salvo fonte independente.');
+      C('dpp-prova', 'Como deve ser feito o reconhecimento de pessoas?',
+        'Pelo art. 226 do CPP: quem vai reconhecer descreve antes a pessoa; o suspeito é colocado, se possível, ao lado de outras pessoas parecidas; lavra-se auto do ato.',
+        'O STJ entende que o procedimento do art. 226 é garantia mínima e que, sem ele, o reconhecimento não vale como prova (HC 598.886/SC, 2020). O reconhecimento por foto segue as mesmas cautelas e, sozinho, não pode fundamentar condenação.',
+        'Reconhecimento sem as formalidades do art. 226 não serve como prova (STJ).');
+      C('dpp-prova', 'O que são acareação, documentos e indícios?',
+        'Acareação é o confronto entre pessoas cujas declarações divergem sobre fatos relevantes (art. 229). Documentos são quaisquer escritos, instrumentos ou papéis, públicos ou particulares (art. 232). Indício é a circunstância conhecida e provada que permite concluir, por indução, a existência de outra (art. 239).',
+        'Na acareação, os acareados são reperguntados sobre os pontos de divergência. Indícios são prova indireta e, se múltiplos, graves e concordantes, podem sustentar uma condenação.',
+        'Indício (prova indireta, conceito jurídico) ≠ vestígio (material).');
+      C('dpp-prova', 'Como é a busca e apreensão?',
+        'Domiciliar: exige mandado judicial e deve ser feita de dia, salvo consentimento do morador, flagrante, desastre ou socorro (CF, art. 5º, XI). Pessoal: dispensa mandado em caso de prisão ou de fundada suspeita de que a pessoa leva arma ou objetos do crime (CPP, art. 244).',
+        'O STF exige fundadas razões, justificadas depois, para entrar em domicílio sem mandado em caso de flagrante (Tema 280). O STJ exige prova de que o consentimento do morador foi livre (de preferência registrada em vídeo). A busca em mulher é feita por outra mulher, se isso não atrasar a diligência (art. 249).',
+        'Item 33 de 2025 (busca com consentimento válido do morador, sem mandado) é CERTO.');
+      MC('dpp-prova', 'A prova derivada de uma prova ilícita:',
+        ['É inadmissível, salvo se não houver nexo causal ou puder ser obtida por fonte independente', 'É sempre admissível', 'É admissível se o réu confessar', 'Só é ilícita em crimes hediondos', 'É admissível a critério do delegado'], 0,
+        'É a regra do art. 157, §1º, do CPP.');
+
+      T('dpp-fla', 'Prisão em flagrante e cadeia de custódia');
+      C('dpp-fla', 'Quais as hipóteses de flagrante (CPP, art. 302)?',
+        'Próprio: está cometendo ou acaba de cometer a infração. Impróprio: é perseguido logo após, em situação que faça presumir a autoria. Presumido: é encontrado logo depois com instrumentos, armas, objetos ou papéis que façam presumir a autoria.',
+        'Nos crimes permanentes, como o tráfico na modalidade "ter em depósito", o flagrante dura enquanto não cessar a permanência (art. 303). Qualquer pessoa pode, e as autoridades policiais devem, prender quem esteja em flagrante (art. 301).',
+        'Flagrante facultativo: qualquer pessoa. Obrigatório: autoridades policiais e seus agentes.');
+      C('dpp-fla', 'Quais as espécies de flagrante e quais são ilegais?',
+        'Esperado (a polícia aguarda o crime acontecer): legal. Prorrogado ou diferido (ação controlada, para colher mais provas): legal quando previsto em lei. Preparado (o agente provocador induz o crime): ilegal, é crime impossível (Súmula 145 do STF). Forjado (provas plantadas): ilegal.',
+        'A ação controlada está prevista, por exemplo, na Lei de Organizações Criminosas (Lei 12.850/2013) e na Lei de Drogas. No flagrante preparado não há crime porque a consumação é impossível pela atuação da polícia.',
+        'Súmula 145 do STF: não há crime quando a preparação do flagrante pela polícia torna impossível a consumação.');
+      C('dpp-fla', 'O que acontece depois da prisão em flagrante?',
+        'Lavra-se o auto de prisão em flagrante, entrega-se nota de culpa ao preso em 24 horas, comunica-se imediatamente o juiz, o Ministério Público e a família, e o auto vai ao juiz em até 24 horas, com audiência de custódia.',
+        'Na audiência de custódia, o juiz relaxa a prisão ilegal, converte em preventiva (se presentes os requisitos e insuficientes outras medidas) ou concede liberdade provisória (art. 310). Se o preso não indicar advogado, cópia do auto vai à Defensoria Pública.',
+        'Prazo de 24 horas para a nota de culpa e para a audiência de custódia.');
+      C('dpp-fla', 'Como o CPP regula a cadeia de custódia?',
+        'É o conjunto de procedimentos para manter e documentar a história cronológica do vestígio (art. 158-A), em 10 etapas: reconhecimento, isolamento, fixação, coleta, acondicionamento, transporte, recebimento, processamento, armazenamento e descarte (art. 158-B).',
+        'Começa com a preservação do local ou com o procedimento em que se detecta o vestígio, e o agente que reconhece o vestígio fica responsável por preservá-lo (art. 158-A, §2º). Os institutos de criminalística devem ter central de custódia (art. 158-E). Para o STJ, a quebra da cadeia não gera nulidade automática; afeta o valor da prova.',
+        'A cadeia NÃO começa no transporte ao instituto (item 34 de 2025, ERRADO).');
+      MC('dpp-fla', 'O flagrante em que a polícia induz o agente a cometer o crime, tornando impossível a consumação, é:',
+        ['Preparado: ilegal (Súmula 145 do STF)', 'Esperado: legal', 'Prorrogado: legal', 'Presumido: legal', 'Impróprio: legal'], 0,
+        'No flagrante preparado há crime impossível; no esperado, a polícia apenas aguarda, sem induzir.');
+      ORD('dpp-fla', 'Ordene as quatro últimas etapas da cadeia de custódia (CPP, art. 158-B).',
+        ['Recebimento', 'Processamento', 'Armazenamento', 'Descarte'],
+        'Antes delas vêm reconhecimento, isolamento, fixação, coleta, acondicionamento e transporte.');
+
+      /* ---------- Raciocínio Lógico ---------- */
+      T('rl-prop', 'Proposições, conectivos e tabela-verdade');
+      C('rl-prop', 'O que é uma proposição?',
+        'É uma sentença declarativa que pode ser julgada verdadeira ou falsa, mas não as duas coisas ao mesmo tempo.',
+        'Não são proposições: perguntas, ordens, exclamações, sentenças abertas com variável ("x + 2 = 5") e paradoxos ("esta frase é falsa"). Proposições compostas combinam as simples por conectivos.',
+        '"Que horas são?" e "Estude!" não são proposições.');
+      C('rl-prop', 'Quando cada conectivo é verdadeiro?',
+        'Conjunção (P ∧ Q): V só se as duas forem V. Disjunção (P ∨ Q): F só se as duas forem F. Disjunção exclusiva (ou... ou): V se exatamente uma for V. Condicional (P → Q): F só quando P é V e Q é F. Bicondicional (P ↔ Q): V quando as duas têm o mesmo valor.',
+        'Na condicional, P é condição suficiente para Q, e Q é condição necessária para P. "A só se B" e "A somente se B" significam A → B. "Se e somente se" é bicondicional.',
+        'Condicional com antecedente falso é SEMPRE verdadeira.');
+      C('rl-prop', 'Quantas linhas tem uma tabela-verdade?',
+        '2ⁿ linhas, em que n é o número de proposições simples distintas.',
+        'Tautologia: sempre verdadeira (ex.: P ∨ ¬P). Contradição: sempre falsa (P ∧ ¬P). Contingência: às vezes V, às vezes F. Com 3 proposições, 8 linhas; com 4, 16.',
+        'Conte as proposições DISTINTAS, não quantas vezes aparecem.');
+      C('rl-prop', 'Como resolver questões com regras e fatos, como a do laboratório da prova de 2025?',
+        'Traduza as frases em símbolos, parta dos fatos dados como verdadeiros e aplique as regras: se P → Q e P é V, então Q é V (modus ponens); se Q é F, então P é F (modus tollens).',
+        'Exemplo da prova: Q → (P ∨ R) é verdadeira; com Q (sensor ativado) e ¬R (porta fechada), P (luzes apagadas) tem de ser verdadeira. "O alarme S só dispara se Q e R" equivale a S → (Q ∧ R); S verdadeira com Q falsa contraria a regra.',
+        'Afirmar o consequente (Q, logo P) e negar o antecedente (¬P, logo ¬Q) são falácias.');
+      MC('rl-prop', 'A proposição "Se o laudo foi entregue, então o caso foi encerrado" é FALSA quando:',
+        ['O laudo foi entregue e o caso não foi encerrado', 'O laudo não foi entregue e o caso foi encerrado', 'Nenhum dos dois ocorreu', 'Os dois ocorreram', 'Nunca: ela é sempre verdadeira'], 0,
+        'A condicional só é falsa com antecedente verdadeiro e consequente falso.');
+      CLZ('rl-prop', 'Uma tabela-verdade com 3 proposições simples tem ___ linhas.',
+        ['8', '6', '9', '3'], 0,
+        '2³ = 8.');
+
+      T('rl-eq', 'Equivalências, negações e De Morgan');
+      C('rl-eq', 'Quais as equivalências da condicional?',
+        'P → Q ≡ ¬Q → ¬P (contrapositiva) ≡ ¬P ∨ Q.',
+        'A recíproca (Q → P) e a inversa (¬P → ¬Q) NÃO são equivalentes à original. Assim, Q → (P ∨ R) equivale a ¬Q ∨ P ∨ R, e não a Q ∧ (P ∨ R).',
+        'Item 49 de 2025 (equivalência com Q ∧ (P ∨ R)) está ERRADO.');
+      C('rl-eq', 'Quais são as leis de De Morgan?',
+        '¬(P ∧ Q) ≡ ¬P ∨ ¬Q e ¬(P ∨ Q) ≡ ¬P ∧ ¬Q.',
+        'Negar uma conjunção dá a disjunção das negações, e vice-versa. Exemplo: a negação de "O perito é farmacêutico e biólogo" é "O perito não é farmacêutico ou não é biólogo".',
+        'Troque o conectivo E negue as duas partes.');
+      C('rl-eq', 'Como negar a condicional e a bicondicional?',
+        '¬(P → Q) ≡ P ∧ ¬Q. ¬(P ↔ Q) ≡ ou P ou Q (disjunção exclusiva), ou seja, (P ∧ ¬Q) ∨ (¬P ∧ Q).',
+        'A negação da condicional não é outra condicional: mantém o antecedente, nega o consequente e liga com "e". Exemplo: a negação de "Se estudar, passa" é "Estuda e não passa".',
+        'A negação de uma condicional NUNCA tem "se... então".');
+      C('rl-eq', 'Como negar proposições com quantificadores?',
+        'A negação de "Todo A é B" é "Algum A não é B". A de "Algum A é B" é "Nenhum A é B". A de "Nenhum A é B" é "Algum A é B".',
+        'Na lógica de primeira ordem: ¬∀x P(x) ≡ ∃x ¬P(x) e ¬∃x P(x) ≡ ∀x ¬P(x). A negação de "todo" não é "nenhum".',
+        'A negação de "Todos os laudos foram entregues" é "Algum laudo não foi entregue".');
+      MC('rl-eq', 'A negação de "Se o vestígio foi coletado, então foi lacrado" é:',
+        ['O vestígio foi coletado e não foi lacrado', 'Se o vestígio não foi coletado, então não foi lacrado', 'O vestígio não foi coletado ou foi lacrado', 'Se foi lacrado, então foi coletado', 'O vestígio não foi coletado e foi lacrado'], 0,
+        '¬(P → Q) ≡ P ∧ ¬Q.');
+      CLZ('rl-eq', 'Pela lei de De Morgan, ¬(P ∧ Q) equivale a ___.',
+        ['¬P ∨ ¬Q', '¬P ∧ ¬Q', 'P ∨ Q', '¬P → Q'], 0,
+        'Nega-se cada parte e troca-se o "e" por "ou".');
+
+      T('rl-arg', 'Argumentação, diagramas e quantificadores');
+      C('rl-arg', 'O que é um argumento válido?',
+        'É aquele em que, se as premissas forem verdadeiras, a conclusão é necessariamente verdadeira. A validade depende da forma, não do conteúdo.',
+        'Um argumento pode ser válido com premissas falsas e inválido com conclusão verdadeira. Formas válidas: modus ponens (P → Q; P; logo Q), modus tollens (P → Q; ¬Q; logo ¬P), silogismo hipotético (P → Q; Q → R; logo P → R) e silogismo disjuntivo (P ∨ Q; ¬P; logo Q).',
+        'Válido não é o mesmo que verdadeiro: validade é sobre a estrutura.');
+      C('rl-arg', 'Como usar diagramas lógicos?',
+        '"Todo A é B": o conjunto A fica dentro de B. "Nenhum A é B": os conjuntos ficam separados. "Algum A é B": há interseção.',
+        'Para testar uma conclusão, procure um desenho em que as premissas valham e a conclusão falhe; se existir, o argumento é inválido. "Algum A não é B": parte de A fica fora de B.',
+        '"Todo A é B" não implica "todo B é A".');
+      C('rl-arg', 'O que são dedução, indução e analogia?',
+        'Dedução vai do geral para o particular, com conclusão necessária. Indução vai de casos particulares para uma generalização, com conclusão provável. Analogia conclui por semelhança entre casos.',
+        'A lógica formal das provas trata da dedução. Na perícia, a indução aparece na construção de bases de dados (frequências), e o indício é um raciocínio indutivo (CPP, art. 239).',
+        'Indução nunca garante a conclusão; só a torna provável.');
+      C('rl-arg', 'Como resolver problemas de verdades e mentiras?',
+        'Suponha que uma afirmação é verdadeira e veja se surge contradição; se surgir, ela é falsa. Teste as hipóteses até que todas as condições se encaixem.',
+        'Organize as informações em tabela. Comece pelas afirmações que se contradizem diretamente: uma delas é necessariamente falsa. Em problemas de associação (quem fez o quê), use tabela de dupla entrada e vá eliminando possibilidades.',
+        'Duas pessoas que acusam uma à outra de mentir não podem estar ambas dizendo a verdade.');
+      MC('rl-arg', 'Premissas: "Se há sangue, faz-se o teste" e "Não se fez o teste". A conclusão válida é:',
+        ['Não havia sangue', 'Havia sangue', 'O teste foi positivo', 'Nada se pode concluir', 'Havia outro fluido'], 0,
+        'É o modus tollens: P → Q; ¬Q; logo ¬P.');
+
+      T('rl-cont', 'Contagem, probabilidade e conjuntos');
+      C('rl-cont', 'Quais as fórmulas de contagem?',
+        'Princípio multiplicativo: m × n maneiras. Permutação: n!. Arranjo (a ordem importa): n! / (n − p)!. Combinação (a ordem não importa): n! / [p! (n − p)!].',
+        'Formar uma comissão de 3 peritos entre 10 é combinação: C(10, 3) = 120. Escolher presidente, vice e secretário entre 10 é arranjo: 10 × 9 × 8 = 720. Permutação com repetição: anagramas de ARARA = 5! / (3! × 2!) = 10.',
+        'Pergunte-se: trocar a ordem gera um resultado diferente? Se sim, é arranjo; se não, combinação.');
+      C('rl-cont', 'Como calcular probabilidades?',
+        'P = casos favoráveis / casos possíveis. P(A ou B) = P(A) + P(B) − P(A e B). Eventos independentes: P(A e B) = P(A) × P(B). Complementar: P(não A) = 1 − P(A).',
+        'Probabilidade condicional: P(A|B) = P(A e B) / P(B), base do teorema de Bayes usado na genética forense. "Pelo menos um" costuma ser mais fácil pelo complementar: 1 − P(nenhum).',
+        'Para "pelo menos um", calcule 1 − P(nenhum).');
+      C('rl-cont', 'Como resolver problemas de conjuntos?',
+        'n(A ∪ B) = n(A) + n(B) − n(A ∩ B). Com três conjuntos: soma dos três − interseções duas a duas + interseção tripla.',
+        'No diagrama de Venn, preencha do centro (interseção tripla) para fora. Complementar de A: os elementos do universo fora de A. Diferença A − B: os elementos de A que não estão em B.',
+        'Comece sempre pela interseção ao preencher o diagrama.');
+      C('rl-cont', 'Como resolver o problema das câmeras da prova de 2025?',
+        '3 câmeras que cobrem no máximo 2 salas cada cobrem no máximo 6 salas; com campos sobrepostos, podem cobrir menos de 3. O intervalo "de 3 a 5" está errado.',
+        'Problemas de máximo e mínimo pedem o melhor e o pior caso: o máximo sem sobreposição e o mínimo com sobreposição. Leia "no máximo" e "pelo menos" com atenção.',
+        '"No máximo duas salas" permite que uma câmera cubra uma sala só ou as mesmas salas de outra.');
+      MC('rl-cont', 'De quantas maneiras se forma uma equipe de 3 peritos entre 6 candidatos (a ordem não importa)?',
+        ['20', '120', '18', '216', '6'], 0,
+        'C(6, 3) = 6! / (3! × 3!) = 20.');
+      CLZ('rl-cont', 'Se P(A) = 0,3, então P(não A) = ___.',
+        ['0,7', '0,3', '1,3', '0,09'], 0,
+        'P(não A) = 1 − 0,3 = 0,7.');
+
+      /* ---------- Direito Penal ---------- */
+      T('dp-lei', 'Princípios e aplicação da lei penal');
+      C('dp-lei', 'Quais os princípios básicos do Direito Penal?',
+        'Legalidade (não há crime sem lei anterior que o defina), anterioridade, irretroatividade da lei mais grave, intervenção mínima (subsidiariedade e fragmentariedade), lesividade, culpabilidade, individualização da pena e insignificância.',
+        'A insignificância exclui a tipicidade material. O STF exige mínima ofensividade, nenhuma periculosidade social, reduzido grau de reprovabilidade e inexpressividade da lesão. Em regra, não se aplica a crimes com violência ou grave ameaça.',
+        'A insignificância exclui a tipicidade (material), não a ilicitude.');
+      C('dp-lei', 'Como a lei penal se aplica no tempo?',
+        'Vale a lei do tempo do crime, que é o momento da ação ou omissão (teoria da atividade, art. 4º). A lei mais benéfica retroage, mesmo após condenação definitiva; a mais grave não retroage.',
+        'A abolitio criminis (lei que deixa de considerar o fato crime) extingue a punibilidade e faz cessar os efeitos penais da sentença, mas não os civis. Leis temporárias e excepcionais continuam valendo para os fatos praticados durante sua vigência, mesmo depois de revogadas (art. 3º).',
+        'Item 30 de 2025 (agente menor de idade na data dos disparos é inimputável) é CERTO.');
+      C('dp-lei', 'Como a lei penal se aplica no espaço?',
+        'Lugar do crime: teoria da ubiquidade, ou seja, onde ocorreu a ação ou omissão, no todo ou em parte, e onde se produziu ou deveria produzir-se o resultado (art. 6º). Regra geral: territorialidade (art. 5º).',
+        'Extensões do território: embarcações e aeronaves públicas brasileiras onde estiverem; as privadas, em alto-mar ou no espaço aéreo correspondente. Extraterritorialidade incondicionada (art. 7º, I): crimes contra a vida ou a liberdade do Presidente, contra o patrimônio ou a fé pública da União, contra a Administração Pública por quem está a seu serviço e genocídio por brasileiro ou domiciliado no Brasil.',
+        'Mnemônico LUTA: Lugar = Ubiquidade; Tempo = Atividade (item 29 de 2025, ERRADO por dizer "apenas onde o resultado ocorreu").');
+      C('dp-lei', 'Qual a diferença entre crime consumado e tentado?',
+        'Consumado: quando se reúnem todos os elementos da definição legal. Tentado: iniciada a execução, não se consuma por circunstâncias alheias à vontade do agente; a pena é diminuída de 1/3 a 2/3 (art. 14).',
+        'Desistência voluntária e arrependimento eficaz (art. 15): o agente responde só pelos atos já praticados. Arrependimento posterior (art. 16): crime sem violência ou grave ameaça, dano reparado até o recebimento da denúncia, redução de 1/3 a 2/3. Crime impossível (art. 17): meio absolutamente ineficaz ou objeto absolutamente impróprio; não se pune.',
+        'Na tentativa, a consumação falha por fatores ALHEIOS à vontade; na desistência, o agente para voluntariamente.');
+      MC('dp-lei', 'Para o Código Penal, o tempo do crime é o momento:',
+        ['Da ação ou omissão, ainda que outro seja o do resultado', 'Do resultado', 'Da descoberta do fato', 'Do oferecimento da denúncia', 'Da sentença'], 0,
+        'É a teoria da atividade (art. 4º do CP).');
+      CLZ('dp-lei', 'Pela teoria da ___, o lugar do crime é tanto onde ocorreu a ação quanto onde se produziu o resultado.',
+        ['ubiquidade', 'atividade', 'resultado', 'territorialidade'], 0,
+        'É a regra do art. 6º do CP.');
+
+      T('dp-crime', 'Fato típico, ilicitude e excludentes');
+      C('dp-crime', 'Quais os elementos do fato típico?',
+        'Conduta (dolosa ou culposa), resultado (nos crimes materiais), nexo causal e tipicidade.',
+        'No conceito analítico tripartite, crime é fato típico, ilícito e culpável. Dolo: vontade de realizar a conduta (direto) ou assunção do risco (eventual). Culpa: imprudência, negligência ou imperícia, com resultado previsível. Crimes formais e de mera conduta não exigem resultado naturalístico.',
+        'Dolo eventual: assume o risco. Culpa consciente: prevê o resultado, mas acredita que não vai acontecer.');
+      C('dp-crime', 'Quais são as excludentes de ilicitude?',
+        'Estado de necessidade, legítima defesa, estrito cumprimento do dever legal e exercício regular de direito (art. 23).',
+        'Legítima defesa: repelir injusta agressão, atual ou iminente, a direito próprio ou alheio, usando moderadamente os meios necessários (art. 25); inclui o agente de segurança que repele agressão a vítima mantida refém. Estado de necessidade: salvar direito de perigo atual, não provocado pelo agente, que não podia ser evitado de outro modo (art. 24).',
+        'Em qualquer excludente, o agente responde pelo excesso doloso ou culposo (art. 23, parágrafo único).');
+      C('dp-crime', 'Qual a diferença entre legítima defesa e estado de necessidade?',
+        'Na legítima defesa há uma agressão humana injusta; no estado de necessidade há um perigo (natural ou humano) e um conflito entre bens jurídicos.',
+        'No estado de necessidade sacrifica-se um bem para salvar outro (ex.: arrombar uma porta para fugir de um incêndio). Não pode alegá-lo quem tem o dever legal de enfrentar o perigo, como bombeiros e policiais, salvo situações excepcionais.',
+        'Ataque de animal: em regra, estado de necessidade; se o animal for usado por alguém como arma, legítima defesa.');
+      C('dp-crime', 'O que é excesso punível?',
+        'É a intensificação desnecessária de uma conduta que começou justificada; o agente responde pelo excesso, a título de dolo ou culpa (art. 23, parágrafo único).',
+        'Exemplo: continuar golpeando o agressor depois de desarmá-lo. O excesso doloso é consciente; o culposo decorre de erro evitável na avaliação da situação. Para a doutrina, o excesso causado por medo ou surpresa (exculpante) pode afastar a culpabilidade.',
+        'A excludente cobre a conduta inicial; o excesso é punido à parte.');
+      MC('dp-crime', 'Quem repele, com moderação, injusta agressão atual a direito de outra pessoa age em:',
+        ['Legítima defesa', 'Estado de necessidade', 'Estrito cumprimento do dever legal', 'Exercício regular de direito', 'Arrependimento eficaz'], 0,
+        'A legítima defesa protege direito próprio ou de terceiro (art. 25 do CP).');
+
+      T('dp-esp', 'Crimes em espécie');
+      C('dp-esp', 'Quais os principais crimes contra a pessoa?',
+        'Homicídio (art. 121), feminicídio (art. 121-A, crime autônomo desde a Lei 14.994/2024), induzimento ao suicídio, infanticídio, aborto, lesão corporal (art. 129) e crimes contra a liberdade (sequestro, ameaça).',
+        'Qualificadoras do homicídio (art. 121, §2º): motivo torpe ou fútil, veneno, fogo, explosivo, asfixia, tortura ou meio cruel, traição, emboscada ou recurso que dificulte a defesa, para assegurar outro crime, entre outras. A lesão corporal se classifica em leve, grave, gravíssima e seguida de morte.',
+        'O feminicídio deixou de ser qualificadora: é o art. 121-A, com pena de 20 a 40 anos.');
+      C('dp-esp', 'Qual a diferença entre furto, roubo, extorsão e estelionato?',
+        'Furto: subtrair coisa alheia móvel sem violência (art. 155). Roubo: subtrair com violência ou grave ameaça (art. 157). Extorsão: constranger alguém, com violência ou grave ameaça, a fazer, tolerar ou deixar de fazer algo para obter vantagem econômica (art. 158). Estelionato: obter vantagem ilícita induzindo alguém em erro por fraude (art. 171).',
+        'No roubo, o agente subtrai; na extorsão, a vítima colabora entregando a vantagem. Desde a Lei 13.964/2019, o estelionato é, em regra, de ação pública condicionada à representação. Latrocínio é o roubo com resultado morte.',
+        'Furto mediante fraude: a fraude distrai a vítima e o agente subtrai. Estelionato: a vítima entrega por engano.');
+      C('dp-esp', 'Quais os principais crimes contra a fé pública?',
+        'Moeda falsa (art. 289), falsificação de documento público (art. 297), falsificação de documento particular (art. 298), falsidade ideológica (art. 299) e uso de documento falso (art. 304).',
+        'Falsidade material: o documento é forjado ou alterado (a forma é falsa), o que a perícia documentoscópica pode revelar. Falsidade ideológica: o documento é formalmente verdadeiro, mas o conteúdo é falso. Alguns documentos particulares são equiparados aos públicos, como título ao portador e testamento particular (art. 297, §2º).',
+        'Material = forma falsa (a perícia ajuda). Ideológica = conteúdo falso.');
+      C('dp-esp', 'Quais os principais crimes contra a Administração Pública?',
+        'Peculato (apropriar-se ou desviar bem de que tem a posse em razão do cargo, art. 312), concussão (exigir vantagem indevida, art. 316), corrupção passiva (solicitar, receber ou aceitar promessa de vantagem, art. 317), prevaricação (retardar ou deixar de praticar ato de ofício por interesse pessoal, art. 319) e corrupção ativa (particular oferecer ou prometer vantagem, art. 333).',
+        'Para fins penais, funcionário público é quem exerce cargo, emprego ou função pública, ainda que transitoriamente ou sem remuneração (art. 327). No peculato culposo, reparar o dano antes da sentença irrecorrível extingue a punibilidade.',
+        'Exigir = concussão. Solicitar = corrupção passiva. Oferecer (particular) = corrupção ativa.');
+      MC('dp-esp', 'O servidor que EXIGE vantagem indevida em razão da função comete:',
+        ['Concussão', 'Corrupção passiva', 'Corrupção ativa', 'Prevaricação', 'Peculato'], 0,
+        'O verbo "exigir" caracteriza a concussão (art. 316 do CP).');
+
+      /* ---------- Direito Administrativo ---------- */
+      T('da-org', 'Organização administrativa e princípios');
+      C('da-org', 'Qual a diferença entre descentralização e desconcentração?',
+        'Descentralização: a atividade é transferida para outra pessoa jurídica (autarquia, fundação, empresa estatal ou particular por delegação). Desconcentração: as competências são distribuídas entre órgãos dentro da mesma pessoa jurídica.',
+        'Descentralização por outorga: a lei cria a entidade e transfere a titularidade e a execução do serviço. Por delegação (colaboração): transfere-se só a execução, por contrato (concessão, permissão) ou ato. Centralização e concentração são os opostos. Órgãos não têm personalidade jurídica.',
+        'Item 22 de 2025 (concessão a particular por contrato = descentralização) é CERTO.');
+      C('da-org', 'Como é formada a administração indireta?',
+        'Por autarquias, fundações públicas, empresas públicas e sociedades de economia mista, vinculadas (não subordinadas) a um órgão da administração direta.',
+        'Autarquia: pessoa jurídica de direito público, criada por lei específica, para atividades típicas de Estado, com patrimônio e receita próprios (ex.: INSS). Empresa pública: direito privado, capital 100% público, qualquer forma societária (ex.: Caixa). Sociedade de economia mista: direito privado, sempre sociedade anônima, com maioria do capital votante público (ex.: Banco do Brasil).',
+        'Autarquia é CRIADA por lei; empresa pública e sociedade de economia mista têm a criação AUTORIZADA por lei.');
+      C('da-org', 'O que é o controle finalístico (tutela)?',
+        'É o controle que a administração direta exerce sobre as entidades da indireta, nos limites da lei, para verificar se cumprem suas finalidades, sem hierarquia.',
+        'A hierarquia existe entre órgãos da mesma pessoa jurídica. Entre administração direta e indireta há vinculação e supervisão ministerial.',
+        'Não há subordinação hierárquica entre um ministério e uma autarquia: há vinculação.');
+      C('da-org', 'Quais são os princípios da Administração Pública?',
+        'Expressos no art. 37 da CF: legalidade, impessoalidade, moralidade, publicidade e eficiência (LIMPE). Implícitos: supremacia e indisponibilidade do interesse público, razoabilidade, proporcionalidade, motivação, autotutela, continuidade e segurança jurídica.',
+        'Pela legalidade administrativa, o gestor só faz o que a lei permite. A supremacia e a indisponibilidade do interesse público são os pilares do regime jurídico-administrativo (prerrogativas e sujeições). Pela autotutela, a administração anula seus atos ilegais e revoga os inconvenientes (Súmula 473 do STF).',
+        'A razoabilidade é princípio IMPLÍCITO, não está no art. 37.');
+      MC('da-org', 'A criação de uma secretaria dentro de um ministério é exemplo de:',
+        ['Desconcentração', 'Descentralização por outorga', 'Descentralização por delegação', 'Concessão de serviço público', 'Privatização'], 0,
+        'A secretaria é um órgão da mesma pessoa jurídica (a União): é desconcentração.');
+
+      T('da-ato', 'Ato administrativo e poderes');
+      C('da-ato', 'Quais os elementos (requisitos) do ato administrativo?',
+        'Competência, finalidade, forma, motivo e objeto.',
+        'Competência, finalidade e forma são, em regra, vinculados; motivo e objeto podem ser discricionários (o mérito administrativo). Vícios de competência e de forma podem ser convalidados em certos casos; os de finalidade, motivo e objeto, em regra, não. Pela teoria dos motivos determinantes, os motivos declarados vinculam a validade do ato.',
+        'Mnemônico COFIFOMOB: COmpetência, FInalidade, FOrma, MOtivo, OBjeto.');
+      C('da-ato', 'Quais os atributos do ato administrativo?',
+        'Presunção de legitimidade e veracidade, imperatividade, autoexecutoriedade e tipicidade.',
+        'A presunção é relativa: admite prova em contrário. Imperatividade: o ato impõe obrigações sem depender da concordância do particular (nem todos os atos a têm). Autoexecutoriedade: execução direta pela administração, sem ordem judicial, quando a lei permite ou em urgência, como a interdição de um estabelecimento.',
+        'A cobrança de multa não paga depende de execução judicial: não é autoexecutória.');
+      C('da-ato', 'Como se extinguem os atos administrativos?',
+        'Por anulação (ilegalidade; feita pela administração ou pelo Judiciário, com efeitos retroativos), revogação (conveniência e oportunidade; só pela administração, efeitos para o futuro), cassação (o beneficiário descumpriu condições) e caducidade (lei nova tornou o ato incompatível).',
+        'O direito de anular atos favoráveis ao destinatário decai em 5 anos, salvo má-fé (Lei 9.784/1999, art. 54). Atos vinculados e os que já geraram direito adquirido não podem ser revogados.',
+        'O Judiciário anula atos ilegais, mas não revoga atos de outro Poder por conveniência.');
+      C('da-ato', 'Quais são os poderes administrativos e o que é abuso de poder?',
+        'Poderes: hierárquico, disciplinar, regulamentar e de polícia (além do vinculado e do discricionário). Abuso de poder tem duas espécies: excesso de poder (agir além da competência) e desvio de poder ou de finalidade (agir com fim diferente do previsto em lei).',
+        'Hierárquico: ordenar, fiscalizar, avocar e delegar dentro da mesma pessoa. Disciplinar: punir servidores e quem tem vínculo especial com a administração. Regulamentar: editar decretos para a fiel execução das leis. Polícia: limitar direitos individuais em favor do interesse público (alvarás, fiscalização).',
+        'Excesso = competência. Desvio = finalidade.');
+      MC('da-ato', 'Um chefe remove um servidor de ofício para puni-lo, embora a lei preveja a remoção para atender à necessidade do serviço. Houve:',
+        ['Desvio de finalidade', 'Excesso de poder', 'Ato vinculado regular', 'Exercício do poder regulamentar', 'Revogação'], 0,
+        'A competência existia, mas foi usada para um fim diferente do previsto em lei.');
+      CLZ('da-ato', 'A revogação de um ato administrativo ocorre por razões de conveniência e ___.',
+        ['oportunidade', 'ilegalidade', 'competência', 'forma'], 0,
+        'Ilegalidade leva à anulação; conveniência e oportunidade, à revogação.');
+
+      T('da-agen', 'Agentes públicos e Lei 8.112/1990');
+      C('da-agen', 'Quais as espécies de agentes públicos?',
+        'Agentes políticos (chefes do Executivo, parlamentares, ministros), servidores públicos (estatutários, empregados públicos e temporários), militares e particulares em colaboração (jurados, mesários, concessionários).',
+        'Cargo: conjunto de atribuições criado por lei, ocupado por estatutário. Emprego: vínculo contratual (CLT). Função: atribuição sem cargo (função de confiança e temporários). Cargo em comissão: livre nomeação e exoneração, para direção, chefia e assessoramento.',
+        'Função de confiança: só para servidor efetivo. Cargo em comissão: qualquer pessoa, respeitado um percentual mínimo de efetivos.');
+      C('da-agen', 'Quais as formas de provimento na Lei 8.112/1990?',
+        'Nomeação, promoção, readaptação, reversão, aproveitamento, reintegração e recondução.',
+        'A nomeação é a única forma originária. Reintegração: retorno do servidor demitido quando a demissão é anulada. Recondução: retorno ao cargo anterior por inabilitação em estágio probatório ou reintegração do antigo ocupante. Reversão: retorno do aposentado. Aproveitamento: retorno do servidor em disponibilidade.',
+        'Transferência e ascensão foram declaradas inconstitucionais (exigiriam concurso).');
+      C('da-agen', 'Como funcionam a estabilidade e o estágio probatório?',
+        'O servidor nomeado por concurso para cargo efetivo adquire estabilidade após 3 anos de efetivo exercício e aprovação em avaliação especial de desempenho (CF, art. 41).',
+        'O estável só perde o cargo por sentença judicial transitada em julgado, por processo administrativo disciplinar com ampla defesa, por avaliação periódica de desempenho insuficiente (na forma de lei complementar) ou por excesso de despesa com pessoal. Extinto o cargo, o estável fica em disponibilidade com remuneração proporcional.',
+        'A estabilidade (3 anos) é no SERVIÇO PÚBLICO; o estágio probatório avalia a aptidão para o CARGO.');
+      C('da-agen', 'Quais as penalidades disciplinares da Lei 8.112/1990?',
+        'Advertência, suspensão (até 90 dias), demissão, cassação de aposentadoria ou disponibilidade, destituição de cargo em comissão e destituição de função comissionada (art. 127).',
+        'Cabe demissão, por exemplo, por crime contra a administração, abandono de cargo (mais de 30 dias consecutivos), improbidade e corrupção. O processo disciplinar é conduzido por comissão de três servidores estáveis. A sindicância pode resultar em arquivamento, advertência ou suspensão de até 30 dias.',
+        'A suspensão pode ser convertida em multa de 50% por dia de remuneração, com o servidor continuando a trabalhar.');
+      MC('da-agen', 'Pela CF, o servidor nomeado por concurso para cargo efetivo adquire estabilidade após:',
+        ['3 anos de efetivo exercício e avaliação especial de desempenho', '2 anos de exercício', '5 anos de exercício', 'A posse', 'A aprovação no concurso'], 0,
+        'É a regra do art. 41 da CF, desde a EC 19/1998.');
+
+      T('da-lic', 'Licitações e contratação direta (Lei 14.133/2021)');
+      C('da-lic', 'Quais as modalidades de licitação na Lei 14.133/2021?',
+        'Pregão, concorrência, concurso, leilão e diálogo competitivo.',
+        'Pregão: bens e serviços comuns (menor preço ou maior desconto). Concorrência: bens e serviços especiais e obras e serviços de engenharia. Concurso: trabalho técnico, científico ou artístico, com prêmio. Leilão: venda de bens. Diálogo competitivo: contratações inovadoras, com diálogo com licitantes pré-selecionados. Tomada de preços e convite foram extintos.',
+        'O registro de preços NÃO é modalidade: é procedimento auxiliar (item 23 de 2025, ERRADO).');
+      C('da-lic', 'Quais os critérios de julgamento?',
+        'Menor preço, maior desconto, melhor técnica ou conteúdo artístico, técnica e preço, maior lance (no leilão) e maior retorno econômico (art. 33).',
+        'O maior retorno econômico é usado em contratos de eficiência, em que a remuneração depende da economia gerada. Técnica e preço vale para serviços em que a técnica pesa, como os serviços técnicos especializados de natureza intelectual.',
+        'Critério de julgamento (o "tipo") não é modalidade.');
+      C('da-lic', 'Qual a diferença entre dispensa e inexigibilidade?',
+        'Inexigibilidade: a competição é inviável (rol exemplificativo do art. 74: fornecedor exclusivo, artista consagrado, serviços técnicos de notória especialização, credenciamento, imóvel com características únicas). Dispensa: a competição seria possível, mas a lei autoriza não licitar (rol taxativo do art. 75: baixo valor, emergência etc.).',
+        'Na contratação direta, o processo deve ter justificativa de preço, razão da escolha do contratado, estimativa de despesa e demonstração de recursos orçamentários (art. 72).',
+        'A justificativa de preço é obrigatória na contratação direta (item 24 de 2025, ERRADO por dizer "opcional").');
+      C('da-lic', 'Quais as fases do procedimento licitatório?',
+        'Preparatória, divulgação do edital, apresentação de propostas e lances, julgamento, habilitação, recursal e homologação (art. 17).',
+        'Em regra, o julgamento vem antes da habilitação (só se confere a documentação do vencedor), mas a ordem pode ser invertida por ato motivado. A fase recursal é única. Alguns princípios: legalidade, impessoalidade, moralidade, publicidade, eficiência, planejamento, transparência, competitividade, vinculação ao edital e julgamento objetivo (art. 5º).',
+        'Na Lei 14.133, a regra é julgar primeiro e habilitar depois.');
+      MC('da-lic', 'Na Lei 14.133/2021, a contratação de artista consagrado pela crítica é hipótese de:',
+        ['Inexigibilidade de licitação', 'Dispensa de licitação', 'Pregão', 'Leilão', 'Diálogo competitivo'], 0,
+        'Não há como comparar objetivamente artistas: a competição é inviável.');
+      ORD('da-lic', 'Ordene as fases da licitação na Lei 14.133/2021 (regra geral).',
+        ['Preparatória', 'Divulgação do edital', 'Propostas e lances', 'Julgamento', 'Habilitação', 'Recursal', 'Homologação'],
+        'Na regra da nova lei, o julgamento vem antes da habilitação.');
+
+      T('da-resp', 'Responsabilidade civil e controle da administração');
+      C('da-resp', 'Como é a responsabilidade civil do Estado na CF?',
+        'Objetiva, na modalidade risco administrativo: as pessoas jurídicas de direito público e as de direito privado prestadoras de serviço público respondem pelos danos que seus agentes causarem a terceiros, independentemente de dolo ou culpa (art. 37, §6º).',
+        'Basta provar conduta, dano e nexo causal. O Estado tem direito de regresso contra o agente que agiu com dolo ou culpa. O STF fixou que a vítima deve processar o Estado, não diretamente o agente (Tema 940).',
+        'O Estado responde objetivamente; o agente responde em ação de regresso, se agiu com dolo ou culpa.');
+      C('da-resp', 'E nos casos de omissão do Estado?',
+        'Em regra, aplica-se a responsabilidade subjetiva, pela culpa do serviço (o serviço não funcionou, funcionou mal ou atrasou). O STF admite responsabilidade objetiva quando havia um dever específico de agir, como na morte de preso sob custódia.',
+        'Na custódia, o Estado assume o dever de proteger o preso e responde por sua morte se esse dever foi descumprido (STF, Tema 592). Uma omissão genérica, como não impedir todos os crimes de uma cidade, não gera indenização automática.',
+        'Morte de detento sob custódia: o Estado responde (dever específico de proteção).');
+      C('da-resp', 'Quais as excludentes e atenuantes da responsabilidade do Estado?',
+        'Excludentes: culpa exclusiva da vítima, caso fortuito ou força maior e fato exclusivo de terceiro, porque rompem o nexo causal. Atenuante: culpa concorrente da vítima, que reduz a indenização.',
+        'A teoria do risco administrativo admite excludentes; a do risco integral não, e é aplicada só em casos excepcionais, como dano nuclear e ambiental. Força maior que o Estado poderia ter evitado não exclui a responsabilidade.',
+        'Risco administrativo admite excludentes; risco integral, não.');
+      C('da-resp', 'Como é feito o controle da Administração Pública?',
+        'Internamente (autotutela, hierarquia, controle interno), externamente pelo Legislativo (com auxílio do Tribunal de Contas) e pelo Judiciário (controle de legalidade, não de mérito).',
+        'Pela autotutela, a administração anula seus atos ilegais e revoga os inconvenientes (Súmula 473 do STF). O Judiciário só age quando provocado e controla a legalidade, incluindo razoabilidade e proporcionalidade, sem substituir o mérito. O TCU julga contas e aplica sanções; o Congresso pode sustar atos normativos que excedam o poder regulamentar.',
+        'O Judiciário não revoga ato administrativo de outro Poder por conveniência.');
+      MC('da-resp', 'Na responsabilidade objetiva do Estado (risco administrativo), a vítima precisa provar:',
+        ['Conduta, dano e nexo causal', 'Dolo do agente', 'Culpa do agente', 'Apenas o dano', 'Que o agente foi condenado criminalmente'], 0,
+        'Não é preciso provar dolo ou culpa do agente.');
+
+      /* ---------- Direito Constitucional ---------- */
+      T('dc-dir', 'Direitos e garantias fundamentais');
+      C('dc-dir', 'Quais as principais garantias individuais do art. 5º?',
+        'Igualdade, legalidade, inviolabilidade do domicílio, sigilo das comunicações, liberdade de expressão (vedado o anonimato), devido processo legal, contraditório e ampla defesa, presunção de inocência, juiz natural e inadmissibilidade das provas ilícitas.',
+        'A casa é asilo inviolável: sem consentimento, só em flagrante, desastre, socorro ou, durante o dia, por ordem judicial (inciso XI). O sigilo telefônico só pode ser quebrado por ordem judicial, para investigação criminal ou instrução processual penal (XII). Não haverá penas de morte (salvo guerra declarada), de caráter perpétuo, de trabalhos forçados, de banimento ou cruéis (XLVII).',
+        'A pena de morte tem uma ÚNICA exceção: guerra declarada (item 27 de 2025, CERTO).');
+      C('dc-dir', 'Quais são os remédios constitucionais?',
+        'Habeas corpus (liberdade de locomoção), habeas data (informações pessoais em bancos de dados), mandado de segurança (direito líquido e certo não amparado por HC ou HD), mandado de injunção (falta de norma que torne inviável o exercício de direito) e ação popular (anular ato lesivo ao patrimônio público, à moralidade ou ao meio ambiente).',
+        'Habeas corpus e habeas data são gratuitos. A ação popular só pode ser proposta por cidadão (eleitor), isento de custas salvo má-fé. O mandado de segurança coletivo pode ser impetrado por partido com representação no Congresso, sindicato, entidade de classe ou associação.',
+        'Ação popular: o legitimado é o CIDADÃO (eleitor), não qualquer pessoa.');
+      C('dc-dir', 'Quais são os direitos sociais?',
+        'Educação, saúde, alimentação, trabalho, moradia, transporte, lazer, segurança, previdência social, proteção à maternidade e à infância e assistência aos desamparados (art. 6º).',
+        'São direitos de segunda dimensão, que exigem prestações do Estado; são limitados pela reserva do possível, mas protegidos pelo mínimo existencial e pela vedação do retrocesso. Os direitos dos trabalhadores estão no art. 7º.',
+        'O transporte foi incluído como direito social pela EC 90/2015.');
+      C('dc-dir', 'Quais as características dos direitos fundamentais?',
+        'Historicidade, universalidade, inalienabilidade, imprescritibilidade, irrenunciabilidade, relatividade (admitem ponderação) e aplicabilidade imediata (art. 5º, §1º).',
+        'Os direitos e garantias individuais são cláusulas pétreas (art. 60, §4º, IV): não podem ser abolidos por emenda. Valem também entre particulares (eficácia horizontal). Estrangeiros residentes e não residentes também são protegidos.',
+        'Direitos fundamentais são RELATIVOS; a doutrina aponta como exceção a proibição da tortura.');
+      MC('dc-dir', 'O remédio constitucional para conhecer ou retificar informações pessoais em bancos de dados públicos é:',
+        ['Habeas data', 'Habeas corpus', 'Mandado de injunção', 'Ação popular', 'Mandado de segurança coletivo'], 0,
+        'O habeas data protege o acesso e a retificação de dados pessoais (art. 5º, LXXII).');
+
+      T('dc-nac', 'Nacionalidade, direitos políticos e partidos');
+      C('dc-nac', 'Quem são os brasileiros natos?',
+        'Os nascidos no Brasil, ainda que de pais estrangeiros (desde que estes não estejam a serviço de seu país); os nascidos no exterior de pai ou mãe brasileiros a serviço do Brasil; e os nascidos no exterior de pai ou mãe brasileiros registrados em repartição brasileira ou que venham residir no Brasil e optem, após a maioridade, pela nacionalidade brasileira (art. 12, I).',
+        'Naturalizados adquirem a nacionalidade na forma da lei. Originários de países de língua portuguesa precisam só de 1 ano de residência ininterrupta e idoneidade moral; os demais estrangeiros, de 15 anos de residência ininterrupta e ausência de condenação penal, desde que requeiram (art. 12, II).',
+        'A lei não pode distinguir natos e naturalizados, salvo nos casos previstos na própria CF.');
+      C('dc-nac', 'Quais cargos são privativos de brasileiro nato?',
+        'Presidente e Vice-Presidente da República, Presidente da Câmara, Presidente do Senado, Ministro do STF, carreira diplomática, oficial das Forças Armadas e Ministro de Estado da Defesa (art. 12, §3º).',
+        'Também só natos ocupam as vagas de cidadãos no Conselho da República. O naturalizado pode ter a naturalização cancelada por sentença judicial em caso de fraude no processo de naturalização ou de atentado contra a ordem constitucional e o Estado Democrático (redação da EC 131/2023).',
+        'Ministro do STJ não precisa ser nato; Ministro do STF, sim.');
+      C('dc-nac', 'Como funcionam os direitos políticos?',
+        'Alistamento e voto são obrigatórios para maiores de 18 anos e facultativos para analfabetos, maiores de 70 anos e jovens de 16 e 17 anos. Não podem se alistar os estrangeiros e os conscritos durante o serviço militar obrigatório.',
+        'Idades mínimas para concorrer: 35 anos (Presidente, Vice e Senador), 30 (Governador e Vice), 21 (Deputado, Prefeito, Vice-Prefeito e juiz de paz) e 18 (Vereador). Inalistáveis e analfabetos são inelegíveis. É proibida a cassação de direitos políticos; perda e suspensão só nos casos do art. 15.',
+        'O analfabeto pode votar, mas não pode ser votado.');
+      C('dc-nac', 'Como a CF trata os partidos políticos?',
+        'É livre a criação, fusão, incorporação e extinção de partidos, resguardados a soberania, o regime democrático, o pluripartidarismo e os direitos fundamentais. Os partidos adquirem personalidade jurídica na forma da lei civil e registram o estatuto no TSE (art. 17).',
+        'Têm autonomia para definir sua estrutura interna. É proibido receber recursos de entidade ou governo estrangeiros e usar organização paramilitar. A EC 97/2017 proibiu coligações nas eleições proporcionais e criou cláusula de desempenho.',
+        'Criar partido NÃO depende de autorização do Congresso (item 26 de 2025, ERRADO).');
+      MC('dc-nac', 'É cargo privativo de brasileiro nato:',
+        ['Ministro do Supremo Tribunal Federal', 'Ministro do Superior Tribunal de Justiça', 'Senador da República', 'Governador de Estado', 'Deputado Federal'], 0,
+        'Os cargos privativos de nato estão no art. 12, §3º, da CF; STJ, Senado, governos e Câmara (exceto a presidência) não estão na lista.');
+
+      T('dc-exe', 'Poder Executivo e segurança pública');
+      C('dc-exe', 'Quais a forma e o sistema de governo do Brasil?',
+        'Forma de governo: república. Sistema de governo: presidencialismo. Forma de Estado: federação. Regime: democrático.',
+        'No presidencialismo, o Presidente acumula as funções de chefe de Estado (representa o país) e de chefe de governo (dirige a administração). O plebiscito de 1993 manteve a república presidencialista. O mandato é de 4 anos, com uma reeleição.',
+        'Item 28 de 2025 ("exclusivamente chefe de Estado") está ERRADO.');
+      C('dc-exe', 'Quais os órgãos de segurança pública (art. 144)?',
+        'Polícia Federal, Polícia Rodoviária Federal, Polícia Ferroviária Federal, polícias civis, polícias militares e corpos de bombeiros militares e polícias penais federal, estaduais e distrital.',
+        'A segurança pública é dever do Estado, direito e responsabilidade de todos. Polícias civis: polícia judiciária e apuração de infrações (exceto as militares e as da União), dirigidas por delegados de carreira. PMs: polícia ostensiva e preservação da ordem. Bombeiros: defesa civil, além do previsto em lei. Polícias penais (EC 104/2019): segurança dos estabelecimentos penais.',
+        'Bombeiros executam atividades de defesa civil (item 25 de 2025, CERTO).');
+      C('dc-exe', 'Quais as atribuições da Polícia Federal (art. 144, §1º)?',
+        'Apurar infrações contra a ordem política e social ou em detrimento de bens, serviços e interesses da União, e outras com repercussão interestadual ou internacional que exijam repressão uniforme; prevenir e reprimir o tráfico de drogas, o contrabando e o descaminho; exercer as funções de polícia marítima, aeroportuária e de fronteiras; e exercer, com exclusividade, a polícia judiciária da União.',
+        'A PF é órgão permanente, organizado e mantido pela União e estruturado em carreira. A perícia criminal federal faz parte da PF.',
+        'Polícia judiciária da UNIÃO é exclusividade da PF.');
+      C('dc-exe', 'Quais atribuições privativas do Presidente são mais cobradas?',
+        'Nomear e exonerar Ministros, exercer a direção superior da administração federal, sancionar, promulgar e publicar leis, expedir decretos e regulamentos, vetar projetos, manter relações com Estados estrangeiros, celebrar tratados (sujeitos ao Congresso), decretar estado de defesa e de sítio e comandar as Forças Armadas (art. 84).',
+        'O Presidente pode delegar a Ministros, ao Procurador-Geral da República ou ao Advogado-Geral da União, entre outras, a organização da administração por decreto e o provimento e a extinção de cargos. Crimes de responsabilidade: julgados pelo Senado, depois de autorização de 2/3 da Câmara; crimes comuns: pelo STF.',
+        'Decreto autônomo (art. 84, VI) só para organizar a administração sem aumentar despesa e para extinguir cargos vagos.');
+      MC('dc-exe', 'Exercer com exclusividade as funções de polícia judiciária da União é atribuição da:',
+        ['Polícia Federal', 'Polícia Rodoviária Federal', 'Polícia Civil dos estados', 'Polícia Penal Federal', 'Força Nacional'], 0,
+        'É a regra do art. 144, §1º, IV, da CF.');
+
+      T('dc-soc', 'Ordem social');
+      C('dc-soc', 'Qual a base e qual o objetivo da ordem social?',
+        'A base é o primado do trabalho, e o objetivo é o bem-estar e a justiça sociais (art. 193).',
+        'A ordem social abrange seguridade social, educação, cultura e desporto, ciência e tecnologia, comunicação social, meio ambiente, família, criança, adolescente, jovem e idoso, e indígenas.',
+        'BASE = trabalho; OBJETIVO = bem-estar e justiça sociais.');
+      C('dc-soc', 'O que compõe a seguridade social?',
+        'Saúde, previdência social e assistência social (art. 194).',
+        'Saúde: direito de todos e dever do Estado, com acesso universal e igualitário (SUS). Previdência: contributiva e de filiação obrigatória. Assistência social: prestada a quem dela precisar, independentemente de contribuição, como o benefício de um salário mínimo ao idoso e à pessoa com deficiência sem meios de se manter.',
+        'Previdência exige contribuição; saúde e assistência, não.');
+      C('dc-soc', 'O que diz a CF sobre o meio ambiente?',
+        'Todos têm direito ao meio ambiente ecologicamente equilibrado, bem de uso comum do povo, cabendo ao Poder Público e à coletividade defendê-lo e preservá-lo para as presentes e futuras gerações (art. 225).',
+        'Condutas lesivas sujeitam pessoas físicas ou jurídicas a sanções penais e administrativas, independentemente da obrigação de reparar o dano; por isso a pessoa jurídica pode responder por crime ambiental. Floresta Amazônica, Mata Atlântica, Serra do Mar, Pantanal e Zona Costeira são patrimônio nacional.',
+        'Pessoa jurídica pode responder penalmente por crime ambiental.');
+      C('dc-soc', 'O que diz a CF sobre família, criança, idoso e indígenas?',
+        'Crianças, adolescentes e jovens têm prioridade absoluta (art. 227). Idosos têm amparo da família, da sociedade e do Estado, e os maiores de 65 anos têm transporte coletivo urbano gratuito (art. 230). Aos indígenas são reconhecidos organização social, costumes, línguas e direitos originários sobre as terras que tradicionalmente ocupam (art. 231).',
+        'As terras indígenas são bens da União, inalienáveis e indisponíveis; os indígenas têm posse permanente e usufruto exclusivo das riquezas do solo, dos rios e dos lagos. Explorar recursos hídricos e minerais nessas terras depende de autorização do Congresso, ouvidas as comunidades. A família tem especial proteção do Estado.',
+        'Terra indígena é propriedade da União, com posse permanente dos indígenas.');
+      MC('dc-soc', 'Segundo a CF, a seguridade social compreende:',
+        ['Saúde, previdência social e assistência social', 'Saúde, educação e previdência', 'Previdência, trabalho e moradia', 'Assistência social, cultura e lazer', 'Saúde e segurança pública'], 0,
+        'É o tripé do art. 194 da CF.');
+
+      return { topics:topics, cards:cards, questions:questions };
+    })();
+
     // Itens da prova 2025 associados aos tópicos (aparecem no teste do tópico correspondente).
     var QTOPIC = {
       'pf25-51':'pol-uni', 'pf25-52':'bcm-cel', 'pf25-53':'pol-uni', 'pf25-54':'pol-uni', 'pf25-56':'bcm-epi',
@@ -1490,13 +2410,28 @@ questions: [
       'pf25-96':'est-bay', 'pf25-98':'est-vin', 'pf25-100':'est-bay', 'pf25-101':'est-bay', 'pf25-102':'est-bay',
       'pf25-103':'est-bay', 'pf25-104':'qual-iso', 'pf25-105':'qual-iso', 'pf25-107':'qual-rib', 'pf25-108':'bpg-leg',
       'pf25-109':'qual-rib', 'pf25-110':'qual-pt', 'pf25-111':'qual-pt', 'pf25-112':'qual-pt', 'pf25-113':'bpg-hist',
-      'pf25-114':'bpg-hist', 'pf25-115':'bpg-hist', 'pf25-118':'bpg-hist', 'pf25-119':'qual-rib', 'pf25-120':'bpg-hist'
+      'pf25-114':'bpg-hist', 'pf25-115':'bpg-hist', 'pf25-118':'bpg-hist', 'pf25-119':'qual-rib', 'pf25-120':'bpg-hist',
+      // Básicos da prova 2025
+      'pf25-09':'pt-red', 'pf25-10':'pt-red', 'pf25-11':'pt-red', 'pf25-12':'pt-red', 'pf25-13':'inf-hw',
+      'pf25-15':'inf-ia', 'pf25-16':'inf-ia', 'pf25-17':'inf-prot', 'pf25-20':'inf-db', 'pf25-21':'da-org',
+      'pf25-22':'da-org', 'pf25-23':'da-lic', 'pf25-24':'da-lic', 'pf25-25':'dc-exe', 'pf25-26':'dc-nac',
+      'pf25-27':'dc-dir', 'pf25-28':'dc-exe', 'pf25-29':'dp-lei', 'pf25-30':'dp-lei', 'pf25-32':'dpp-per',
+      'pf25-33':'dpp-prova', 'pf25-34':'dpp-fla', 'pf25-35':'crim-con', 'pf25-36':'crim-con', 'pf25-37':'crim-loc',
+      'pf25-39':'crim-loc', 'pf25-40':'dh-conv', 'pf25-41':'dh-forca', 'pf25-42':'dh-cf', 'pf25-43':'dh-conv',
+      'pf25-44':'dh-cf', 'pf25-45':'dh-cf', 'pf25-46':'rl-cont', 'pf25-47':'rl-prop', 'pf25-48':'rl-prop',
+      'pf25-49':'rl-eq',
+      // Questões antigas de múltipla escolha dos básicos
+      'q01':'dc-dir', 'q02':'dc-dir', 'q03':'da-org', 'q04':'da-lic', 'q05':'dp-lei', 'q06':'dp-lei',
+      'q07':'dpp-ip', 'q08':'dpp-fla', 'q21':'rl-eq', 'q22':'pt-cra', 'q23':'inf-net'
     };
     // Cards antigos de qualidade (ISO 17025) entram no tópico de acreditação.
     var CTOPIC = { fc119:'qual-iso', fc120:'qual-iso', fc121:'qual-iso', fc122:'qual-iso', fc123:'qual-iso' };
 
-    SEED.flashcards = SEED.flashcards.concat(AREA19.cards);
-    SEED.questions = SEED.questions.concat(AREA19.questions);
+    // Básicos: os cards curtos antigos dessas matérias dão lugar aos novos, organizados por tópico.
+    var BASIC_NODES = { pt:1, inf:1, dh:1, crim:1, dpp:1, rl:1, dp:1, da:1, dc:1 };
+    SEED.flashcards = SEED.flashcards.filter(function(c){ return !BASIC_NODES[c.syllabusId]; });
+    SEED.flashcards = SEED.flashcards.concat(AREA19.cards, BASICOS.cards);
+    SEED.questions = SEED.questions.concat(AREA19.questions, BASICOS.questions);
     SEED.flashcards.forEach(function(c){ if(CTOPIC[c.id]) c.topic = CTOPIC[c.id]; });
     SEED.questions.forEach(function(q){ if(QTOPIC[q.id]) q.topic = QTOPIC[q.id]; });
     // Tipo de interação de uma questão: mc (múltipla escolha), ce (certo/errado), cloze (completar), order (ordenar).
@@ -1504,7 +2439,7 @@ questions: [
       if(q.type) return q.type;
       return (q.options && q.options.length === 2 && q.options[0] === 'Certo' && q.options[1] === 'Errado') ? 'ce' : 'mc';
     }
-    var TOPICS = AREA19.topics;
+    var TOPICS = AREA19.topics.concat(BASICOS.topics);
     var TOPIC_NAME = {};
     TOPICS.forEach(function(t){ TOPIC_NAME[t.id] = t.name; });
 
