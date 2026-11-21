@@ -9,7 +9,7 @@
 
 O MVP é a **fatia vertical mínima utilizável para estudo real**, entregue ao fim da **Sprint 4**:
 
-- Abrir o `app.html` e cair direto na **Home** (1 toque para estudar).
+- Abrir o `index.html` e cair direto na **Home** (1 toque para estudar).
 - Rodar uma **run** completa em ritmo de reels (flashcards + blocos de questões).
 - Ver o **Sumário** com acerto por conteúdo.
 - Ter os **itens fracos reinjetados** automaticamente na run seguinte.
@@ -24,7 +24,7 @@ O MVP é a **fatia vertical mínima utilizável para estudo real**, entregue ao 
 
 | # | Item | Sprint | Critério de aceite |
 |---|---|---|---|
-| M-01 | `app.html` único, offline, `file://` | 1 | Abre nos 4 navegadores sem rede |
+| M-01 | `index.html` único, offline, `file://` | 1 | Abre nos 4 navegadores sem rede |
 | M-02 | Store central + persistência com fallback | 1 | Estado sobrevive a reload |
 | M-03 | Navegação por estado (router) | 1 | Troca de telas sem recarregar |
 | M-04 | Home com botão único "Estudar agora" | 1 | 1 toque inicia fluxo |
@@ -72,7 +72,7 @@ O MVP é a **fatia vertical mínima utilizável para estudo real**, entregue ao 
 
 ## 3. Critérios de aceite do MVP
 
-1. A usuária abre o `app.html` offline e vê a Home em < 1 s.
+1. A usuária abre o `index.html` offline e vê a Home em < 1 s.
 2. Um toque em "Estudar agora" inicia uma run sem confirmações.
 3. A run intercala 4 flashcards → bloco de 4–5 questões, com feedback imediato.
 4. Sair no meio salva `partial`; retomar não repete itens já respondidos.

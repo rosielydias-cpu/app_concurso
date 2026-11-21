@@ -9,7 +9,7 @@
 
 | Item | Decisão |
 |---|---|
-| Entregável final | Um único `app.html` autocontido (HTML + CSS + JS inline) |
+| Entregável final | Um único `index.html` autocontido (HTML + CSS + JS inline) |
 | Restrições | Zero rede, zero build, zero framework, zero CDN, funciona por `file://` |
 | Plataformas | Chrome/Edge/Firefox/Safari — desktop e mobile |
 | Tamanho-alvo | 300–600 KB (HTML+CSS+JS+dados) |
@@ -42,7 +42,7 @@ Sprint 0 ─► 1 ─► 2 ─► 3 ─► 4  ══ MVP v0.1 (utilizável) ═�
 | Sprint | Status | Entrega |
 |---|---|---|
 | 0 | Concluída | [`backlog.md`](./backlog.md) |
-| 1 | Concluída | fundação do `app.html` |
+| 1 | Concluída | fundação do `index.html` |
 | 2 | Concluída | seed 58 cards / 23 questões + import JSON |
 | 3 | Concluída | motor de run validado (200 runs) |
 | 4 | Concluída — **MVP v0.1** | reforço adaptativo validado |
@@ -93,10 +93,10 @@ Sprint 0 ─► 1 ─► 2 ─► 3 ─► 4  ══ MVP v0.1 (utilizável) ═�
 
 **Duração:** 1 semana · **Marco:** M0 → início M1
 
-**Objetivo:** montar o esqueleto do `app.html` com design system, Store com persistência e navegação — sem lógica de estudo ainda.
+**Objetivo:** montar o esqueleto do `index.html` com design system, Store com persistência e navegação — sem lógica de estudo ainda.
 
 ### Tarefas
-- [x] Criar `app.html` monolítico com `<style>`, `<body>` shell e `<script>` IIFE único.
+- [x] Criar `index.html` monolítico com `<style>`, `<body>` shell e `<script>` IIFE único.
 - [x] Design system: tokens CSS (cores, espaçamento, tipografia, raios, sombras, dark/light).
 - [x] Shell fixo: header (progresso/streak), `#viewport`, tabbar inferior, toast, container de modal.
 - [x] **Store**: estado central em memória + `subscribe/render` simples.
@@ -106,10 +106,10 @@ Sprint 0 ─► 1 ─► 2 ─► 3 ─► 4  ══ MVP v0.1 (utilizável) ═�
 - [x] Tela **Home estática** (layout + botão "Estudar agora" sem ação real).
 - [x] Utils base: `mulberry32` (PRNG com seed), datas, formatação, debounce.
 
-> **Status:** implementada (`app.html`, JS validado). Pendente: camada **IndexedDB** — adiada para a Sprint 9 (endurecimento de persistência), conforme planejado; fallback ativo hoje é `localStorage → sessionStorage → memória`.
+> **Status:** implementada (`index.html`, JS validado). Pendente: camada **IndexedDB** — adiada para a Sprint 9 (endurecimento de persistência), conforme planejado; fallback ativo hoje é `localStorage → sessionStorage → memória`.
 
 ### Entregáveis
-- `app.html` abrindo por `file://` com Home renderizada e persistência funcionando.
+- `index.html` abrindo por `file://` com Home renderizada e persistência funcionando.
 
 ### Critérios de aceite
 - Abre offline em Chrome/Edge/Firefox/Safari sem erros no console.
@@ -138,7 +138,7 @@ Sprint 0 ─► 1 ─► 2 ─► 3 ─► 4  ══ MVP v0.1 (utilizável) ═�
 - [x] **Importar JSON**: `<input type="file">` + validação + merge seguro.
 - [x] Tela **Plan** (leitura): lista de disciplinas, pesos e progresso zerado.
 
-> **Status:** camada de dados implementada (`app.html`). Seed inicial entregue com **14 conteúdos, 58 flashcards e 23 questões** (validado: zero duplicatas, referências íntegras). O volume-alvo de 300–500 cards / 200–400 questões é **ampliável via importação JSON** (modelo disponível na tela Plano).
+> **Status:** camada de dados implementada (`index.html`). Seed inicial entregue com **14 conteúdos, 58 flashcards e 23 questões** (validado: zero duplicatas, referências íntegras). O volume-alvo de 300–500 cards / 200–400 questões é **ampliável via importação JSON** (modelo disponível na tela Plano).
 
 ### Entregáveis
 - Dados seed embutidos e validados.
@@ -404,11 +404,11 @@ Sprint 0 ─► 1 ─► 2 ─► 3 ─► 4  ══ MVP v0.1 (utilizável) ═�
 - [ ] Coletar feedback e corrigir bugs bloqueantes.
 - [ ] Documentação embutida (Ajuda/Sobre) e **README de uso**.
 - [ ] Checklist de release (versão no Store, `version: 1`).
-- [ ] Backup de segurança do `app.html` final.
+- [ ] Backup de segurança do `index.html` final.
 - [ ] Congelar escopo: registrar "pós-1.0" no backlog de evolução.
 
 ### Entregáveis
-- **`app.html` v1.0** + documentação + backlog pós-1.0.
+- **`index.html` v1.0** + documentação + backlog pós-1.0.
 
 ### Critérios de aceite
 - PO conclui ≥ 5 runs reais sem bugs bloqueantes.
@@ -423,7 +423,7 @@ Sprint 0 ─► 1 ─► 2 ─► 3 ─► 4  ══ MVP v0.1 (utilizável) ═�
 ## 12. Definição de Pronto (DoD) — aplica-se a toda sprint
 
 Uma entrega só é "pronta" quando:
-- [ ] Implementada dentro do `app.html` único, **sem dependências externas**.
+- [ ] Implementada dentro do `index.html` único, **sem dependências externas**.
 - [ ] Funciona **offline** e por `file://` nos 4 navegadores-alvo.
 - [ ] **Zero requisições de rede** em runtime.
 - [ ] **Autosave** e persistência com fallback preservados.

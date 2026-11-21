@@ -57,7 +57,7 @@ Criar um **aplicativo web de estudo em formato "Reels"** que transforme o tempo 
 
 ### 4.1 Restrição estrutural
 
-**Um único arquivo `app.html`**, autocontido, que funciona por `file://` em qualquer navegador moderno (Chrome/Edge/Firefox/Safari desktop e mobile).
+**Um único arquivo `index.html`**, autocontido, que funciona por `file://` em qualquer navegador moderno (Chrome/Edge/Firefox/Safari desktop e mobile).
 
 **Proibições absolutas:**
 
@@ -76,7 +76,7 @@ Criar um **aplicativo web de estudo em formato "Reels"** que transforme o tempo 
 ### 4.2 Camadas lógicas dentro do arquivo (separação por `<section>` + módulos JS internos)
 
 ```
-app.html
+index.html
 ├─ <style>            → Design system (tokens CSS), layout, componentes, animações
 ├─ <body>             → Shell fixo: header, #viewport (main), tabbar inferior, toast, modais
 └─ <script>           → Núcleo JS (script único, IIFE)
@@ -255,7 +255,7 @@ RUN (padrão: ~30 min)
 4. **Recompensa, não punição.** Erro = sinal de dado, não de fracasso visual.
 5. **Recuperar o controle é fácil.** Abandonar uma run é permitido e sem perda de progresso já feito.
 6. **O app é um coach, não um chefe.** Sugere, explica, ajusta — não cobra.
-7. **Zero atrito técnico.** Sem cadastro, sem internet, sem instalar nada: abrir o `app.html` e estudar.
+7. **Zero atrito técnico.** Sem cadastro, sem internet, sem instalar nada: abrir o `index.html` e estudar.
 
 ---
 
