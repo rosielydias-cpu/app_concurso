@@ -213,6 +213,9 @@
   .check:last-child{border-bottom:0}
   .check input{width:20px; height:20px; accent-color:var(--accent)}
   .check.done span{color:var(--muted); text-decoration:line-through}
+  .opts-ce{grid-template-columns:1fr 1fr}
+  .opts-ce .opt{justify-content:center; align-items:center; font-weight:800}
+  .reel-q.reel-q-ce{font-weight:600; line-height:1.45}
   html{--fs:1}
   .reel-q{font-size:calc(20px * var(--fs))}
   .reel-a, .opt{font-size:calc(15.5px * var(--fs))}
@@ -361,20 +364,28 @@
 
     var SEED = {
       syllabus: [
-        { id:'dc', name:'Direito Constitucional', parentId:null, weight:8, order:1, discipline:'Direito' },
-        { id:'da', name:'Direito Administrativo', parentId:null, weight:6, order:2, discipline:'Admin' },
-        { id:'dp', name:'Direito Penal', parentId:null, weight:8, order:3, discipline:'Direito' },
-        { id:'dpp', name:'Direito Processual Penal', parentId:null, weight:8, order:4, discipline:'Processo' },
-        { id:'le', name:'Legislação Especial', parentId:null, weight:6, order:5, discipline:'Legislação' },
-        { id:'far', name:'Farmacologia', parentId:null, weight:10, order:6, discipline:'Farmácia' },
-        { id:'tox', name:'Toxicologia', parentId:null, weight:8, order:7, discipline:'Farmácia' },
-        { id:'fg', name:'Farmacognosia', parentId:null, weight:6, order:8, discipline:'Farmácia' },
-        { id:'br', name:'Bromatologia', parentId:null, weight:6, order:9, discipline:'Farmácia' },
-        { id:'qb', name:'Química e Bioquímica', parentId:null, weight:6, order:10, discipline:'Farmácia' },
-        { id:'crim', name:'Criminalística', parentId:null, weight:6, order:11, discipline:'Criminalística' },
-        { id:'pt', name:'Língua Portuguesa', parentId:null, weight:6, order:12, discipline:'Básicas' },
-        { id:'rl', name:'Raciocínio Lógico', parentId:null, weight:4, order:13, discipline:'Básicas' },
-        { id:'inf', name:'Informática', parentId:null, weight:4, order:14, discipline:'Básicas' }
+        /* Perito Criminal Federal — Área 14 (Farmácia). Pesos calibrados pela prova CESPE 2018
+           (itens 51–120): Farmacologia ~18 itens, Química ~20, Toxicologia 4, Microbiologia 6,
+           Imunologia 6, Qualidade/validação 6, Legislação sanitária 5, Farmacognosia 1. */
+        { id:'far', name:'Farmacologia', parentId:null, weight:10, order:1, discipline:'Específicos · Farmácia' },
+        { id:'tox', name:'Toxicologia', parentId:null, weight:7, order:2, discipline:'Específicos · Farmácia' },
+        { id:'fg', name:'Farmacognosia', parentId:null, weight:4, order:3, discipline:'Específicos · Farmácia' },
+        { id:'br', name:'Bromatologia', parentId:null, weight:4, order:4, discipline:'Específicos · Farmácia' },
+        { id:'qb', name:'Química Geral, Orgânica e Físico-Química', parentId:null, weight:9, order:5, discipline:'Específicos · Química' },
+        { id:'qa', name:'Química Analítica e Quimiometria', parentId:null, weight:6, order:6, discipline:'Específicos · Química' },
+        { id:'mic', name:'Microbiologia', parentId:null, weight:5, order:7, discipline:'Específicos · Biologia' },
+        { id:'imu', name:'Imunologia', parentId:null, weight:5, order:8, discipline:'Específicos · Biologia' },
+        { id:'qual', name:'Gestão da Qualidade e Validação (ISO 17025)', parentId:null, weight:5, order:9, discipline:'Específicos · Qualidade e Vigilância' },
+        { id:'lsan', name:'Legislação Sanitária (ANVISA)', parentId:null, weight:5, order:10, discipline:'Específicos · Qualidade e Vigilância' },
+        { id:'crim', name:'Criminalística', parentId:null, weight:4, order:11, discipline:'Específicos · Criminalística' },
+        { id:'dc', name:'Direito Constitucional', parentId:null, weight:6, order:12, discipline:'Básicos · Direito' },
+        { id:'da', name:'Direito Administrativo', parentId:null, weight:5, order:13, discipline:'Básicos · Direito' },
+        { id:'dp', name:'Direito Penal', parentId:null, weight:6, order:14, discipline:'Básicos · Direito' },
+        { id:'dpp', name:'Direito Processual Penal', parentId:null, weight:6, order:15, discipline:'Básicos · Direito' },
+        { id:'le', name:'Legislação Especial', parentId:null, weight:5, order:16, discipline:'Básicos · Direito' },
+        { id:'pt', name:'Língua Portuguesa', parentId:null, weight:6, order:17, discipline:'Básicos · Gerais' },
+        { id:'rl', name:'Raciocínio Lógico', parentId:null, weight:3, order:18, discipline:'Básicos · Gerais' },
+        { id:'inf', name:'Informática', parentId:null, weight:3, order:19, discipline:'Básicos · Gerais' }
       ],
       flashcards: [
         { id:'fc01', syllabusId:'dc', front:'Quais são os fundamentos da República (art. 1º da CF)?', back:'Soberania, cidadania, dignidade da pessoa humana, valores sociais do trabalho e da livre iniciativa e pluralismo político.' },
@@ -462,7 +473,50 @@
         { id:'fc83', syllabusId:'crim', front:'A cadeia de custódia na perícia criminal registra de forma contínua a posse e a integridade dos vestígios desde a coleta até a análise laboratorial, garantindo sua admissibilidade judicial.', back:'Cada transferência deve ser documentada (data, hora, responsável, finalidade); ausência de registros pode invalidar as evidências.' },
         { id:'fc84', syllabusId:'pt', front:'A crase ocorre na fusão da preposição "a" com o artigo feminino "a(s)" (a + a = à) ou com os pronomes aquele(s), aquela(s) e aquilo.', back:'Exemplos: fui à escola, refiro-me àquilo. Não há crase antes de palavra masculina: "a pé", "aos alunos" (a + os, sem crase).' },
         { id:'fc85', syllabusId:'rl', front:'A negação da proposição "Todo A é B" é "Algum A não é B", seguindo a lógica quantificacional de oposição de quantificadores universais e particulares.', back:'Em lógica de predicados: ¬∀x(Ax → Bx) ≡ ∃x(Ax ∧ ¬Bx); lê-se "existe ao menos um A que não é B".' },
-        { id:'fc86', syllabusId:'inf', front:'O protocolo HTTPS fornece comunicação criptografada entre cliente e servidor, garantindo confidencialidade (via criptografia assimétrica/simétrica), integridade (hash) e autenticação (certificado X.509).', back:'O handshake TLS estabelece chaves simétricas para criptografia de sessão; o certificado válido evita ataques MITM.' }
+        { id:'fc86', syllabusId:'inf', front:'O protocolo HTTPS fornece comunicação criptografada entre cliente e servidor, garantindo confidencialidade (via criptografia assimétrica/simétrica), integridade (hash) e autenticação (certificado X.509).', back:'O handshake TLS estabelece chaves simétricas para criptografia de sessão; o certificado válido evita ataques MITM.' },
+        /* ---- Área 14 (Farmácia): reforço alinhado à prova CESPE 2018 ---- */
+        { id:'fc87', syllabusId:'far', front:'Qual a diferença entre potência e eficácia?', back:'Potência: concentração que produz 50% do efeito máximo (CE50); quanto menor a CE50, mais potente. Eficácia: o efeito máximo (Emax) que o fármaco consegue produzir.' },
+        { id:'fc88', syllabusId:'far', front:'Como o antagonista competitivo reversível altera a curva dose-resposta do agonista?', back:'Desloca a curva para a DIREITA (aumenta a CE50) sem reduzir o efeito máximo; é superável aumentando a dose do agonista.' },
+        { id:'fc89', syllabusId:'far', front:'E o antagonista não competitivo (ou irreversível)?', back:'Reduz o efeito máximo do agonista; aumentar a dose do agonista não recupera a resposta.' },
+        { id:'fc90', syllabusId:'far', front:'Qual o mecanismo de ação da cocaína?', back:'Bloqueia a recaptação de dopamina, noradrenalina e serotonina (principalmente o transportador de dopamina, DAT), aumentando a dopamina na via de recompensa.' },
+        { id:'fc91', syllabusId:'far', front:'Como agem os antidepressivos tricíclicos?', back:'Inibem de forma NÃO seletiva a recaptação de noradrenalina e serotonina; também bloqueiam receptores muscarínicos, H1 e α1, o que explica boca seca, sedação e hipotensão.' },
+        { id:'fc92', syllabusId:'far', front:'Quais receptores são intracelulares (nucleares)?', back:'Receptores de hormônios esteroides (glicocorticoides, mineralocorticoides, estrogênio), de hormônios tireoidianos, de vitamina D e de retinoides. Atuam como fatores de transcrição.' },
+        { id:'fc93', syllabusId:'far', front:'O que é metabolismo de primeira passagem?', back:'Metabolização do fármaco no intestino e no fígado (via sistema porta) antes de chegar à circulação sistêmica. Ocorre sobretudo na via oral e reduz a biodisponibilidade.' },
+        { id:'fc94', syllabusId:'fg', front:'Qual a diferença entre infusão e decocção?', back:'Infusão: verte-se água fervente sobre a droga e abafa-se (folhas e flores). Decocção: a droga é fervida junto com a água (cascas, raízes e sementes).' },
+        { id:'fc95', syllabusId:'fg', front:'O que é maceração?', back:'Extração a frio: a droga vegetal fica em contato com o solvente, à temperatura ambiente, por horas ou dias.' },
+        { id:'fc96', syllabusId:'tox', front:'Por que o chumbo é neurotóxico?', back:'Atravessa a barreira hematoencefálica e causa encefalopatia (mais grave em crianças); também inibe enzimas da síntese do heme, como a ALA-desidratase.' },
+        { id:'fc97', syllabusId:'tox', front:'Carvão ativado é útil na intoxicação por álcool?', back:'Não. O carvão ativado adsorve mal álcoois, metais (lítio, ferro) e ácidos ou bases fortes. É útil para muitos fármacos ingeridos recentemente.' },
+        { id:'fc98', syllabusId:'qa', front:'A cromatografia em camada delgada (CCD) é qualitativa ou quantitativa?', back:'Qualitativa ou semiquantitativa: identifica pelo fator de retenção (Rf). Para quantificar, usa-se CLAE (HPLC), CG ou espectrofotometria.' },
+        { id:'fc99', syllabusId:'qa', front:'O que o infravermelho e o UV-Visível medem?', back:'IV: vibrações das ligações (ex.: estiramento C=O por volta de 1.700 cm⁻¹). UV-Vis: transições eletrônicas (ex.: HOMO → LUMO).' },
+        { id:'fc100', syllabusId:'qa', front:'O que é a regressão PLS (mínimos quadrados parciais)?', back:'Uma técnica de calibração multivariada (quimiometria) que quantifica analitos com sinais sobrepostos sem precisar separá-los.' },
+        { id:'fc101', syllabusId:'qa', front:'O que é análise gravimétrica?', back:'Determinação quantitativa pela massa: o analito é isolado (por precipitação ou volatilização) e pesado.' },
+        { id:'fc102', syllabusId:'qa', front:'Qual o critério de linearidade na validação pela RDC 166/2017?', back:'Coeficiente de correlação (r) acima de 0,990, além da avaliação dos resíduos e da significância do coeficiente angular.' },
+        { id:'fc103', syllabusId:'qb', front:'Qual a geometria molecular da amônia (NH₃)?', back:'Piramidal trigonal: 3 pares ligantes e 1 par de elétrons livre (arranjo tetraédrico), com ângulo de cerca de 107°.' },
+        { id:'fc104', syllabusId:'qb', front:'Qual a diferença entre esterificação e saponificação?', back:'Esterificação: ácido + álcool → éster + água (a formação de triglicerídeos é uma esterificação). Saponificação: hidrólise do éster em meio básico → sabão (sal de ácido graxo) + álcool.' },
+        { id:'fc105', syllabusId:'qb', front:'O que caracteriza o equilíbrio químico?', back:'É um equilíbrio dinâmico: a velocidade direta é igual à inversa (e diferente de zero), e as concentrações permanecem constantes.' },
+        { id:'fc106', syllabusId:'qb', front:'Por que o íon Cl⁻ é maior que o átomo de Cl?', back:'O elétron extra aumenta a repulsão entre os elétrons sob a mesma carga nuclear, e o raio cresce. Os cátions, ao contrário, são menores que seus átomos.' },
+        { id:'fc107', syllabusId:'qb', front:'Na eletrólise de NaCl em solução aquosa, o que se forma em cada eletrodo?', back:'Ânodo (oxidação): Cl₂. Cátodo (redução): H₂ e OH⁻. Dica: ânodo e oxidação começam com vogal; cátodo e redução, com consoante.' },
+        { id:'fc108', syllabusId:'qb', front:'A que classe pertence a cafeína e qual é o seu núcleo?', back:'É um alcaloide metilxantina (1,3,7-trimetilxantina) de núcleo purínico (pirimidina fundida a imidazol), com grupos amida no anel. A guanina tem o mesmo núcleo.' },
+        { id:'fc109', syllabusId:'qb', front:'O que é um carbono quiral e qual a sua consequência?', back:'É um carbono ligado a 4 grupos diferentes. Gera estereoisômeros com atividade óptica (ex.: o ácido L-ascórbico tem 2 carbonos quirais).' },
+        { id:'fc110', syllabusId:'mic', front:'Qual a diferença entre bactérias gram-positivas e gram-negativas?', back:'Gram-positivas: parede espessa de peptidoglicano e sem membrana externa (coram de roxo). Gram-negativas: camada fina de peptidoglicano e membrana externa com LPS (coram de rosa).' },
+        { id:'fc111', syllabusId:'mic', front:'Quais são as formas básicas das bactérias?', back:'Cocos (esféricos), bacilos (bastonetes), espirilos e espiroquetas (espirais) e vibriões (em forma de vírgula).' },
+        { id:'fc112', syllabusId:'mic', front:'Qual a morfologia e o Gram da Neisseria meningitidis?', back:'É um diplococo gram-negativo, agente da meningite meningocócica.' },
+        { id:'fc113', syllabusId:'mic', front:'Qual o agente do antraz e quais as suas características?', back:'Bacillus anthracis: bacilo gram-positivo formador de esporos. Tem formas cutânea, inalatória e gastrointestinal e já foi usado como arma biológica.' },
+        { id:'fc114', syllabusId:'imu', front:'A quais linfócitos o MHC de classe I e o de classe II apresentam antígenos?', back:'MHC I: peptídeos endógenos para linfócitos T CD8 (citotóxicos). MHC II: peptídeos exógenos, nas células apresentadoras, para linfócitos T CD4 (auxiliares).' },
+        { id:'fc115', syllabusId:'imu', front:'De que células se originam os plasmócitos?', back:'Da diferenciação de linfócitos B ativados. Os plasmócitos secretam anticorpos (imunidade humoral); linfócitos T não viram plasmócitos.' },
+        { id:'fc116', syllabusId:'imu', front:'Quais as citocinas e os alvos dos perfis Th1, Th2 e Th17?', back:'Th1: IFN-γ, contra patógenos intracelulares. Th2: IL-4, IL-5 e IL-13, contra helmintos e na alergia. Th17: IL-17, contra bactérias extracelulares e fungos.' },
+        { id:'fc117', syllabusId:'imu', front:'Qual a função dos linfócitos T regulatórios (Treg)?', back:'São CD4⁺CD25⁺FOXP3⁺ e suprimem respostas imunes (via IL-10, TGF-β e CTLA-4), inclusive modulando células apresentadoras, o que mantém a tolerância.' },
+        { id:'fc118', syllabusId:'imu', front:'Qual a principal célula apresentadora capaz de ativar linfócitos T naive?', back:'A célula dendrítica.' },
+        { id:'fc119', syllabusId:'qual', front:'De que trata a ABNT NBR ISO/IEC 17025:2017?', back:'Dos requisitos gerais para a competência, a imparcialidade e a operação consistente de laboratórios de ensaio e calibração.' },
+        { id:'fc120', syllabusId:'qual', front:'Quando a validação de método é obrigatória pela ISO/IEC 17025?', back:'Em métodos não normalizados, em métodos desenvolvidos pelo laboratório e em métodos normalizados usados fora do escopo previsto ou modificados (ampliados).' },
+        { id:'fc121', syllabusId:'qual', front:'Quais são os parâmetros de validação analítica da RDC 166/2017?', back:'Seletividade, linearidade, intervalo, precisão (repetibilidade, intermediária e reprodutibilidade), exatidão, limites de detecção e de quantificação e robustez.' },
+        { id:'fc122', syllabusId:'qual', front:'Quem responde a uma reclamação no laboratório, segundo a ISO/IEC 17025?', back:'A resposta é feita, ou revisada e aprovada, por pessoa não envolvida nas atividades de laboratório que geraram a reclamação.' },
+        { id:'fc123', syllabusId:'qual', front:'Quais condições ambientais a ISO/IEC 17025 manda controlar?', back:'As que podem afetar os resultados, como temperatura, umidade, vibração, ruído, poeira e interferência eletromagnética. Elas devem ser monitoradas e registradas.' },
+        { id:'fc124', syllabusId:'lsan', front:'Que lei criou a ANVISA?', back:'A Lei nº 9.782/1999, que também define o Sistema Nacional de Vigilância Sanitária.' },
+        { id:'fc125', syllabusId:'lsan', front:'Que lei trata da vigilância sanitária de medicamentos, cosméticos e saneantes?', back:'A Lei nº 6.360/1976.' },
+        { id:'fc126', syllabusId:'lsan', front:'Sobre o que dispõe a RDC ANVISA 81/2008?', back:'É o regulamento técnico de bens e produtos importados para fins de vigilância sanitária. Material terapêutico, como células e tecidos, depende de autorização prévia da ANVISA.' },
+        { id:'fc127', syllabusId:'lsan', front:'Quais as regras do suplemento de cafeína para atletas na RDC 18/2010?', back:'Deve fornecer de 210 a 420 mg de cafeína por porção e não pode ser adicionado de nutrientes nem de outros não nutrientes. Confira a norma vigente: os suplementos alimentares passaram a seguir a RDC 243/2018.' },
+        { id:'fc128', syllabusId:'lsan', front:'Como se comprova a eficácia e a segurança de um fitoterápico?', back:'Por ensaios clínicos, por dados da literatura técnico-científica ou pela tradicionalidade de uso (RDC 14/2010, substituída pela RDC 26/2014).' }
       ],
 questions: [
         { id:'q01', syllabusId:'dc', stem:'São fundamentos da República Federativa do Brasil, EXCETO:', options:['Soberania','Cidadania','Dignidade da pessoa humana','Separação dos Poderes'], answer:3, explanation:'A separação dos Poderes (art. 60, §4º da CF) é princípio fundamental (art. 2º) e cláusula pétrea, mas não está entre os fundamentos do art. 1º: soberania, cidadania, dignidade da pessoa humana, valores sociais do trabalho e da livre iniciativa e pluralismo político.' },
@@ -487,7 +541,69 @@ questions: [
         { id:'q20', syllabusId:'crim', stem:'Preservar o local de crime é essencial para:', options:['Acelerar o julgamento','Evitar a contaminação e a perda de vestígios','Dispensar a perícia','Reduzir o inquérito'], answer:1, explanation:'A preservação da cena do crime evita a contaminação, alteração ou perda de vestígios técnicos, indispensáveis à perícia criminal.' },
         { id:'q21', syllabusId:'rl', stem:'A negação da proposição "Todo A é B" é:', options:['Nenhum A é B','Algum A não é B','Todo B é A','Algum B é A'], answer:1, explanation:'A negação universal ("todo") particulariza para "existe ao menos um A que não é B", seguindo a lógica quantificacional de oposição.' },
         { id:'q22', syllabusId:'pt', stem:'O emprego da crase ocorre, tipicamente, na fusão de:', options:['Preposição "a" com artigo "a(s)"','Preposição "de" com artigo','Verbo com preposição','Pronome com conjunção'], answer:0, explanation:'A crase é a fusão da preposição "a" com o artigo feminino "a(s)" (ex.: vou à praia, às vezes).' },
-        { id:'q23', syllabusId:'inf', stem:'O protocolo HTTPS tem como principal função:', options:['Aumentar a velocidade da rede','Garantir comunicação criptografada entre cliente e servidor','Bloquear anúncios','Compactar arquivos'], answer:1, explanation:'O HTTPS (HTTP over SSL/TLS) fornece criptografia, autenticação e integridade da comunicação entre cliente e servidor.' }
+        { id:'q23', syllabusId:'inf', stem:'O protocolo HTTPS tem como principal função:', options:['Aumentar a velocidade da rede','Garantir comunicação criptografada entre cliente e servidor','Bloquear anúncios','Compactar arquivos'], answer:1, explanation:'O HTTPS (HTTP over SSL/TLS) fornece criptografia, autenticação e integridade da comunicação entre cliente e servidor.' },
+        /* ---- CESPE 2018 · PF · Perito Criminal Federal Área 14 (Farmácia) · itens 51–120 ----
+           Formato Certo/Errado com gabarito oficial definitivo. Itens anulados (56, 71) e itens
+           que dependem de figura não reproduzível foram omitidos; "(adaptado)" = enunciado
+           reescrito para ficar autossuficiente sem a figura. answer: 0 = Certo, 1 = Errado. */
+        { id:'pf18-51', syllabusId:'far', source:'CESPE 2018 · item 51', stem:'Os receptores acoplados à proteína G representam a classe mais abundante de receptores no corpo humano e são considerados receptores metabotrópicos.', options:['Certo','Errado'], answer:0, explanation:'Os GPCRs formam a maior superfamília de receptores de membrana e são metabotrópicos: agem via proteína G e segundos mensageiros, não abrindo um canal diretamente.' },
+        { id:'pf18-52', syllabusId:'far', source:'CESPE 2018 · item 52', stem:'Canais iônicos transmembrana podem ser considerados receptores farmacológicos.', options:['Certo','Errado'], answer:0, explanation:'Canais iônicos controlados por ligante (receptores ionotrópicos, como o GABA-A e o nicotínico) são alvos farmacológicos clássicos.' },
+        { id:'pf18-53', syllabusId:'far', source:'CESPE 2018 · item 53', stem:'Os receptores de glicocorticoides são classificados como receptores intracelulares.', options:['Certo','Errado'], answer:1, explanation:'Gabarito oficial: ERRADO. Item polêmico: o receptor de glicocorticoide fica no citoplasma e age no núcleo como fator de transcrição, e muitos livros o chamam de intracelular. Na prova, vale o gabarito da banca.' },
+        { id:'pf18-54', syllabusId:'far', source:'CESPE 2018 · item 54', stem:'Fármacos administrados por via oral não sofrem metabolismo de primeira passagem.', options:['Certo','Errado'], answer:1, explanation:'A via oral é justamente a mais sujeita ao metabolismo de primeira passagem, no intestino e no fígado (via sistema porta).' },
+        { id:'pf18-55', syllabusId:'far', source:'CESPE 2018 · item 55', stem:'O metabolismo de primeira passagem diminui a biodisponibilidade de fármacos.', options:['Certo','Errado'], answer:0, explanation:'Parte do fármaco é metabolizada antes de chegar à circulação sistêmica, o que reduz a fração biodisponível.' },
+        { id:'pf18-57', syllabusId:'far', source:'CESPE 2018 · item 57', stem:'A insuficiência renal pode aumentar a taxa de eliminação de um fármaco excretado por via renal.', options:['Certo','Errado'], answer:1, explanation:'A insuficiência renal REDUZ a eliminação, aumenta a meia-vida e o risco de toxicidade; por isso a dose é ajustada.' },
+        { id:'pf18-58', syllabusId:'far', source:'CESPE 2018 · item 58', stem:'Fármacos antagonistas interagem com receptores, sem alterar a sinalização intracelular, mas impedem a ação de um agonista.', options:['Certo','Errado'], answer:0, explanation:'O antagonista tem afinidade, mas não tem eficácia intrínseca: ocupa o receptor sem ativá-lo e bloqueia o agonista.' },
+        { id:'pf18-59', syllabusId:'far', source:'CESPE 2018 · item 59', stem:'A curva dose-resposta de um fármaco agonista na presença de um antagonista competitivo reversível é deslocada para a esquerda.', options:['Certo','Errado'], answer:1, explanation:'Ela é deslocada para a DIREITA (a potência aparente diminui), sem redução do efeito máximo.' },
+        { id:'pf18-60', syllabusId:'far', source:'CESPE 2018 · item 60', stem:'A eficácia de um fármaco corresponde à concentração em que esse fármaco produz 50% de sua resposta máxima.', options:['Certo','Errado'], answer:1, explanation:'Isso é a POTÊNCIA (CE50). Eficácia é o efeito máximo (Emax) que o fármaco consegue produzir.' },
+        { id:'pf18-61', syllabusId:'far', source:'CESPE 2018 · item 61', stem:'José usa o medicamento A para dor severa há um ano, agora sem sucesso, e ingeriu três comprimidos do medicamento B, um hipnótico e sedativo. Julgue: os opioides são os fármacos de escolha para tratar dor severa.', options:['Certo','Errado'], answer:0, explanation:'Na escada analgésica da OMS, a dor intensa é tratada com opioides fortes, como a morfina.' },
+        { id:'pf18-62', syllabusId:'far', source:'CESPE 2018 · item 62', stem:'José usa o medicamento A para dor severa há um ano, agora sem sucesso, e ingeriu três comprimidos do medicamento B, um hipnótico e sedativo. Julgue: o fármaco A poderia ser um opioide e o fármaco B, um benzodiazepínico.', options:['Certo','Errado'], answer:0, explanation:'Perda de efeito com o uso prolongado sugere opioide (tolerância), e um hipnótico-sedativo sugere benzodiazepínico. A associação dos dois pode causar depressão respiratória fatal.' },
+        { id:'pf18-63', syllabusId:'far', source:'CESPE 2018 · item 63', stem:'Na mesma situação de José, um exemplo de medicamento B (hipnótico e sedativo) é a quetiapina, comumente utilizada na prática clínica como hipnótico.', options:['Certo','Errado'], answer:1, explanation:'A quetiapina é um antipsicótico atípico, não um hipnótico-sedativo de referência.' },
+        { id:'pf18-64', syllabusId:'far', source:'CESPE 2018 · item 64', stem:'Na mesma situação de José, se o medicamento A for um anti-inflamatório não esteroidal, a associação dele com o medicamento B (hipnótico-sedativo) poderá levar à depressão do sistema nervoso central e ao óbito.', options:['Certo','Errado'], answer:1, explanation:'AINEs não deprimem o SNC. O risco grave de depressão está na associação de opioides com benzodiazepínicos.' },
+        { id:'pf18-65', syllabusId:'far', source:'CESPE 2018 · item 65', stem:'A tolerância farmacológica ocorre quando, após a administração repetida de uma droga, há a necessidade do aumento da dose para produzir um mesmo efeito anterior.', options:['Certo','Errado'], answer:0, explanation:'Essa é exatamente a definição de tolerância.' },
+        { id:'pf18-66', syllabusId:'far', source:'CESPE 2018 · item 66', stem:'Drogas estimulantes do sistema nervoso central têm potencial para causar dependência porque ativam a via de recompensa e causam aumento da liberação de dopamina nessa região encefálica.', options:['Certo','Errado'], answer:0, explanation:'A via mesolímbica (da área tegmentar ventral ao núcleo accumbens) é dopaminérgica, e o aumento de dopamina ali reforça o uso.' },
+        { id:'pf18-67', syllabusId:'far', source:'CESPE 2018 · item 67', stem:'Os fármacos antidepressivos tricíclicos podem causar dependência porque atuam como inibidores seletivos da recaptação de serotonina.', options:['Certo','Errado'], answer:1, explanation:'Os tricíclicos inibem a recaptação de noradrenalina e serotonina de forma NÃO seletiva. Os ISRS (como a fluoxetina) são outra classe.' },
+        { id:'pf18-68', syllabusId:'far', source:'CESPE 2018 · item 68', stem:'A cocaína é uma droga estimulante do sistema nervoso central e seu mecanismo de ação baseia-se no bloqueio dos receptores GABA-A.', options:['Certo','Errado'], answer:1, explanation:'A cocaína bloqueia a recaptação de monoaminas, principalmente pelo transportador de dopamina (DAT). Quem age no GABA-A são os benzodiazepínicos e os barbitúricos.' },
+        { id:'pf18-69', syllabusId:'fg', source:'CESPE 2018 · item 69', stem:'Decocção é o método utilizado para extração que consiste em expor o produto natural à água fervente e abafá-lo em recipiente com tampa.', options:['Certo','Errado'], answer:1, explanation:'Essa é a descrição da INFUSÃO. Na decocção, a droga é fervida junto com a água, método usado para partes duras como cascas e raízes.' },
+        { id:'pf18-70', syllabusId:'tox', source:'CESPE 2018 · item 70', stem:'O chumbo pode causar intoxicação no sistema nervoso central, já que o metal ultrapassa a barreira hematoencefálica.', options:['Certo','Errado'], answer:0, explanation:'O chumbo atravessa a barreira hematoencefálica e causa encefalopatia, sobretudo em crianças.' },
+        { id:'pf18-72', syllabusId:'tox', source:'CESPE 2018 · item 72', stem:'Lauro, 19 anos, chegou ao hospital com ataxia, déficit cognitivo, hipotensão e bradicardia; a alcoolemia, isoladamente, não explicava o quadro. Julgue: uma possível causa seria a associação de álcool a barbitúricos, por sinergismo dos efeitos.', options:['Certo','Errado'], answer:0, explanation:'Etanol e barbitúricos são depressores do SNC e potencializam o efeito um do outro.' },
+        { id:'pf18-73', syllabusId:'tox', source:'CESPE 2018 · item 73', stem:'No caso de Lauro, se o exame também mostrasse benzodiazepínico, as duas intoxicações poderiam ser tratadas com flumazenil (para o benzodiazepínico) e carvão ativado (para o álcool).', options:['Certo','Errado'], answer:1, explanation:'O carvão ativado adsorve mal o etanol e não é tratamento para intoxicação alcoólica.' },
+        { id:'pf18-74', syllabusId:'qb', source:'CESPE 2018 · item 74', stem:'A cafeína é um alcaloide de núcleo purínico, solúvel em água (22 g/L) e em clorofórmio (130 g/L). O grupo funcional amida está presente na molécula da cafeína.', options:['Certo','Errado'], answer:0, explanation:'A cafeína tem carbonilas ligadas a nitrogênio no anel, ou seja, amidas cíclicas.' },
+        { id:'pf18-75', syllabusId:'qb', source:'CESPE 2018 · item 75', stem:'A cafeína (alcaloide metilxantina) apresenta caráter ácido em meio aquoso.', options:['Certo','Errado'], answer:1, explanation:'Como alcaloide, a cafeína é praticamente neutra ou uma base muito fraca; não tem caráter ácido em água.' },
+        { id:'pf18-76', syllabusId:'qa', source:'CESPE 2018 · item 76', stem:'A cromatografia de camada delgada permite quantificar a concentração de cafeína presente em um suplemento alimentar termogênico.', options:['Certo','Errado'], answer:1, explanation:'A CCD é qualitativa ou semiquantitativa (identifica pelo Rf). Para quantificar, usa-se CLAE (HPLC) ou espectrofotometria.' },
+        { id:'pf18-77', syllabusId:'qa', source:'CESPE 2018 · item 77', stem:'A banda de absorção mais evidente da cafeína no espectro infravermelho (ligação C=O, 1.709–1.654 cm⁻¹) se deve à excitação de um elétron da carbonila do HOMO para o LUMO.', options:['Certo','Errado'], answer:1, explanation:'Bandas no IV vêm de VIBRAÇÕES das ligações (estiramento C=O). Transições HOMO → LUMO são eletrônicas e aparecem no UV-Visível.' },
+        { id:'pf18-78', syllabusId:'qb', source:'CESPE 2018 · item 78', stem:'A cafeína é solúvel em água (22 g/L) e em clorofórmio (130 g/L). Com base na sua solubilidade, é correto afirmar que a cafeína é uma molécula com alta polaridade.', options:['Certo','Errado'], answer:1, explanation:'Ela se dissolve mais no clorofórmio, pouco polar, do que na água, o que indica polaridade moderada, e não alta.' },
+        { id:'pf18-79', syllabusId:'qb', source:'CESPE 2018 · item 79', stem:'Os dois anéis presentes na estrutura da cafeína também estão presentes na molécula da guanina.', options:['Certo','Errado'], answer:0, explanation:'As duas moléculas têm o núcleo purínico: um anel pirimidínico fundido a um imidazol.' },
+        { id:'pf18-81', syllabusId:'qb', source:'CESPE 2018 · item 81', stem:'A molécula de amônia tem estrutura trigonal planar.', options:['Certo','Errado'], answer:1, explanation:'A amônia é PIRAMIDAL trigonal: 3 pares ligantes e 1 par livre, com ângulo de cerca de 107°.' },
+        { id:'pf18-82', syllabusId:'qb', source:'CESPE 2018 · item 82 (adaptado)', stem:'A reação de formação de triglicerídeos a partir de glicerol e ácidos graxos (lipogênese) é uma reação de saponificação.', options:['Certo','Errado'], answer:1, explanation:'Formar triglicerídeos é uma ESTERIFICAÇÃO. Saponificação é a hidrólise de éster em meio básico, que gera sabão e glicerol.' },
+        { id:'pf18-83', syllabusId:'qb', source:'CESPE 2018 · item 83 (adaptado)', stem:'A adição dos ácidos HCl ou H₂SO₄, que catalisam a esterificação do glicerol (um poliálcool), aumentaria a constante da lei de velocidade dessa reação.', options:['Certo','Errado'], answer:0, explanation:'O catalisador diminui a energia de ativação e, com isso, aumenta a constante de velocidade k, sem deslocar o equilíbrio.' },
+        { id:'pf18-84', syllabusId:'qb', source:'CESPE 2018 · item 84', stem:'A água é um dos produtos da reação de formação de triglicerídeos.', options:['Certo','Errado'], answer:0, explanation:'Na esterificação, cada ligação éster formada entre o glicerol e um ácido graxo libera uma molécula de água.' },
+        { id:'pf18-85', syllabusId:'qb', source:'CESPE 2018 · item 85', stem:'Se a reação na lipogênese estiver em equilíbrio, as taxas (velocidade) da reação de formação e de hidrólise do triglicerídeo são iguais a zero.', options:['Certo','Errado'], answer:1, explanation:'No equilíbrio dinâmico, as velocidades direta e inversa são IGUAIS entre si, mas diferentes de zero.' },
+        { id:'pf18-89', syllabusId:'qb', source:'CESPE 2018 · item 89', stem:'O ácido ascórbico (vitamina C) apresenta atividade ótica.', options:['Certo','Errado'], answer:0, explanation:'Ele tem 2 carbonos quirais (C4 e C5); a forma biologicamente ativa é o ácido L-ascórbico.' },
+        { id:'pf18-90', syllabusId:'qb', source:'CESPE 2018 · item 90', stem:'Os átomos de carbono do ácido ascórbico têm estrutura tetraédrica.', options:['Certo','Errado'], answer:1, explanation:'Os carbonos da carbonila (C=O) e da dupla C=C do anel são sp², com geometria trigonal plana; nem todos são tetraédricos.' },
+        { id:'pf18-91', syllabusId:'qa', source:'CESPE 2018 · item 91', stem:'Ácido acetilsalicílico e cafeína têm bandas sobrepostas nos espectros de emissão, mas podem ser quantificados por regressão PLS (Partial Least Squares). O PLS é uma técnica de calibração multivariada.', options:['Certo','Errado'], answer:0, explanation:'O PLS relaciona muitas variáveis espectrais à concentração; é uma ferramenta central da quimiometria.' },
+        { id:'pf18-92', syllabusId:'qa', source:'CESPE 2018 · item 92', stem:'O texto compara o método PLS a um método quantitativo em que os compostos são separados e pesados individualmente para determinar o teor de cada um. Ou seja, o PLS é comparado a uma análise gravimétrica.', options:['Certo','Errado'], answer:0, explanation:'Separar e pesar os componentes para determinar o teor é, por definição, análise gravimétrica.' },
+        { id:'pf18-93', syllabusId:'qa', source:'CESPE 2018 · item 93', stem:'Foi feito um ajuste linear entre a concentração de ácido acetilsalicílico e a intensidade máxima do sinal de emissão, com coeficiente de correlação 0,98. Nessa situação, a relação não é linear, pois o coeficiente de correlação é menor que um.', options:['Certo','Errado'], answer:1, explanation:'r = 0,98 indica forte correlação linear; r < 1 significa apenas que o ajuste não é perfeito. (Para validação, a RDC 166/2017 exige r > 0,990.)' },
+        { id:'pf18-94', syllabusId:'qb', source:'CESPE 2018 · item 94', stem:'O ânion presente no soro fisiológico (solução de NaCl) é menor que o seu átomo correspondente neutro.', options:['Certo','Errado'], answer:1, explanation:'O Cl⁻ é MAIOR que o Cl: o elétron extra aumenta a repulsão e expande a nuvem eletrônica.' },
+        { id:'pf18-95', syllabusId:'qb', source:'CESPE 2018 · item 95', stem:'Se for aplicada uma adequada diferença de potencial no soro fisiológico, haverá formação de Cl₂ no cátodo.', options:['Certo','Errado'], answer:1, explanation:'O Cl₂ se forma no ÂNODO, por oxidação (2Cl⁻ → Cl₂ + 2e⁻). No cátodo ocorre redução, com formação de H₂.' },
+        { id:'pf18-96', syllabusId:'qb', source:'CESPE 2018 · item 96', stem:'O vapor de água no interior de um frasco fechado contendo soro fisiológico exerce sobre o soro e sobre as paredes do recipiente a mesma pressão.', options:['Certo','Errado'], answer:0, explanation:'Um gás em equilíbrio exerce a mesma pressão em todas as direções; essa é a pressão de vapor.' },
+        { id:'pf18-97', syllabusId:'qb', source:'CESPE 2018 · item 97', stem:'Na preparação do soro fisiológico, a interação eletrostática do ânion com seu contra-íon no sólido cristalino não é superada pela interação desses íons individualmente com as moléculas do solvente.', options:['Certo','Errado'], answer:1, explanation:'O NaCl se dissolve justamente porque a solvatação (interação íon-dipolo com a água) supera a energia do retículo cristalino.' },
+        { id:'pf18-100', syllabusId:'mic', source:'CESPE 2018 · item 100 (adaptado)', stem:'Bactérias em forma de bacilo, como as encontradas no líquido cefalorraquidiano do caso da prova, podem ser transmitidas por inalação, ingestão ou por via cutânea.', options:['Certo','Errado'], answer:0, explanation:'O Bacillus anthracis, por exemplo, infecta pelas vias inalatória, gastrointestinal e cutânea.' },
+        { id:'pf18-101', syllabusId:'mic', source:'CESPE 2018 · item 101 (adaptado)', stem:'Encontrando-se bacilos no líquido cefalorraquidiano, deve-se realizar a prova de Gram nessa amostra para a confirmação da infecção por Neisseria meningitidis.', options:['Certo','Errado'], answer:1, explanation:'A N. meningitidis é um DIPLOCOCO gram-negativo, e não um bacilo.' },
+        { id:'pf18-102', syllabusId:'mic', source:'CESPE 2018 · item 102 (adaptado)', stem:'O antraz, doença que já foi explorada como arma biológica, é causado por uma bactéria em forma de bacilo.', options:['Certo','Errado'], answer:0, explanation:'O agente é o Bacillus anthracis, um bacilo gram-positivo formador de esporos.' },
+        { id:'pf18-103', syllabusId:'mic', source:'CESPE 2018 · item 103', stem:'O resultado positivo para a presença de bactéria gram-positiva significa que a bactéria possui uma camada fina de peptidoglicano e uma membrana externa com lipopolissacarídeo, fosfolipídios e proteínas.', options:['Certo','Errado'], answer:1, explanation:'Essa descrição é das GRAM-NEGATIVAS. As gram-positivas têm parede espessa de peptidoglicano e não têm membrana externa.' },
+        { id:'pf18-104', syllabusId:'imu', source:'CESPE 2018 · item 104 (adaptado)', stem:'Na diferenciação de linfócitos T naive em efetores, a substância que inicia o processo pode ser um antígeno, e a célula que o apresenta, uma célula dendrítica.', options:['Certo','Errado'], answer:0, explanation:'As células dendríticas são as principais células apresentadoras capazes de ativar linfócitos T naive.' },
+        { id:'pf18-105', syllabusId:'imu', source:'CESPE 2018 · item 105 (adaptado)', stem:'Linfócitos T regulatórios (Treg) são células capazes de modular a atividade de células apresentadoras de antígeno.', options:['Certo','Errado'], answer:0, explanation:'As Treg suprimem respostas imunes, inclusive inibindo células apresentadoras, por meio de CTLA-4, IL-10 e TGF-β.' },
+        { id:'pf18-106', syllabusId:'imu', source:'CESPE 2018 · item 106 (adaptado)', stem:'Para gerar uma resposta imunológica do tipo Th1, a célula apresentadora de antígeno sinaliza o linfócito T CD4 via MHC classe I.', options:['Certo','Errado'], answer:1, explanation:'Linfócitos T CD4, que originam Th1, Th2 e Th17, reconhecem antígeno em MHC de CLASSE II. O MHC I apresenta antígeno a linfócitos T CD8.' },
+        { id:'pf18-107', syllabusId:'imu', source:'CESPE 2018 · item 107 (adaptado)', stem:'Linfócitos T podem se diferenciar em plasmócitos e secretar anticorpos para compor a imunidade humoral.', options:['Certo','Errado'], answer:1, explanation:'Plasmócitos derivam de linfócitos B. Linfócitos T auxiliam os B, mas não produzem anticorpos.' },
+        { id:'pf18-109', syllabusId:'imu', source:'CESPE 2018 · item 109 (adaptado)', stem:'A resposta Th17 está associada à defesa contra bactérias extracelulares e fungos.', options:['Certo','Errado'], answer:0, explanation:'As células Th17 produzem IL-17, recrutam neutrófilos e atuam contra bactérias extracelulares e fungos.' },
+        { id:'pf18-110', syllabusId:'qual', source:'CESPE 2018 · item 110', stem:'Em caso de método não normalizado, de método criado pelo próprio laboratório ou de situação de ampliação de método normalizado, é indispensável a validação de método.', options:['Certo','Errado'], answer:0, explanation:'A ISO/IEC 17025:2017 exige validar métodos não normalizados, métodos desenvolvidos pelo laboratório e métodos normalizados usados fora do escopo ou modificados.' },
+        { id:'pf18-113', syllabusId:'qual', source:'CESPE 2018 · item 113', stem:'Temperatura e som são variáveis que podem comprometer a validade de resultados de exames realizados em laboratório.', options:['Certo','Errado'], answer:0, explanation:'A ISO/IEC 17025 exige monitorar e controlar condições ambientais, como temperatura, umidade, vibração e ruído, quando elas afetam os resultados.' },
+        { id:'pf18-114', syllabusId:'qual', source:'CESPE 2018 · item 114', stem:'Atividades de laboratório podem ser providas externamente se o laboratório não tiver recurso financeiro ou equipe técnica capacitada para realizá-las.', options:['Certo','Errado'], answer:0, explanation:'A ISO/IEC 17025:2017 admite atividades providas externamente (subcontratação) quando faltam recursos ou competência, desde que o cliente seja informado e o provedor seja competente.' },
+        { id:'pf18-115', syllabusId:'qual', source:'CESPE 2018 · item 115', stem:'Em caso de reclamação ao laboratório, as conclusões a serem informadas ao reclamante devem ser analisadas criticamente por indivíduo que não esteja envolvido nas atividades de laboratório que tenham motivado a queixa.', options:['Certo','Errado'], answer:0, explanation:'A ISO/IEC 17025:2017 exige que a resposta seja feita, ou revisada e aprovada, por pessoa não envolvida nas atividades em questão.' },
+        { id:'pf18-117', syllabusId:'lsan', source:'CESPE 2018 · item 117', stem:'Tecido destinado a uso terapêutico que não tenha sido autorizado pela área técnica da ANVISA pode entrar em território nacional se estiver identificado com data de envio, nome do paciente e centro hospitalar de destino.', options:['Certo','Errado'], answer:1, explanation:'A importação de células, tecidos e órgãos para uso terapêutico depende de autorização prévia da ANVISA (RDC 81/2008); identificar a remessa não a dispensa.' },
+        { id:'pf18-118', syllabusId:'lsan', source:'CESPE 2018 · item 118', stem:'Os suplementos hidroeletrolíticos para atletas devem conter até 700 mg/L de potássio e até 15% (m/v) de fibras alimentares.', options:['Certo','Errado'], answer:1, explanation:'A RDC 18/2010 limitava o potássio a até 700 mg/L, mas não permitia adicionar fibras alimentares a esses suplementos.' },
+        { id:'pf18-119', syllabusId:'lsan', source:'CESPE 2018 · item 119', stem:'Suplemento de cafeína para atletas não pode ser adicionado de nutrientes.', options:['Certo','Errado'], answer:0, explanation:'Pela RDC 18/2010, esse suplemento fornece de 210 a 420 mg de cafeína por porção e não pode receber nutrientes nem outros não nutrientes.' },
+        { id:'pf18-120', syllabusId:'lsan', source:'CESPE 2018 · item 120', stem:'Tradicionalidade de uso constitui informação comprobatória de eficácia e segurança de fitoterápico.', options:['Certo','Errado'], answer:0, explanation:'A RDC 14/2010 aceitava a tradicionalidade de uso como forma de comprovação. A norma atual (RDC 26/2014) mantém essa via para o "produto tradicional fitoterápico".' }
       ]
     };
 
@@ -1402,15 +1518,16 @@ questions: [
       function paintQuestion(item){
         var q = qMap[item.refId];
         if(!q){ advance(); return; }
-        var letters = ['A','B','C','D','E','F'];
+        var isCE = q.options.length === 2 && q.options[0] === 'Certo' && q.options[1] === 'Errado';
+        var letters = isCE ? ['C','E'] : ['A','B','C','D','E','F'];
         var optsHtml = q.options.map(function(t, i){
           return '<button class="opt" data-i="' + i + '"><span class="opt-letter">' + letters[i] + '</span><span>' + U.esc(t) + '</span></button>';
         }).join('');
         stage.innerHTML =
           '<div class="reel">' +
-            '<div class="reel-tag">Questão · <span>' + U.esc(nodeName(item.syllabusId)) + '</span></div>' +
-            '<div class="reel-q">' + U.esc(q.stem) + '</div>' +
-            '<div class="opts" id="opts">' + optsHtml + '</div>' +
+            '<div class="reel-tag">' + (isCE ? 'Certo ou errado' : 'Questão') + ' · <span>' + U.esc(nodeName(item.syllabusId)) + '</span>' + (q.source ? ' · ' + U.esc(q.source) : '') + '</div>' +
+            '<div class="reel-q' + (isCE ? ' reel-q-ce' : '') + '">' + U.esc(q.stem) + '</div>' +
+            '<div class="opts' + (isCE ? ' opts-ce' : '') + '" id="opts">' + optsHtml + '</div>' +
             '<div class="feedback" id="q-feedback" hidden>' +
               '<p class="fb-title"></p>' +
               '<p class="fb-exp"></p>' +
@@ -1433,7 +1550,7 @@ questions: [
             var fb = stage.querySelector('#q-feedback');
             fb.hidden = false;
             fb.classList.add(correct ? 'ok' : 'bad');
-            fb.querySelector('.fb-title').textContent = correct ? 'Correto' : 'Incorreto';
+            fb.querySelector('.fb-title').textContent = (correct ? 'Você acertou' : 'Você errou') + (isCE ? ' · gabarito: ' + q.options[q.answer].toUpperCase() : '');
             fb.querySelector('.fb-exp').textContent = q.explanation || '';
             if(correct) Audio.correct();
             chrome();
@@ -1637,7 +1754,8 @@ questions: [
           var y = i * rowH + 6;
           var w = Math.max(0, (d.pct / 100) * 190);
           var color = d.pct >= 70 ? 'var(--ok)' : (d.pct >= 50 ? 'var(--warn)' : 'var(--danger)');
-          var label = d.discipline.length > 14 ? d.discipline.slice(0, 13) + '…' : d.discipline;
+          var short = d.discipline.replace(/^(Específicos|Básicos) · /, '');
+          var label = short.length > 15 ? short.slice(0, 14) + '…' : short;
           return '<text x="0" y="' + (y + 9) + '" style="fill:var(--muted);font-size:10.5px">' + U.esc(label) + '</text>' +
             '<rect x="100" y="' + y + '" width="190" height="10" rx="5" style="fill:var(--surface-2)"/>' +
             '<rect x="100" y="' + y + '" width="' + w.toFixed(1) + '" height="10" rx="5" style="fill:' + color + '"/>' +
@@ -1773,7 +1891,7 @@ questions: [
         }
         Persistence.save(obj);
         Store.init();
-        if(!Store.get().syllabus.length) Store.set({ syllabus: SEED.syllabus.map(function(n){ return Object.assign({}, n); }) });
+        syncSyllabus();
         Persistence.save(Store.get());
         applyTheme();
         toast('Backup restaurado: ' + Store.get().runs.length + ' runs.');
@@ -1843,7 +1961,7 @@ questions: [
       else msg = 'Você já fez ' + runsToday + (runsToday === 1 ? ' run' : ' runs') + ' hoje (' + U.fmtDuration(today) + '). Faltam ' + U.fmtDuration(goal - today) + ' para a meta.';
 
       var focus;
-      if(hour < 12) focus = 'Manhã: bom horário para disciplinas de maior peso, como Farmacologia e Toxicologia.';
+      if(hour < 12) focus = 'Manhã: bom horário para as matérias de maior peso na prova, como Farmacologia e Química.';
       else if(hour < 18) focus = 'Tarde: alterne flashcards com questões para manter o foco.';
       else focus = 'Noite: priorize revisão e reforço. Deixe conteúdo novo para amanhã cedo.';
 
@@ -1854,6 +1972,7 @@ questions: [
       if(!sch.configured) tips.push('Defina a <b>data da prova</b> na aba Plano para eu calcular seu ritmo.');
       if(sm.runs >= 3 && sm.accuracy < 60) tips.push('Seu acerto geral está em <b>' + sm.accuracy + '%</b>. Antes das questões, revise a teoria do conteúdo principal.');
       if(sm.streak >= 3) tips.push('<b>' + sm.streak + ' dias</b> seguidos. Não quebre a sequência!');
+      tips.push('Na CESPE, <b>cada erro anula um acerto</b>. Se não tiver segurança no item, deixe em branco.');
 
       vp.innerHTML =
         '<section class="view">' +
@@ -2084,6 +2203,17 @@ questions: [
       });
     }
 
+    // Mantém as matérias da base (SEED) atualizadas em quem já usa o app (nomes, pesos, novas matérias),
+    // preservando matérias importadas pela usuária.
+    function syncSyllabus(){
+      var cur = Store.get().syllabus || [];
+      var seedIds = {};
+      SEED.syllabus.forEach(function(n){ seedIds[n.id] = true; });
+      var merged = SEED.syllabus.map(function(n){ return Object.assign({}, n); })
+        .concat(cur.filter(function(n){ return !seedIds[n.id]; }));
+      if(JSON.stringify(merged) !== JSON.stringify(cur)) Store.set({ syllabus: merged });
+    }
+
     function init(){
       var backend = Persistence.init();
       Store.init();
@@ -2093,9 +2223,7 @@ questions: [
         var gap = Math.round((U.parseDate(U.todayStr()) - U.parseDate(stk.lastStudyDate)) / 86400000);
         if(gap > 1) Store.update(function(st){ st.streak.current = 0; });
       }
-      if(!Store.get().syllabus.length){
-        Store.set({ syllabus: SEED.syllabus.map(function(n){ return Object.assign({}, n); }) });
-      }
+      syncSyllabus();
       applyTheme();
       registerViews();
       bindTabbar();
