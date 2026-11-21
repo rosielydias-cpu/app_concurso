@@ -213,6 +213,32 @@
   .check:last-child{border-bottom:0}
   .check input{width:20px; height:20px; accent-color:var(--accent)}
   .check.done span{color:var(--muted); text-decoration:line-through}
+  .reel-a .ans{font-weight:600}
+  .more-box, .tip-box{margin-top:12px; padding:12px 14px; border-radius:12px; font-size:calc(14.5px * var(--fs)); line-height:1.55}
+  .more-box{background:rgba(58,160,255,.08); border:1px solid rgba(58,160,255,.3)}
+  .more-box b{color:var(--accent-2)}
+  .tip-box{background:rgba(255,201,77,.08); border:1px solid rgba(255,201,77,.35)}
+  .tip-box b{color:var(--warn)}
+  .more-box b, .tip-box b{display:block; font-size:11.5px; letter-spacing:.8px; text-transform:uppercase; margin-bottom:4px}
+  .blank{display:inline-block; min-width:80px; border-bottom:2px dashed var(--accent-2); color:var(--accent-2); padding:0 4px}
+  .blank.ok{border-bottom-style:solid; border-color:var(--ok); color:var(--ok)}
+  .blank.bad{border-bottom-style:solid; border-color:var(--danger); color:var(--danger)}
+  .opts-chips{grid-template-columns:repeat(auto-fit, minmax(130px, 1fr))}
+  .ord-pool{display:grid; gap:8px}
+  .ord-item{display:flex; gap:10px; align-items:center; text-align:left; padding:12px 14px; border:1px dashed var(--border); border-radius:12px; background:var(--surface-2); color:var(--text); font-size:calc(15px * var(--fs)); cursor:pointer}
+  .ord-item:disabled{opacity:.35; cursor:default}
+  .ord-picked, .ord-answer{margin:0; padding-left:22px; display:grid; gap:6px; font-size:calc(15px * var(--fs))}
+  .ord-picked:empty::before{content:"Sua ordem aparece aqui"; color:var(--muted); font-size:13px; margin-left:-22px}
+  .ord-picked li{padding:10px 12px; border-radius:10px; background:var(--surface-2); border:1px solid var(--accent-2); cursor:pointer}
+  .ord-picked li.right{border-color:var(--ok); background:rgba(55,217,154,.12)}
+  .ord-picked li.off{border-color:var(--danger); background:rgba(255,92,122,.12)}
+  .ord-answer li{color:var(--ok); font-weight:600}
+  .edital{margin-top:8px; font-size:12.5px; color:var(--muted)}
+  .edital summary{cursor:pointer; color:var(--accent-2); font-weight:700; padding:4px 0}
+  .edital p{margin-top:6px; line-height:1.5}
+  .topic-list{list-style:none; display:grid; gap:4px; margin:6px 0 4px}
+  .topic-list li{color:var(--text)}
+  .topic-list span{color:var(--muted); font-size:11.5px}
   .opts-ce{grid-template-columns:1fr 1fr}
   .opts-ce .opt{justify-content:center; align-items:center; font-weight:800}
   .reel-q.reel-q-ce{font-weight:600; line-height:1.45}
@@ -412,7 +438,7 @@
         { id:'fc12', syllabusId:'dp', front:'A lei penal mais benéfica retroage?', back:'Sim. A lei posterior mais benéfica aplica-se aos fatos anteriores (art. 2º do CP).' },
         { id:'fc13', syllabusId:'dp', front:'Quais são os elementos do crime na teoria tripartite?', back:'Fato típico, ilícito (antijurídico) e culpável.' },
         { id:'fc14', syllabusId:'dp', front:'Qual a diferença entre dolo e culpa?', back:'Dolo: vontade ou assunção do risco de produzir o resultado. Culpa: conduta por imprudência, negligência ou imperícia.' },
-        { id:'fc15', syllabusId:'dp', front:'Cite um exemplo de qualificadora do homicídio.', back:'Motivo torpe, meio cruel, recurso que dificulte a defesa da vítima ou feminicídio.' },
+        { id:'fc15', syllabusId:'dp', front:'Cite um exemplo de qualificadora do homicídio.', back:'Motivo torpe ou fútil, emprego de veneno ou meio cruel e recurso que dificulte a defesa da vítima (CP, art. 121, §2º). Desde a Lei 14.994/2024, o feminicídio deixou de ser qualificadora e virou crime autônomo (art. 121-A).' },
         { id:'fc16', syllabusId:'dpp', front:'Qual é a natureza do inquérito policial?', back:'Procedimento administrativo, inquisitivo, informativo e dispensável.' },
         { id:'fc17', syllabusId:'dpp', front:'A ação penal pública incondicionada depende de representação?', back:'Não. É promovida pelo Ministério Público independentemente da vontade da vítima.' },
         { id:'fc18', syllabusId:'dpp', front:'O que é a cadeia de custódia?', back:'Rastreamento dos vestígios desde a coleta até a análise, garantindo sua integridade e idoneidade (art. 158-A do CPP).' },
@@ -528,59 +554,6 @@
         { id:'fc127', syllabusId:'lsan', front:'Quais as regras do suplemento de cafeína para atletas na RDC 18/2010?', back:'Deve fornecer de 210 a 420 mg de cafeína por porção e não pode ser adicionado de nutrientes nem de outros não nutrientes. Confira a norma vigente: os suplementos alimentares passaram a seguir a RDC 243/2018.' },
         { id:'fc128', syllabusId:'lsan', front:'Como se comprova a eficácia e a segurança de um fitoterápico?', back:'Por ensaios clínicos, por dados da literatura técnico-científica ou pela tradicionalidade de uso (RDC 14/2010, substituída pela RDC 26/2014).' },
         /* ---- Área 19 — Genética Forense (edital 2025) ---- */
-        { id:'fc129', syllabusId:'bcm', front:'O que é epigenética?', back:'Alterações herdáveis na expressão gênica sem mudança na sequência de bases: metilação do DNA (citosinas em CpG), modificações de histonas (acetilação, metilação) e RNAs não codificantes. A acetilação é das histonas, não do DNA.' },
-        { id:'fc130', syllabusId:'bcm', front:'Em que extremidade do mRNA fica o CAP de 7-metilguanosina?', back:'Na extremidade 5′. Na 3′ fica a cauda poli-A.' },
-        { id:'fc131', syllabusId:'bcm', front:'Todo RNA transcrito em eucariotos é traduzido em proteína?', back:'Não. rRNA, tRNA, miRNA e lncRNA, entre outros, são funcionais sem tradução.' },
-        { id:'fc132', syllabusId:'bcm', front:'De que aminoácidos são formadas as proteínas e o que define a sua sequência?', back:'De α-aminoácidos (20 padrão) unidos por ligações peptídicas. A sequência é definida pela sequência de nucleotídeos do gene, segundo o código genético.' },
-        { id:'fc133', syllabusId:'bcm', front:'Cada gene codifica uma única proteína?', back:'Não necessariamente: o splicing alternativo gera várias isoformas de proteína a partir de um mesmo gene.' },
-        { id:'fc134', syllabusId:'bcm', front:'Quantos genes codificadores de proteína tem o genoma humano?', back:'Cerca de 20 mil, número semelhante ao de outros vertebrados e menor que o de muitas plantas. A complexidade vem da regulação e do splicing, não do número de genes.' },
-        { id:'fc135', syllabusId:'bcm', front:'Como o RNA (transcriptoma) ajuda a identificar fluidos biológicos?', back:'Marcadores de mRNA tecido-específicos distinguem sangue venoso (ex.: HBB), sangue menstrual (MMP7, MMP11), saliva (STATH, HTN3), sêmen (PRM1, KLK3) e secreção vaginal.' },
-        { id:'fc136', syllabusId:'bcm', front:'Como inferir idade e hábitos (tabaco, álcool) a partir do DNA?', back:'Por padrões de metilação do DNA: relógios epigenéticos para a idade (ex.: gene ELOVL2) e marcas como a do AHRR para o tabagismo.' },
-        { id:'fc137', syllabusId:'bcm', front:'O que são aminoácidos essenciais?', back:'Os que o organismo humano não sintetiza e precisa obter da dieta (ex.: histidina, isoleucina, leucina). Estão presentes nas proteínas de todos os seres vivos e não indicam a origem da amostra.' },
-        { id:'fc138', syllabusId:'met', front:'Como se rompem células animais para extrair DNA?', back:'Células animais não têm parede celular: usa-se lise com detergente e proteinase K (uma protease). Exonucleases degradariam o próprio DNA.' },
-        { id:'fc139', syllabusId:'met', front:'Qual a ordem das etapas do exame de DNA forense?', back:'Avaliação e amostragem → extração → quantificação (PCR em tempo real) → amplificação (PCR) → eletroforese capilar → análise e interpretação.' },
-        { id:'fc140', syllabusId:'met', front:'Para que serve a quantificação por PCR em tempo real (qPCR)?', back:'Para medir o DNA humano (e o masculino), avaliar degradação e inibição e ajustar a quantidade de DNA usada na amplificação.' },
-        { id:'fc141', syllabusId:'met', front:'O que acontece com DNA em excesso ou em falta na PCR?', back:'Em excesso: picos fora de escala, pull-up, stutters altos e picos divididos. Em falta: perda de alelos (drop-out) e efeitos estocásticos.' },
-        { id:'fc142', syllabusId:'met', front:'Como deve ser o fluxo de pessoas e materiais no laboratório de DNA?', back:'Unidirecional: das áreas pré-PCR (extração e preparo) para as pós-PCR (amplificação e genotipagem), nunca o inverso, para evitar contaminação por amplicons.' },
-        { id:'fc143', syllabusId:'met', front:'Como funciona o sequenciamento de Sanger?', back:'Usa DNA polimerase, primer, dNTPs e ddNTPs fluorescentes que interrompem a síntese. Lê um fragmento por reação; em misturas, os picos sobrepostos são uma limitação.' },
-        { id:'fc144', syllabusId:'met', front:'O que é o sequenciamento massivo paralelo (MPS/NGS)?', back:'Sequencia milhões de fragmentos ao mesmo tempo (STRs com variação de sequência, SNPs e mtDNA numa só corrida). É mais informativo, porém mais caro e geralmente mais demorado que a eletroforese capilar.' },
-        { id:'fc145', syllabusId:'met', front:'O que é a tecnologia de DNA rápido (Rapid DNA)?', back:'Um equipamento integrado que faz lise, extração, amplificação, eletroforese e análise em cerca de 1 a 2 horas, sem intervenção manual. É usado sobretudo em amostras de referência, como o swab bucal.' },
-        { id:'fc146', syllabusId:'met', front:'Quais os testes presuntivos para sangue, sêmen e saliva?', back:'Sangue: Kastle-Meyer (fenolftaleína) e luminol. Sêmen: fosfatase ácida e PSA (p30); a confirmação é ver espermatozoides ao microscópio. Saliva: amilase.' },
-        { id:'fc147', syllabusId:'met', front:'O que são amostras questionadas e amostras de referência?', back:'Questionada: vestígio de origem desconhecida, como os do local de crime. Referência: amostra de origem conhecida (suspeito, vítima ou familiares), usada para comparação.' },
-        { id:'fc148', syllabusId:'met', front:'O que é a fenotipagem forense por DNA (FDP)?', back:'A predição de características externas visíveis (cor de olhos, cabelo e pele), da ancestralidade biogeográfica e da idade, para gerar pistas quando não há amostra de referência para comparar.' },
-        { id:'fc149', syllabusId:'pol', front:'O que são STRs e por que são o padrão forense?', back:'Repetições curtas em tandem (unidades de 2 a 6 pb; as forenses têm tipicamente 4 pb), muito polimórficas e de herança mendeliana codominante. São a base do CODIS e do Banco Nacional de Perfis Genéticos.' },
-        { id:'fc150', syllabusId:'pol', front:'Como os STRs são tipados?', back:'Por PCR multiplex com primers fluorescentes e eletroforese capilar. O alelo é definido pelo tamanho do fragmento, comparado a uma escada alélica (ladder); não é preciso sequenciar.' },
-        { id:'fc151', syllabusId:'pol', front:'O que são SNPs e quais os seus usos forenses?', back:'Variações de base única, geralmente bialélicas, com amplicons curtos (bons para DNA degradado). São usados em ancestralidade, fenotipagem (ex.: HIrisPlex) e identificação.' },
-        { id:'fc152', syllabusId:'pol', front:'Qual a limitação dos marcadores do cromossomo Y (Y-STR)?', back:'São herdados em bloco (haplótipo) pela linha paterna: parentes paternos têm o mesmo perfil, por isso o Y-STR não distingue suspeitos com ancestral paterno comum.' },
-        { id:'fc153', syllabusId:'pol', front:'Quais as características do DNA mitocondrial?', back:'Herança materna e muitas cópias por célula, o que o torna útil em pelo, osso e amostras degradadas. Analisam-se as regiões HV1 e HV2. Não distingue parentes pela linha materna.' },
-        { id:'fc154', syllabusId:'pol', front:'Kits comerciais de STR humano amplificam DNA de cachorro?', back:'Em geral não: os primers são específicos para humanos, com reatividade cruzada apenas com primatas superiores. DNA de animal não gera perfil humano.' },
-        { id:'fc155', syllabusId:'pol', front:'Um perfil genético útil para identificação serve para inferir traços físicos?', back:'Não: os STRs de identificação ficam em regiões não codificantes. Traços físicos e ancestralidade exigem outros marcadores, como SNPs específicos.' },
-        { id:'fc156', syllabusId:'gpop', front:'Quais as condições do equilíbrio de Hardy-Weinberg?', back:'População grande, cruzamentos ao acaso e ausência de mutação, seleção, migração (fluxo gênico) e deriva. Nessas condições, p² + 2pq + q² = 1 e as frequências não mudam.' },
-        { id:'fc157', syllabusId:'gpop', front:'Como testar se uma população está em equilíbrio de Hardy-Weinberg?', back:'Calcule p e q pelos genótipos e compare os observados com os esperados (p²N, 2pqN, q²N). Ex.: 150 BB, 200 BN e 150 NN dão p = q = 0,5; o esperado é 125/250/125, então a população está fora do equilíbrio.' },
-        { id:'fc158', syllabusId:'gpop', front:'Qual o efeito da endogamia (consanguinidade)?', back:'Aumenta os homozigotos e reduz os heterozigotos, sem mudar as frequências alélicas, o que eleva a ocorrência de doenças recessivas.' },
-        { id:'fc159', syllabusId:'gpop', front:'Para que serve o θ (FST, coeficiente de Wright) nos cálculos forenses?', back:'Para corrigir a subestruturação populacional no cálculo da probabilidade de coincidência de perfis (recomendação do NRC II).' },
-        { id:'fc160', syllabusId:'gpop', front:'O que o fluxo gênico (mistura) causa numa população?', back:'Introduz alelos de outras populações, aumenta a variabilidade genética e reduz as diferenças entre populações.' },
-        { id:'fc161', syllabusId:'gpop', front:'O que é um gargalo genético?', back:'Uma redução drástica no tamanho da população, que causa perda de variabilidade e mudanças aleatórias nas frequências (deriva).' },
-        { id:'fc162', syllabusId:'gpop', front:'O que é desequilíbrio de ligação e qual a sua importância forense?', back:'É a associação não aleatória entre alelos de loci diferentes. Por isso se usam loci independentes, para poder multiplicar as frequências (regra do produto).' },
-        { id:'fc163', syllabusId:'est', front:'O que é a razão de verossimilhança (LR)?', back:'LR = P(E|H1) / P(E|H2): mede a força da evidência. LR > 1 favorece H1 (acusação), LR = 1 é neutro e LR < 1 favorece H2 (defesa).' },
-        { id:'fc164', syllabusId:'est', front:'Como é o teorema de Bayes na forma de chances?', back:'Chance a posteriori = LR × chance a priori. O perito informa o LR; as probabilidades a priori e a posteriori cabem ao julgador.' },
-        { id:'fc165', syllabusId:'est', front:'Qual o LR numa coincidência simples de perfis, sem mistura?', back:'LR ≈ 1 / frequência do perfil. Ex.: frequência de 1/1.000.000 → LR = 1.000.000.' },
-        { id:'fc166', syllabusId:'est', front:'O que é a regra do produto?', back:'Para loci independentes, a frequência do perfil (e o LR total) é o produto dos valores de cada locus.' },
-        { id:'fc167', syllabusId:'est', front:'O que é a falácia do promotor?', back:'Confundir P(evidência|inocente) com P(inocente|evidência). Uma chance de coincidência de 1% não significa 99% de chance de culpa.' },
-        { id:'fc168', syllabusId:'est', front:'Resolva: prior de 1/300, P(E|culpado) = 1 e P(E|inocente) = 0,01. Qual a probabilidade posterior de culpa?', back:'LR = 1/0,01 = 100. Chance a priori = 1/299. Chance a posteriori = 100/299, ou seja, probabilidade = 100/399 ≈ 25%.' },
-        { id:'fc169', syllabusId:'est', front:'O que é o índice de paternidade (IP) de um locus?', back:'IP = X/Y: a probabilidade de o suposto pai transmitir o alelo paterno obrigatório dividida pela frequência desse alelo na população. Ex.: mãe AA, filho AB, suposto pai BB → IP = 1/p(B).' },
-        { id:'fc170', syllabusId:'est', front:'Uma única incompatibilidade exclui a paternidade com certeza?', back:'Não: pode ser mutação. Em geral exige-se incompatibilidade em vários loci (2 a 3 ou mais) para concluir pela exclusão.' },
-        { id:'fc171', syllabusId:'est', front:'O que significa LR = 1?', back:'A evidência é neutra: as probabilidades a posteriori ficam iguais às a priori.' },
-        { id:'fc172', syllabusId:'qual', front:'Como a ISO/IEC 17025 trata a incerteza de medição de métodos reconhecidos?', back:'O laboratório deve avaliar a incerteza. Para um método reconhecido que já especifica seus limites de incerteza, considera-se o requisito atendido seguindo o método e as condições de relato (item 7.6.3).' },
-        { id:'fc173', syllabusId:'qual', front:'O que é o ensaio de proficiência e o que acontece se o laboratório falhar?', back:'É uma avaliação EXTERNA de desempenho por comparação interlaboratorial, exigida também de laboratórios já acreditados. Uma falha exige investigação e ação corretiva; não causa perda automática da acreditação.' },
-        { id:'fc174', syllabusId:'qual', front:'A acreditação ISO/IEC 17025 é obrigatória para o laudo valer em juízo?', back:'Não. A acreditação demonstra competência técnica, mas não é requisito legal para a aceitação do laudo.' },
-        { id:'fc175', syllabusId:'qual', front:'Como as resoluções da RIBPG se relacionam com a ISO/IEC 17025?', back:'Para laboratórios integrantes da RIBPG, as resoluções do Comitê Gestor (ex.: a Res. 12/2019, sobre auditorias) são obrigatórias e complementam a ISO/IEC 17025, sem substituí-la.' },
-        { id:'fc176', syllabusId:'bpg', front:'O que prevê a Lei nº 12.654/2012?', back:'A coleta de perfil genético como forma de identificação criminal e a guarda dos perfis em banco de dados sigiloso (alterou a Lei 12.037/2009 e a LEP).' },
-        { id:'fc177', syllabusId:'bpg', front:'Que norma instituiu o Banco Nacional de Perfis Genéticos (BNPG) e a RIBPG?', back:'O Decreto nº 7.950/2013.' },
-        { id:'fc178', syllabusId:'bpg', front:'Que software os bancos de perfis genéticos brasileiros usam?', back:'O CODIS (Combined DNA Index System), cedido pelo FBI por acordo de cooperação. Ele padroniza a comparação de perfis entre os laboratórios.' },
-        { id:'fc179', syllabusId:'bpg', front:'Os perfis dos bancos podem revelar traços físicos ou de saúde?', back:'Não. A Lei 12.654/2012 proíbe revelar traços somáticos ou comportamentais (exceto a determinação genética de gênero); por isso se usam STRs não codificantes.' },
-        { id:'fc180', syllabusId:'bpg', front:'Quais as finalidades dos bancos de perfis genéticos?', back:'Apoiar a investigação criminal e identificar pessoas desaparecidas, comparando perfis de restos mortais com os de familiares de referência.' },
-        { id:'fc181', syllabusId:'bpg', front:'Como funciona a RIBPG entre os estados?', back:'Permite comparar perfis de laboratórios estaduais e federais de forma automatizada, inclusive em crimes interestaduais. A padronização nacional dos marcadores é obrigatória para todos.' },
         { id:'fc182', syllabusId:'dh', front:'Que status os tratados de direitos humanos têm no Brasil?', back:'Os aprovados pelo rito do art. 5º, §3º, da CF (3/5 dos votos, em dois turnos, nas duas Casas) equivalem a emenda constitucional. Os demais são supralegais (STF, RE 466.343).' },
         { id:'fc183', syllabusId:'dh', front:'Onde a Convenção Americana prevê o duplo grau de jurisdição?', back:'No art. 8.2.h: o direito de recorrer da sentença a juiz ou tribunal superior.' },
         { id:'fc184', syllabusId:'dh', front:'Quando não se exige esgotar os recursos internos para peticionar à Comissão Interamericana?', back:'Pelo art. 46.2 da CADH: quando não há devido processo legal, quando o acesso aos recursos foi impedido ou quando há demora injustificada na decisão.' },
@@ -602,25 +575,6 @@
         { id:'fc200', syllabusId:'da', front:'O sistema de registro de preços é uma modalidade de licitação?', back:'Não. Na Lei 14.133/2021 ele é um procedimento auxiliar (art. 78). As modalidades são pregão, concorrência, concurso, leilão e diálogo competitivo.' },
         { id:'fc201', syllabusId:'da', front:'A justificativa de preço é obrigatória na contratação direta?', back:'Sim. Inclusive na inexigibilidade, o processo deve ter a justificativa de preço (Lei 14.133/2021, art. 72, VII).' },
         /* ---- Cobertura do edital 2025 (Área 19 + básicos): tópicos não cobrados na prova ---- */
-        { id:'fc202', syllabusId:'bcm', front:'Qual a diferença entre mitose e meiose?', back:'Mitose: 1 divisão que gera 2 células diploides idênticas (crescimento e reparo). Meiose: 2 divisões que geram 4 células haploides diferentes, com crossing-over (recombinação) na prófase I.' },
-        { id:'fc203', syllabusId:'bcm', front:'Como ocorre a replicação do DNA?', back:'É semiconservativa e segue no sentido 5′→3′. A DNA polimerase precisa de um primer; há a fita contínua (líder) e a descontínua (fragmentos de Okazaki, unidos pela DNA ligase).' },
-        { id:'fc204', syllabusId:'bcm', front:'O que são desnaturação e hibridização do DNA?', back:'Desnaturação: separação das fitas por calor ou pH (quebra das pontes de hidrogênio); a Tm sobe com o teor de GC. Hibridização: pareamento de fitas complementares, base da PCR e das sondas.' },
-        { id:'fc205', syllabusId:'bcm', front:'O que significa o Km na cinética de Michaelis-Menten?', back:'Km é a concentração de substrato em que a velocidade é Vmax/2. Quanto menor o Km, maior a afinidade da enzima pelo substrato.' },
-        { id:'fc206', syllabusId:'bcm', front:'Qual a diferença entre inibição enzimática competitiva e não competitiva?', back:'Competitiva: aumenta o Km aparente e mantém a Vmax (superável com mais substrato). Não competitiva: reduz a Vmax e mantém o Km.' },
-        { id:'fc207', syllabusId:'bcm', front:'Quais os principais tipos de mutação?', back:'Pontuais (substituições silenciosas, de sentido trocado ou sem sentido) e inserções ou deleções (que podem mudar a fase de leitura). Nos STRs, o deslizamento da polimerase muda o número de repetições.' },
-        { id:'fc208', syllabusId:'bcm', front:'Quais os mecanismos de reparo do DNA?', back:'Excisão de bases, excisão de nucleotídeos, reparo de mau pareamento (mismatch) e reparo de quebra de dupla fita (recombinação homóloga ou junção de extremidades não homólogas).' },
-        { id:'fc209', syllabusId:'bcm', front:'Que genomas não humanos são usados para identificar espécies?', back:'Animais: DNA mitocondrial (barcoding pelo COI e pelo citocromo b). Plantas: genoma plastidial (cloroplasto, genes rbcL e matK). Fungos: região ITS do DNA nuclear ribossomal.' },
-        { id:'fc210', syllabusId:'met', front:'Quais os principais métodos de extração de DNA?', back:'Orgânico (fenol-clorofórmio); Chelex (rápido, gera DNA de fita simples); sílica ou esferas magnéticas (automatizável); e extração diferencial, que separa espermatozoides de células epiteliais em casos de violência sexual.' },
-        { id:'fc211', syllabusId:'met', front:'Qual a diferença entre eletroforese em placa e capilar?', back:'Placa (gel de agarose ou poliacrilamida): revelação por corante e menor resolução. Capilar: polímero dentro do capilar, detecção por fluorescência, resolução de 1 pb e automação; é o padrão para STR.' },
-        { id:'fc212', syllabusId:'met', front:'Quais os componentes e as etapas da PCR?', back:'Componentes: DNA molde, primers, dNTPs, DNA polimerase termoestável, Mg²⁺ e tampão. Cada ciclo tem desnaturação (~95 °C), anelamento (~55–60 °C) e extensão (~72 °C).' },
-        { id:'fc213', syllabusId:'met', front:'O que é genealogia genética forense?', back:'O uso de milhares de SNPs comparados em bancos de genealogia para achar parentes distantes de um perfil desconhecido e reconstruir árvores genealógicas até chegar a um suspeito.' },
-        { id:'fc214', syllabusId:'met', front:'Como coletar e acondicionar uma mancha biológica?', back:'Use swab umedecido com água estéril, seque ao ar e acondicione em papel (nunca em plástico úmido). Identifique e lacre a embalagem e use EPI, registrando tudo na cadeia de custódia.' },
-        { id:'fc215', syllabusId:'gpop', front:'O que medem as estatísticas F de Wright?', back:'FIS: endogamia dentro da subpopulação. FST: diferenciação entre subpopulações. FIT: endogamia total.' },
-        { id:'fc216', syllabusId:'gpop', front:'O que é deriva genética?', back:'Mudança aleatória nas frequências alélicas, mais forte em populações pequenas; leva à fixação ou à perda de alelos. A seleção natural, ao contrário, não é aleatória.' },
-        { id:'fc217', syllabusId:'gpop', front:'Quais os métodos de análise filogenética?', back:'Reconstroem as relações evolutivas a partir de sequências (ex.: mtDNA): métodos de distância (neighbor-joining), máxima parcimônia, máxima verossimilhança e inferência bayesiana.' },
-        { id:'fc218', syllabusId:'qual', front:'Como funciona a acreditação de laboratórios no Brasil?', back:'É concedida pela Cgcre/INMETRO com base na ISO/IEC 17025: solicitação, análise documental, avaliação no local, tratamento das não conformidades e decisão. É mantida por reavaliações periódicas e ensaios de proficiência.' },
-        { id:'fc219', syllabusId:'qual', front:'Qual a diferença entre ensaio interlaboratorial e ensaio de proficiência?', back:'Interlaboratorial: dois ou mais laboratórios ensaiam os mesmos itens. O ensaio de proficiência é um tipo de interlaboratorial usado para avaliar o desempenho de cada laboratório.' },
-        { id:'fc220', syllabusId:'bpg', front:'Quem tem o perfil genético coletado obrigatoriamente pela LEP (art. 9º-A)?', back:'O condenado por crime doloso com violência grave contra a pessoa, por crime contra a vida, contra a liberdade sexual ou por crime sexual contra vulnerável (redação da Lei 13.964/2019).' },
         { id:'fc221', syllabusId:'crim', front:'Como se classificam os fenômenos cadavéricos?', back:'Abióticos imediatos (parada cardiorrespiratória, perda da consciência) e consecutivos (resfriamento, livores, rigidez, desidratação). Transformativos destrutivos (autólise, putrefação) e conservadores (saponificação, mumificação).' },
         { id:'fc222', syllabusId:'crim', front:'Qual a diferença entre calibre real e calibre nominal?', back:'Real: o diâmetro interno do cano medido entre os cheios (as partes entre as raias). Nominal: a designação comercial da munição (ex.: .38, 9 mm).' },
         { id:'fc223', syllabusId:'crim', front:'O que são resíduos do tiro (GSR) e como são analisados?', back:'Partículas com chumbo, bário e antimônio vindas da espoleta, detectadas por microscopia eletrônica de varredura com EDS (MEV/EDS).' },
@@ -824,6 +778,735 @@ questions: [
         { id:'pf25-120', syllabusId:'bpg', source:'Cebraspe 2025 · item 120', stem:'A existência de um banco estadual integrado à RIBPG desobriga a unidade federativa de seguir os protocolos nacionais de padronização dos perfis genéticos, desde que os resultados cumpram a ISO/IEC 17025:2017.', options:['Certo','Errado'], answer:1, explanation:'A padronização nacional é obrigatória para o intercâmbio na RIBPG; a acreditação não a substitui.' }
       ]
     };
+
+    /* Conteúdo programático do Edital nº 1 – PF, de 20/05/2025 (Cargo 11 – Área 19 e Conhecimentos
+       Básicos de Perito), distribuído pelas matérias do app. Mostrado na aba Plano em "O que cai no edital". */
+    var EDITAL = {
+      bcm: 'Biologia dos tecidos e das células; química celular; biomoléculas; proteínas e enzimas, cinética e inibição enzimática; componentes e revestimentos celulares; mitose e meiose. DNA e RNA: composição, estrutura, replicação, transcrição, tradução, mutação, recombinação, regulação gênica, reparo, desnaturação e hibridização. Genoma humano (organização cromossômica, estrutura dos genes, DNA nuclear e mitocondrial). Genoma não humano (nuclear, mitocondrial e plastidial de animais, plantas e fungos).',
+      pol: 'STR (herança mendeliana, aplicações forenses); SNP (ancestralidade, fenotipagem); marcadores uniparentais: cromossomo Y (herança paterna) e DNA mitocondrial (herança materna); aplicações forenses.',
+      met: 'Vestígio biológico; coleta em local de crime; cadeia de custódia do vestígio biológico; amostras questionadas e de referência; testes para sangue, sêmen e saliva; técnicas de amostragem; extração e purificação do DNA; quantificação em tempo real; PCR e amplificação; eletroforese em placa e capilar; sequenciamento (Sanger e massivo paralelo); DNA rápido, predição fenotípica e genealogia genética forense.',
+      gpop: 'Estrutura de populações; padrões de herança; frequências alélicas e genotípicas; equilíbrio de Hardy-Weinberg; estatística de Wright; desequilíbrio de ligação; endogamia; gargalo genético; análise filogenética; seleção natural, mutação, deriva e fluxo gênico; evolução molecular.',
+      est: 'Teorema de Bayes; razão de verossimilhança (LR); avaliação estatística da coincidência de perfis; avaliação da evidência em casos de vínculo genético (paternidade e parentesco).',
+      qual: 'Processo de acreditação laboratorial; estrutura normativa aplicável à genética forense; ISO/IEC 17025; requisitos de auditoria da RIBPG (Resolução nº 12/2019 do Comitê Gestor); ensaios interlaboratoriais; testes de proficiência.',
+      bpg: 'Bases de funcionamento dos bancos de perfis genéticos; histórico; Rede Integrada de Bancos de Perfis Genéticos (RIBPG); legislação aplicada (Lei 12.654/2012, Decreto 7.950/2013, LEP art. 9º-A, Lei 12.037/2009).',
+      pt: 'Compreensão e interpretação de textos; tipos e gêneros textuais; ortografia; coesão (referenciação, conectores, tempos e modos verbais); classes de palavras; coordenação e subordinação; pontuação; concordância; regência; crase; colocação pronominal; reescrita e significação das palavras; redação oficial (Manual de Redação da Presidência).',
+      inf: 'Hardware e software; Windows, Android e iOS; navegadores, webmail e Microsoft 365 (Word, Excel, Outlook, PowerPoint, OneDrive, Teams); segurança da informação (malware, phishing, baiting, engenharia social, antivírus, EDR, firewall, gerenciadores de senhas, MFA, assinatura e certificação digital); nuvem; bancos de dados (estruturados e não estruturados, relacionais, chaves); redes (LAN, MAN, WAN, internet e intranet, TCP/IP, NAT, VPN, RDP); Python e low-code; metadados; mineração de dados, big data e IA generativa.',
+      dh: 'Direitos humanos na CF/1988; sistema internacional de proteção; convenções sobre genocídio, refugiados (e Protocolo), discriminação racial, discriminação contra a mulher, tortura e desaparecimento forçado; Regras Mínimas da ONU para presos; Princípios Básicos sobre o Uso da Força e Armas de Fogo (Havana, 1990); Lei 13.060/2014 e Decreto 12.341/2024.',
+      crim: 'Ciências forenses, criminalística e perícia; perícia criminal e civil; vestígio, evidência e indício; princípio de Locard; classificação dos vestígios; fotografia pericial; áreas da criminalística; locais de crime (isolamento, preservação, busca, fixação, coleta, acondicionamento, transporte, liberação); exame perinecroscópico, tanatologia e traumatologia; balística forense (arma de fogo, calibre, identificação, cartucho, resíduos, distância do tiro); laudo pericial; metais preciosos, isótopos e bancos de dados (perfis genéticos e balísticos).',
+      dpp: 'Inquérito policial (natureza, características, instauração, notitia e delatio criminis, indiciamento, valor probatório); prova: corpo de delito e perícias, requisição, obrigações do perito, nova perícia e assistente técnico; cadeia de custódia; ônus e nulidade da prova; documentos; reconhecimento de pessoas e coisas; acareação; indícios; busca e apreensão; prisão em flagrante; perícia criminal federal e polícias científicas; Lei 12.030/2009.',
+      rl: 'Estruturas lógicas; argumentação (analogias, inferências, deduções); lógica proposicional (tabelas-verdade, equivalências, leis de De Morgan, diagramas); lógica de primeira ordem; contagem e probabilidade; conjuntos; problemas aritméticos, geométricos e matriciais.',
+      dp: 'Princípios; lei penal no tempo e no espaço; tempo e lugar do crime; territorialidade e extraterritorialidade; fato típico; crime consumado e tentado; ilicitude e excludentes; excesso punível; crimes contra a pessoa, o patrimônio, a fé pública e a Administração Pública.',
+      da: 'Organização administrativa (centralização, descentralização, concentração e desconcentração; administração direta e indireta); ato administrativo; agentes públicos e Lei 8.112/1990; poderes administrativos e abuso de poder; licitação (princípios, contratação direta, modalidades, critérios, procedimento); controle; responsabilidade civil do Estado; regime jurídico-administrativo e princípios.',
+      dc: 'Direitos e garantias fundamentais; direitos sociais; nacionalidade; direitos políticos e partidos; garantias constitucionais; Poder Executivo (forma e sistema de governo, chefia de Estado e de governo); segurança pública; ordem social (seguridade, meio ambiente, família, criança, adolescente, idoso e indígenas).'
+    };
+
+    /* ===== Área 19 — conteúdo por TÓPICO do edital =====
+       Cada tópico: 4 flashcards completos (resposta + "Aprofunde" + "Pegadinha de prova") e um teste
+       variado (múltipla escolha, completar lacuna, ordenar etapas, além dos itens Certo/Errado da prova 2025). */
+    var AREA19 = (function(){
+      var topics = [], cards = [], questions = [];
+      var n = {};
+      function T(id, name){ topics.push({ id:id, node:id.split('-')[0], name:name }); }
+      function C(t, front, back, more, tip){
+        n[t] = (n[t] || 0) + 1;
+        cards.push({ id:'g-' + t + '-' + n[t], syllabusId:t.split('-')[0], topic:t, front:front, back:back, more:more, tip:tip });
+      }
+      function Q(t, obj){
+        n['q' + t] = (n['q' + t] || 0) + 1;
+        obj.id = obj.type + '-' + t + '-' + n['q' + t];
+        obj.syllabusId = t.split('-')[0];
+        obj.topic = t;
+        questions.push(obj);
+      }
+      function MC(t, stem, options, answer, explanation){ Q(t, { type:'mc', stem:stem, options:options, answer:answer, explanation:explanation }); }
+      function CLZ(t, stem, options, answer, explanation){ Q(t, { type:'cloze', stem:stem, options:options, answer:answer, explanation:explanation }); }
+      function ORD(t, stem, items, explanation){ Q(t, { type:'order', stem:stem, items:items, explanation:explanation }); }
+
+      /* ---------- Biologia Celular e Molecular ---------- */
+      T('bcm-cel', 'Células e tecidos');
+      C('bcm-cel', 'Quais são os quatro tecidos básicos dos animais?',
+        'Epitelial, conjuntivo, muscular e nervoso.',
+        'Epitelial: células justapostas, pouca matriz; reveste superfícies e forma glândulas (a epiderme é epitélio estratificado pavimentoso queratinizado). Conjuntivo: muita matriz extracelular; inclui sangue, osso, cartilagem e tecido adiposo. Muscular: liso, estriado esquelético e cardíaco. Nervoso: neurônios e células da glia.',
+        'Sangue é tecido conjuntivo, não um "quinto tecido". Hemácias maduras de mamíferos não têm núcleo; o DNA nuclear de uma mancha de sangue vem dos leucócitos.');
+      C('bcm-cel', 'Quais são os principais tecidos vegetais?',
+        'Meristemas (crescimento), revestimento (epiderme e periderme), parênquimas, sustentação (colênquima e esclerênquima) e condução (xilema e floema).',
+        'Parênquimas fazem preenchimento, fotossíntese (clorênquima) e reserva. Xilema leva água e sais (seiva bruta) da raiz às folhas; floema distribui a seiva elaborada (açúcares). O esclerênquima tem parede secundária lignificada e células geralmente mortas na maturidade.',
+        'Colênquima: células vivas, parede espessada de celulose (sustentação flexível). Esclerênquima: lignina, rígido. A banca gosta de trocar os dois.');
+      C('bcm-cel', 'Como é a membrana plasmática e como as substâncias a atravessam?',
+        'É uma bicamada de fosfolipídios com proteínas, colesterol (em animais) e glicocálix: o modelo do mosaico fluido.',
+        'É semipermeável. Moléculas pequenas e apolares passam por difusão simples; íons e moléculas polares usam canais ou transportadores (difusão facilitada, sem gasto de energia) ou transporte ativo com ATP (ex.: bomba Na⁺/K⁺). Partículas grandes entram e saem por endocitose e exocitose.',
+        'Difusão facilitada NÃO gasta ATP. O que define o transporte ativo é ir contra o gradiente, com gasto de energia.');
+      C('bcm-cel', 'Que revestimento externo têm as células de plantas, fungos, bactérias e animais?',
+        'Plantas: parede de celulose. Fungos: parede de quitina. Bactérias: parede de peptidoglicano. Células animais: não têm parede, só membrana plasmática.',
+        'Isso muda a extração de DNA. Em plantas é preciso romper a parede (moagem, nitrogênio líquido, tampão CTAB). Em tecidos animais basta lisar a membrana com detergente e digerir proteínas com proteinase K.',
+        'Item 64 de 2025: "romper a parede celular de couro e marfim com exonuclease" está errado duas vezes. Células animais não têm parede, e exonuclease degrada o próprio DNA.');
+      MC('bcm-cel', 'Por que o DNA nuclear de uma mancha de sangue vem principalmente dos leucócitos?',
+        ['Porque as hemácias maduras de mamíferos não têm núcleo', 'Porque as plaquetas concentram o DNA nuclear', 'Porque o plasma não contém células', 'Porque as hemácias degradam o DNA dos leucócitos', 'Porque o sangue é um tecido epitelial'], 0,
+        'Hemácias maduras perdem o núcleo durante a maturação. Plaquetas são fragmentos celulares sem núcleo; o DNA nuclear vem dos glóbulos brancos.');
+      CLZ('bcm-cel', 'Células animais não têm ___; por isso a lise para extrair DNA usa detergente e proteinase K.',
+        ['parede celular', 'membrana plasmática', 'núcleo', 'ribossomos'], 0,
+        'Só plantas (celulose), fungos (quitina) e bactérias (peptidoglicano) têm parede celular.');
+
+      T('bcm-bio', 'Biomoléculas, proteínas e enzimas');
+      C('bcm-bio', 'Quais são as principais biomoléculas e suas funções?',
+        'Carboidratos (energia e estrutura), lipídios (reserva, membranas, hormônios), proteínas (estrutura, enzimas, transporte, defesa) e ácidos nucleicos (informação genética).',
+        'Os monômeros são monossacarídeos, ácidos graxos e glicerol, aminoácidos e nucleotídeos. A água é a substância mais abundante na célula (cerca de 70%). Sais minerais atuam no equilíbrio osmótico e como cofatores (ex.: o Mg²⁺ é cofator da DNA polimerase na PCR).',
+        'Celulose (plantas) e quitina (fungos e artrópodes) são polissacarídeos estruturais. Glicogênio (animais) e amido (plantas) são de reserva.');
+      C('bcm-bio', 'Quais são os níveis de estrutura das proteínas?',
+        'Primária (sequência de aminoácidos), secundária (α-hélice e folha β), terciária (dobramento 3D) e quaternária (associação de subunidades).',
+        'A forma 3D, que define a função, é determinada pela estrutura primária. Calor, pH extremo e solventes desnaturam a proteína: ela perde a conformação, mas mantém a sequência. Uma única troca de aminoácido pode alterar a função, como na anemia falciforme (Glu→Val na β-globina).',
+        'Proteínas são formadas por ALFA-aminoácidos (item 60 de 2025 dizia "beta"). Desnaturar não quebra ligações peptídicas; quem quebra é a hidrólise.');
+      C('bcm-bio', 'Como funcionam as enzimas e o que significa o Km?',
+        'São catalisadores biológicos: reduzem a energia de ativação sem serem consumidas e sem alterar o equilíbrio. O Km é a concentração de substrato em que a velocidade é metade da Vmax.',
+        'Na cinética de Michaelis-Menten, a velocidade cresce com o substrato até a saturação (Vmax). Km baixo significa alta afinidade. Atividade depende de temperatura e pH ótimos, cofatores (íons metálicos) e coenzimas (muitas derivadas de vitaminas). O sítio ativo se ajusta ao substrato (encaixe induzido).',
+        'A enzima não muda o ΔG nem a constante de equilíbrio da reação; muda só a velocidade.');
+      C('bcm-bio', 'Como diferenciar os tipos de inibição enzimática?',
+        'Competitiva: Km aumenta e Vmax não muda. Não competitiva: Vmax diminui e Km não muda. Incompetitiva: os dois diminuem. Irreversível: inativa a enzima por ligação covalente.',
+        'O inibidor competitivo disputa o sítio ativo e é vencido com excesso de substrato. O não competitivo se liga a outro sítio. Exemplos: organofosforados inibem de forma irreversível a acetilcolinesterase; o EDTA sequestra o Mg²⁺ e assim inibe nucleases.',
+        'O EDTA do tampão TE protege o DNA justamente por inibir as DNases dependentes de Mg²⁺; em excesso, também atrapalha a PCR.');
+      MC('bcm-bio', 'Uma enzima na presença de um inibidor competitivo apresenta:',
+        ['Km aparente maior e Vmax inalterada', 'Km menor e Vmax maior', 'Km inalterado e Vmax menor', 'Km e Vmax menores', 'Perda permanente da atividade'], 0,
+        'O inibidor competitivo aumenta o Km aparente (é preciso mais substrato para chegar a Vmax/2), mas com substrato suficiente a Vmax é atingida.');
+
+      T('bcm-div', 'Divisão celular e recombinação');
+      C('bcm-div', 'Quais as fases da mitose e o que acontece em cada uma?',
+        'Prófase (condensação dos cromossomos), metáfase (alinhamento no equador), anáfase (separação das cromátides-irmãs) e telófase (formação dos novos núcleos), seguida da citocinese.',
+        'O DNA é replicado antes, na fase S da interfase. A mitose gera 2 células geneticamente idênticas à original (2n → 2n), garantindo crescimento e reparo. Cromossomos metafásicos, mais condensados, são os usados no cariótipo.',
+        'Na mitose não há pareamento de homólogos nem crossing-over; isso só acontece na prófase I da meiose.');
+      C('bcm-div', 'O que caracteriza a meiose?',
+        'Duas divisões após uma única replicação, gerando 4 células haploides (2n → n) geneticamente diferentes.',
+        'A meiose I é reducional: os homólogos se pareiam (sinapse), trocam segmentos (crossing-over) e se separam. A meiose II é equacional: separam-se as cromátides-irmãs. A variabilidade vem do crossing-over e da segregação independente dos cromossomos.',
+        'Na anáfase I separam-se os HOMÓLOGOS; as cromátides-irmãs só se separam na anáfase II.');
+      C('bcm-div', 'O que é recombinação e por que ela importa para os STRs?',
+        'É a troca de segmentos entre cromossomos homólogos (crossing-over), que gera novas combinações de alelos nos gametas.',
+        'Loci próximos no mesmo cromossomo tendem a ser herdados juntos (ligação). Os STRs forenses foram escolhidos em cromossomos diferentes ou distantes para se comportarem como independentes, o que permite multiplicar as frequências (regra do produto).',
+        'A região não recombinante do Y e o mtDNA praticamente não recombinam; por isso são herdados em bloco, como haplótipos.');
+      C('bcm-div', 'Como a meiose explica a herança dos STRs entre pais e filhos?',
+        'Cada genitor transmite ao filho um dos seus dois alelos de cada locus, pela segregação dos homólogos na meiose.',
+        'Em cada locus autossômico, o filho tem um alelo materno e um paterno: é a base do teste de vínculo genético. Se o suposto pai não tem o alelo paterno obrigatório, há uma incompatibilidade, que pode ser exclusão ou mutação.',
+        'Um genitor homozigoto (ex.: 12,12) obrigatoriamente transmite esse alelo. Um heterozigoto transmite cada alelo com probabilidade 1/2.');
+      MC('bcm-div', 'Em que momento ocorre o crossing-over?',
+        ['Prófase I da meiose', 'Anáfase da mitose', 'Anáfase II da meiose', 'Fase S da interfase', 'Telófase I da meiose'], 0,
+        'O crossing-over ocorre quando os homólogos estão pareados, na prófase I da meiose.');
+      ORD('bcm-div', 'Ordene as fases da mitose.',
+        ['Prófase', 'Metáfase', 'Anáfase', 'Telófase'],
+        'Prófase (condensa) → metáfase (alinha) → anáfase (separa) → telófase (novos núcleos). Depois vem a citocinese.');
+
+      T('bcm-dna', 'Estrutura, replicação e propriedades do DNA');
+      C('bcm-dna', 'Como é a estrutura do DNA?',
+        'Dupla hélice de duas fitas antiparalelas de nucleotídeos (desoxirribose + fosfato + base), com pareamento A=T (2 pontes de hidrogênio) e G≡C (3 pontes).',
+        'Pelas regras de Chargaff, A = T e G = C, logo purinas = pirimidinas. O esqueleto açúcar-fosfato fica do lado de fora e tem carga negativa; por isso o DNA migra para o polo positivo na eletroforese. O RNA usa ribose e uracila e geralmente é fita simples.',
+        'Purinas (A e G) têm dois anéis; pirimidinas (C, T e U) têm um. Cafeína e guanina compartilham o núcleo purínico.');
+      C('bcm-dna', 'Como ocorre a replicação do DNA?',
+        'É semiconservativa: cada fita serve de molde, e cada nova molécula tem uma fita antiga e uma nova.',
+        'A helicase abre a hélice; a primase faz um primer de RNA; a DNA polimerase só adiciona nucleotídeos à extremidade 3′-OH (síntese 5′→3′). A fita líder é contínua; a tardia é feita em fragmentos de Okazaki, unidos pela DNA ligase. A atividade revisora (exonuclease 3′→5′) corrige erros.',
+        'A DNA polimerase não começa do zero: precisa de primer. Na PCR, os primers são pequenos oligonucleotídeos de DNA sintéticos.');
+      C('bcm-dna', 'O que são desnaturação e hibridização do DNA?',
+        'Desnaturação é a separação das duas fitas (por calor, pH alto ou formamida); hibridização é o reemparelhamento de fitas complementares.',
+        'A Tm (temperatura de melting) é aquela em que metade do DNA está desnaturado; ela sobe com o teor de GC e com a força iônica. Essas propriedades sustentam a PCR (desnaturação a ~95 °C e anelamento dos primers), as sondas da qPCR e os microarranjos de SNP.',
+        'Desnaturar não quebra as ligações fosfodiéster, só as pontes de hidrogênio entre as bases.');
+      C('bcm-dna', 'Por que o DNA é um vestígio relativamente estável?',
+        'A desoxirribose (sem a hidroxila 2′) e as ligações fosfodiéster tornam o DNA bem mais estável que o RNA, principalmente em amostras secas.',
+        'Umidade, calor, luz UV e microrganismos aceleram a degradação. DNA degradado dá perfis parciais, com perda dos alelos maiores (o eletroferograma fica "em declive"). Por isso secar a amostra e guardar em papel, em local fresco, é essencial.',
+        'A queda do DNA sob as unhas em poucas horas se deve principalmente à perda mecânica, não à degradação química rápida (item 51 de 2025).');
+      MC('bcm-dna', 'Sobre o pareamento entre guanina e citosina, é correto afirmar:',
+        ['Tem três pontes de hidrogênio, o que eleva a Tm de regiões ricas em GC', 'Tem duas pontes de hidrogênio, como A–T', 'É uma ligação covalente que não se rompe no aquecimento', 'Ocorre apenas no RNA', 'Envolve a uracila no DNA'], 0,
+        'G≡C tem três pontes de hidrogênio e A=T tem duas; por isso o DNA rico em GC precisa de mais energia para desnaturar.');
+
+      T('bcm-exp', 'Transcrição, tradução e regulação gênica');
+      C('bcm-exp', 'Como é a transcrição e o processamento do RNA em eucariotos?',
+        'A RNA polimerase II transcreve o gene a partir do promotor. O pré-mRNA recebe CAP na 5′ (7-metilguanosina) e cauda poli-A na 3′, e sofre splicing (remoção dos íntrons).',
+        'O splicing alternativo combina éxons de formas diferentes e gera várias proteínas a partir de um mesmo gene. Só depois o mRNA maduro sai do núcleo. rRNAs e tRNAs são transcritos por outras RNA polimerases (I e III).',
+        'CAP fica na extremidade 5′ e poli-A na 3′. O item 59 de 2025 trocou as extremidades.');
+      C('bcm-exp', 'Como é o código genético e como ocorre a tradução?',
+        'Cada códon (3 nucleotídeos do mRNA) especifica um aminoácido. Dos 64 códons, 61 codificam aminoácidos e 3 são de parada (UAA, UAG, UGA). O códon de início é AUG (metionina).',
+        'O código é degenerado (vários códons para o mesmo aminoácido), não ambíguo e quase universal. No ribossomo, o mRNA é lido de 5′ para 3′; os tRNAs trazem os aminoácidos pelo anticódon, e as ligações peptídicas formam a proteína.',
+        'Degenerado não é ambíguo: um códon nunca codifica dois aminoácidos diferentes.');
+      C('bcm-exp', 'Todo RNA vira proteína?',
+        'Não. Além do mRNA, há RNAs funcionais que não são traduzidos: rRNA, tRNA, miRNA, siRNA, lncRNA e outros.',
+        'O transcriptoma é o conjunto de todos os RNAs de uma célula num dado momento; varia com o tecido, a idade e o estado fisiológico. É a base da identificação de fluidos por mRNA. Os miRNAs são curtos e estáveis, úteis em amostras degradadas.',
+        'Item 57 de 2025: "o produto da transcrição terá como destino final a tradução" está errado. Item 63: "cada proteína é codificada por um dado gene" também está errado, por causa do splicing alternativo.');
+      C('bcm-exp', 'Como a expressão gênica é regulada?',
+        'Em procariotos, sobretudo por operons (ex.: operon lac). Em eucariotos, por promotores, enhancers, fatores de transcrição, estado da cromatina (epigenética), splicing e RNAs reguladores.',
+        'No operon lac, o repressor bloqueia o operador quando não há lactose. Em eucariotos, a heterocromatina (DNA metilado, histonas desacetiladas) silencia genes, e a eucromatina acetilada facilita a transcrição.',
+        'Todas as células somáticas têm o mesmo genoma; o que muda entre os tecidos é QUAIS genes são expressos.');
+      MC('bcm-exp', 'Sobre o mRNA maduro eucarioto, é correto afirmar:',
+        ['Tem CAP 5′ de 7-metilguanosina e cauda poli-A na 3′', 'Tem o CAP na extremidade 3′', 'Mantém os íntrons para a tradução', 'É sintetizado pela DNA polimerase', 'Contém timina no lugar de uracila'], 0,
+        'O mRNA maduro tem CAP 5′, cauda poli-A 3′ e só os éxons; é feito pela RNA polimerase II e usa uracila.');
+      ORD('bcm-exp', 'Ordene o caminho da informação do gene até a proteína.',
+        ['Transcrição do gene', 'Adição de CAP e poli-A e splicing', 'Saída do mRNA para o citoplasma', 'Tradução no ribossomo'],
+        'No núcleo, o gene é transcrito e o pré-mRNA é processado; o mRNA maduro vai ao citoplasma e é traduzido no ribossomo.');
+      CLZ('bcm-exp', 'O códon de início da tradução é ___, que codifica a metionina.',
+        ['AUG', 'UAA', 'UGA', 'GGC'], 0,
+        'AUG é o códon de início. UAA, UAG e UGA são códons de parada.');
+
+      T('bcm-mut', 'Mutação e reparo do DNA');
+      C('bcm-mut', 'Quais são os tipos de mutação gênica?',
+        'Substituições (silenciosa, de sentido trocado e sem sentido) e inserções ou deleções, que podem deslocar a fase de leitura.',
+        'Silenciosa: a base muda, mas o aminoácido não (graças à degeneração do código). De sentido trocado (missense): muda o aminoácido. Sem sentido (nonsense): cria um códon de parada precoce. Indels que não são múltiplos de 3 deslocam a leitura (frameshift) e costumam ser graves.',
+        'Transição: troca purina por purina ou pirimidina por pirimidina. Transversão: troca purina por pirimidina.');
+      C('bcm-mut', 'Como os STRs sofrem mutação?',
+        'Principalmente por deslizamento da DNA polimerase na replicação, que faz o alelo ganhar ou perder uma unidade de repetição.',
+        'A taxa de mutação dos STRs é da ordem de 1 em 1.000 por locus por geração, muito maior que a de SNPs. Por isso, em vínculo genético, uma incompatibilidade de um passo pode ser mutação e entra no cálculo. O mesmo deslizamento gera os picos de stutter na PCR.',
+        'Concluir exclusão de paternidade com base em um único locus discordante é arriscado: pode ser mutação.');
+      C('bcm-mut', 'Quais os mecanismos de reparo do DNA?',
+        'Reparo direto, excisão de bases (BER), excisão de nucleotídeos (NER), reparo de mau pareamento (MMR) e reparo de quebras de dupla fita (recombinação homóloga e junção de extremidades não homólogas).',
+        'O BER corrige bases danificadas (oxidação, desaminação). O NER remove lesões volumosas, como os dímeros de timina causados por UV. O MMR corrige erros deixados pela replicação. A recombinação homóloga usa a cromátide-irmã como molde (fiel); a junção de extremidades não homólogas liga as pontas e está sujeita a erro.',
+        'Dímero de pirimidina (UV) → NER. Mau pareamento depois da replicação → MMR.');
+      C('bcm-mut', 'Qual a diferença entre mutação somática e germinativa?',
+        'A somática ocorre em células do corpo e não é herdada; a germinativa ocorre em células que formam gametas e passa para os descendentes.',
+        'Em genética forense, as mutações germinativas importam nos testes de vínculo. Mutações somáticas e quimerismo, como após transplante de medula óssea, podem fazer o perfil do sangue diferir do perfil da mucosa oral da mesma pessoa.',
+        'Quem recebeu transplante de medula pode ter o perfil sanguíneo do doador. Nesse caso, use swab bucal como referência.');
+      MC('bcm-mut', 'A principal origem das mutações nos STRs é:',
+        ['O deslizamento da DNA polimerase durante a replicação', 'A exposição à radiação ultravioleta', 'A metilação de histonas', 'O splicing alternativo', 'A desnaturação do DNA no aquecimento'], 0,
+        'O deslizamento da polimerase em regiões repetitivas muda o número de repetições; é também a origem dos stutters na PCR.');
+
+      T('bcm-gen', 'Genoma humano e não humano');
+      C('bcm-gen', 'Como o genoma nuclear humano está organizado?',
+        'Tem cerca de 3,1 bilhões de pares de bases em 46 cromossomos (22 pares de autossomos + XX ou XY) e cerca de 20 mil genes codificadores de proteína.',
+        'Menos de 2% do genoma codifica proteínas. O restante inclui íntrons, regiões reguladoras e muitas sequências repetitivas (microssatélites, minissatélites, elementos transponíveis). O DNA se enrola em histonas (nucleossomos), formando a cromatina.',
+        'O número de genes humano é parecido com o de outros vertebrados e menor que o de várias plantas (item 67 de 2025). Os STRs forenses ficam em regiões não codificantes.');
+      C('bcm-gen', 'Qual a estrutura de um gene eucarioto?',
+        'Promotor, éxons (mantidos no mRNA), íntrons (removidos no splicing), regiões não traduzidas 5′ e 3′ e sinal de poliadenilação.',
+        'Enhancers e silenciadores podem estar longe do gene e regulam a sua expressão. Alguns STRs forenses ficam dentro de íntrons, como o TH01 (gene da tirosina hidroxilase) e o TPOX (gene da tireoperoxidase).',
+        'Estar dentro de um íntron não torna o STR "codificante": íntrons não viram proteína.');
+      C('bcm-gen', 'Quais as características do DNA mitocondrial humano?',
+        'É circular, tem cerca de 16.569 pb e 37 genes, existe em centenas a milhares de cópias por célula e tem herança materna.',
+        'A região controle (D-loop) não codifica proteínas e concentra a variação usada na identificação (HV1, HV2, HV3). É útil em fios de cabelo sem bulbo, ossos, dentes e amostras degradadas. Pode haver heteroplasmia. A sequência é comparada à referência rCRS (Cambridge revisada).',
+        'O mtDNA não individualiza: todos os parentes da linhagem materna têm o mesmo haplótipo.');
+      C('bcm-gen', 'Quais genomas não humanos são usados em perícia?',
+        'Animais: genes mitocondriais (COI e citocromo b). Plantas: genoma plastidial (rbcL, matK) e região ITS nuclear. Fungos: região ITS do DNA ribossômico nuclear.',
+        'Aplicações: crimes contra a fauna (tráfico, marfim, couro, carne de caça), fraudes em alimentos (embutidos), identificação de plantas como a Cannabis e análise de pólen e solo como vestígio. O DNA barcoding compara a sequência com bancos de referência (como BOLD e GenBank).',
+        'Kits de STR humanos não identificam espécies animais: são específicos para humanos (e primatas superiores).');
+      MC('bcm-gen', 'Para identificar a espécie de origem de um pedaço de couro, o marcador mais indicado é:',
+        ['A sequência de genes mitocondriais, como COI ou citocromo b', 'Um kit comercial de STR humano', 'A amelogenina', 'Um kit de Y-STR', 'A região HV1 comparada à rCRS humana'], 0,
+        'Barcoding de espécies animais usa genes mitocondriais conservados entre indivíduos da mesma espécie e variáveis entre espécies.');
+
+      T('bcm-epi', 'Epigenética e transcriptoma forense');
+      C('bcm-epi', 'O que são modificações epigenéticas?',
+        'Alterações que regulam a expressão gênica sem mudar a sequência de bases: metilação do DNA, modificações de histonas e RNAs não codificantes.',
+        'A metilação ocorre sobretudo em citosinas de dinucleotídeos CpG e, quando está no promotor, costuma silenciar o gene. A acetilação de histonas abre a cromatina e favorece a transcrição. Os padrões mudam com idade, ambiente, tabagismo e álcool.',
+        'A acetilação é das HISTONAS (proteínas), não da molécula de DNA. O item 55 de 2025, que dizia isso, foi anulado.');
+      C('bcm-epi', 'Como a epigenética estima a idade em perícia?',
+        'Por relógios epigenéticos: a metilação de certos CpGs muda de forma previsível com a idade (ex.: gene ELOVL2).',
+        'O DNA é tratado com bissulfito (que converte a citosina não metilada em uracila) e a metilação é medida por pirossequenciamento, minissequenciamento ou MPS. O erro típico em adultos é de alguns anos para mais ou para menos. Também se inferem tabagismo (ex.: gene AHRR) e tipo de tecido.',
+        'A sequência do STR não muda com a idade; o que muda é a metilação.');
+      C('bcm-epi', 'Como o mRNA identifica fluidos biológicos?',
+        'Cada tecido expressa mRNAs típicos: sangue (HBB, ALAS2), sangue menstrual (MMP7, MMP11), saliva (STATH, HTN3), sêmen (PRM1, KLK3) e secreção vaginal.',
+        'É uma alternativa confirmatória aos testes presuntivos, e o RNA pode ser extraído junto com o DNA. O transcriptoma do sangue menstrual difere do sangue venoso, o que importa em casos de violência sexual.',
+        'O RNA é menos estável que o DNA (tem a hidroxila 2′ e as RNases estão em toda parte), por isso exige cuidado extra.');
+      C('bcm-epi', 'Por que hábitos de vida deixam marcas detectáveis no DNA?',
+        'Porque fumar, beber e outras exposições alteram o padrão de metilação de genes específicos, o que pode ser medido numa amostra biológica.',
+        'O gene AHRR, por exemplo, fica hipometilado em fumantes. Esses marcadores, junto com os de idade, ajudam a descrever uma pessoa desconhecida quando não há suspeito. São pistas probabilísticas, não identificação.',
+        'Item 66 de 2025 (epigenoma para inferir álcool e tabaco) é CERTO.');
+      MC('bcm-epi', 'Qual técnica é a base da estimativa de idade a partir do DNA?',
+        ['Análise da metilação de CpGs após tratamento com bissulfito', 'Contagem de repetições dos STRs', 'Sequenciamento do cromossomo Y', 'Teste de Kastle-Meyer', 'Eletroforese em agarose do DNA total'], 0,
+        'Os relógios epigenéticos medem a metilação; o bissulfito diferencia citosinas metiladas das não metiladas.');
+      CLZ('bcm-epi', 'A acetilação ocorre nas ___, e não na molécula de DNA.',
+        ['histonas', 'bases nitrogenadas', 'fosfatos', 'desoxirriboses'], 0,
+        'Histonas acetiladas deixam a cromatina mais aberta e favorecem a transcrição.');
+
+      /* ---------- Polimorfismos e marcadores ---------- */
+      T('pol-str', 'STR (repetições curtas em tandem)');
+      C('pol-str', 'O que é um STR e como se nomeia o alelo?',
+        'É uma unidade de 2 a 6 pb repetida em sequência; o alelo é nomeado pelo número de repetições (ex.: alelo 12 = 12 repetições).',
+        'Os STRs forenses são principalmente tetranucleotídeos (4 pb), que geram menos stutter. Existem alelos intermediários, como o 9.3 do TH01 (9 repetições completas + 3 pb). São muito polimórficos, codominantes e de herança mendeliana.',
+        'O homozigoto mostra um só pico (de altura maior); o heterozigoto mostra dois.');
+      C('pol-str', 'Quais são os marcadores do núcleo forense?',
+        'O CODIS expandido usa 20 STRs autossômicos (ex.: D3S1358, vWA, FGA, TH01, TPOX, CSF1PO, D8S1179, D21S11), mais a amelogenina para o sexo.',
+        'Os kits comerciais amplificam esses loci de uma vez (multiplex), com corantes de cores diferentes. A amelogenina distingue X e Y por uma diferença de 6 pb entre AMELX e AMELY. Deleções raras do AMELY podem fazer um homem parecer mulher.',
+        'Amelogenina não é STR: é um marcador de sexo incluído nos kits.');
+      C('pol-str', 'Quais os artefatos comuns na genotipagem de STR?',
+        'Stutter (pico uma repetição menor), adenilação incompleta (−A), pull-up (vazamento de cor), picos fora de escala e drop-out ou drop-in.',
+        'O stutter costuma ter de 5% a 15% da altura do alelo verdadeiro e complica misturas. Pouco DNA gera efeitos estocásticos: desbalanço entre os alelos do heterozigoto e perda de alelos (drop-out). DNA em excesso satura o detector. Os limiares analítico e estocástico são definidos na validação.',
+        'Pico pequeno uma unidade antes de um alelo grande: pense em stutter antes de concluir que é mistura.');
+      C('pol-str', 'Por que os STRs ainda são o padrão forense?',
+        'Têm alto poder de discriminação, kits padronizados, compatibilidade com os bancos (CODIS e BNPG) e tipagem rápida por tamanho na eletroforese capilar.',
+        'O MPS revela também variações de sequência dentro do STR (isoalelos), aumentando a discriminação, mas os bancos continuam usando o tamanho do alelo. Os mini-STRs, com amplicons menores, ajudam em DNA degradado.',
+        'STRs não estão "deixando de ser usados" e não são tipados por sequenciamento na rotina (item 65 de 2025, ERRADO).');
+      MC('pol-str', 'Um pico pequeno, uma unidade de repetição antes de um alelo alto, é mais provavelmente:',
+        ['Um stutter', 'Com certeza um alelo de um segundo contribuinte', 'Um pull-up', 'A amelogenina', 'Um alelo intermediário'], 0,
+        'O stutter nasce do deslizamento da polimerase e aparece logo antes do alelo verdadeiro, com altura bem menor.');
+
+      T('pol-snp', 'SNP: ancestralidade e fenotipagem');
+      C('pol-snp', 'O que são SNPs e como diferem dos STRs?',
+        'São variações de uma única base, geralmente com dois alelos, muito numerosas no genoma e com baixa taxa de mutação.',
+        'Cada SNP informa pouco, então são necessários dezenas a centenas para igualar o poder de discriminação de 15 a 20 STRs. Vantagens: amplicons curtos (ótimos para DNA degradado), estabilidade em parentesco distante e uso em ancestralidade e fenótipo.',
+        'Baixa taxa de mutação faz dos SNPs bons marcadores para parentesco distante e genealogia; os STRs mutam mais.');
+      C('pol-snp', 'Quais os tipos de SNPs usados em perícia?',
+        'De identidade, de ancestralidade (AISNPs), de fenótipo (PISNPs) e de linhagem (no Y e no mtDNA).',
+        'Os AISNPs têm frequências muito diferentes entre populações continentais. Os PISNPs ficam em genes de pigmentação, como HERC2/OCA2 (cor dos olhos), MC1R (cabelo ruivo) e SLC24A5/SLC45A2 (pele). O sistema HIrisPlex-S prevê cor de olhos, cabelo e pele.',
+        'Marcadores de identificação não são de fenótipo: o perfil STR do banco não revela aparência (item 68 de 2025, CERTO).');
+      C('pol-snp', 'Como se tipam os SNPs?',
+        'Por minissequenciamento (SNaPshot), PCR em tempo real com sondas, microarranjos e sequenciamento massivo paralelo.',
+        'Microarranjos com centenas de milhares de SNPs são a base da genealogia genética forense. O MPS consegue analisar STRs, SNPs e mtDNA numa única corrida.',
+        'Microarranjos exigem DNA em boa quantidade e qualidade; o MPS lida melhor com amostras forenses difíceis.');
+      C('pol-snp', 'Quais os limites da predição de ancestralidade e de aparência?',
+        'A predição é probabilística, varia em acurácia conforme o traço e a população e serve como pista investigativa, não como identificação.',
+        'Olhos azuis ou castanhos são previstos com boa acurácia; tons intermediários e cor de pele em populações miscigenadas, como a brasileira, são mais difíceis. Os bancos oficiais brasileiros não podem revelar traços somáticos (Lei 12.654/2012).',
+        'Fenotipagem é usada quando não há suspeito para comparar; não substitui o confronto de perfis.');
+      MC('pol-snp', 'Qual a vantagem dos SNPs sobre os STRs em amostras muito degradadas?',
+        ['Amplicons mais curtos', 'Maior número de alelos por locus', 'Maior taxa de mutação', 'Dispensam a PCR', 'São o padrão do BNPG'], 0,
+        'DNA degradado está fragmentado; alvos curtos têm mais chance de estar íntegros.');
+
+      T('pol-uni', 'Marcadores uniparentais: Y e mtDNA');
+      C('pol-uni', 'Para que serve o Y-STR?',
+        'Para detectar e tipar DNA masculino em misturas com muito DNA feminino, como em swabs de violência sexual ou raspados de unha.',
+        'Como o kit só amplifica o cromossomo Y, o DNA da vítima não interfere. Também estima quantos homens contribuíram e serve em parentesco pela linha paterna. Kits com Y-STRs de mutação rápida ajudam a diferenciar até parentes.',
+        'Uma coincidência de Y-STR inclui toda a linhagem paterna do suspeito; o peso estatístico é a frequência do haplótipo.');
+      C('pol-uni', 'Qual a limitação do Y-STR na interpretação?',
+        'O haplótipo é herdado em bloco pelo pai: irmãos, pai, avô paterno, tios e primos paternos têm o mesmo perfil.',
+        'Os loci do Y não são independentes, então não se multiplicam frequências; usa-se a contagem do haplótipo em bancos como o YHRD, com correções. Com suspeitos da mesma linhagem paterna, o Y-STR não distingue.',
+        'Item 53 de 2025 (Y inadequado para suspeitos com ancestral paterno comum): CERTO.');
+      C('pol-uni', 'Quando usar o DNA mitocondrial?',
+        'Quando há pouco ou nenhum DNA nuclear: cabelo sem bulbo, ossos e dentes antigos, amostras muito degradadas.',
+        'As muitas cópias por célula aumentam a chance de sucesso. Compara-se a região controle com a referência rCRS. As referências possíveis são parentes da linha materna: mãe, irmãos maternos, avó materna.',
+        'O pai não serve de referência para o mtDNA do filho.');
+      C('pol-uni', 'Como interpretar uma coincidência de Y ou de mtDNA?',
+        'Indica que as amostras podem vir da mesma pessoa ou de alguém da mesma linhagem; o peso é dado pela frequência do haplótipo na população.',
+        'A frequência é estimada por contagem num banco (EMPOP para mtDNA, YHRD para Y), com limite de confiança, porque muitos haplótipos são raros. O poder de discriminação é bem menor que o de um perfil autossômico completo.',
+        'Linhagem não é indivíduo: não afirme identidade só com Y ou mtDNA.');
+      MC('pol-uni', 'Um swab vaginal tem grande excesso de DNA da vítima e pouco DNA masculino. A melhor estratégia é:',
+        ['Extração diferencial e/ou tipagem de Y-STR', 'STR autossômico direto, sem separação', 'mtDNA da fração feminina', 'Teste de amilase', 'Sequenciamento de Sanger do HV1 da vítima'], 0,
+        'A extração diferencial separa os espermatozoides; o Y-STR ignora o DNA feminino.');
+
+      /* ---------- Metodologias e técnicas ---------- */
+      T('met-col', 'Vestígio, coleta e cadeia de custódia');
+      C('met-col', 'Como coletar manchas e vestígios biológicos?',
+        'Mancha seca: swab levemente umedecido com água estéril (duplo swab: um úmido e outro seco). Objeto pequeno: recolher inteiro. Roupa: recortar a área.',
+        'Para DNA de toque, use swab ou fita adesiva. Pelos: pinça, preferindo os que têm bulbo. Sempre com EPI (luvas, máscara, touca), trocando as luvas entre vestígios e coletando controles do suporte quando indicado.',
+        'Nunca embale material úmido em plástico: favorece fungos e bactérias que degradam o DNA.');
+      C('met-col', 'Como acondicionar e guardar vestígios biológicos?',
+        'Secar ao ar, à temperatura ambiente, embalar em papel, lacrar, identificar e guardar em local seco e fresco. Líquidos e tecidos frescos vão refrigerados ou congelados.',
+        'Cada vestígio em embalagem separada, com lacre numerado e registro na ficha de cadeia de custódia. Swabs devem secar antes de embalar. Sangue de referência: tubo com EDTA refrigerado ou cartão FTA.',
+        'Cartões FTA guardam sangue e saliva em temperatura ambiente por anos.');
+      C('met-col', 'Quais são as etapas da cadeia de custódia (CPP, art. 158-B)?',
+        'Reconhecimento, isolamento, fixação, coleta, acondicionamento, transporte, recebimento, processamento, armazenamento e descarte.',
+        'A cadeia começa com a preservação do local ou com o procedimento em que se detecta o vestígio (art. 158-A, §1º). O vestígio fica na central de custódia, e o recipiente só deve ser aberto pelo perito que vai examiná-lo. O descarte respeita a legislação e, quando pertinente, depende de autorização judicial.',
+        'A cadeia NÃO começa no transporte ao instituto (item 34 de 2025). Não há prazo legal único de 10 anos para guardar vestígios (item 74).');
+      C('met-col', 'Como evitar contaminação no local e no laboratório?',
+        'EPI, troca frequente de luvas, materiais estéreis descartáveis, separação física das áreas pré e pós-PCR com fluxo unidirecional, controles negativos e banco de perfis de eliminação da equipe.',
+        'Consumíveis devem ser livres de DNA humano (ISO 18385). Brancos de extração e de amplificação revelam contaminação. Bancos de eliminação reconhecem perfis de policiais, peritos e fabricantes.',
+        'Evitar o fluxo de pessoas e materiais do pós-PCR para o pré-PCR é CERTO (item 76 de 2025).');
+      MC('met-col', 'Uma camiseta com mancha de sangue ainda úmida deve ser:',
+        ['Seca ao ar, embalada em papel, lacrada e identificada', 'Embalada imediatamente em saco plástico fechado', 'Lavada para remover a sujeira antes da coleta', 'Exposta ao sol para secar rápido', 'Dobrada junto com as outras roupas da vítima'], 0,
+        'Secar ao ar e embalar em papel evita a degradação; cada peça vai separada para evitar transferência.');
+      ORD('met-col', 'Ordene as seis primeiras etapas da cadeia de custódia (CPP, art. 158-B).',
+        ['Reconhecimento', 'Isolamento', 'Fixação', 'Coleta', 'Acondicionamento', 'Transporte'],
+        'Depois vêm recebimento, processamento, armazenamento e descarte.');
+
+      T('met-pres', 'Testes para sangue, sêmen e saliva');
+      C('met-pres', 'Quais testes se usam para sangue?',
+        'Presuntivos: Kastle-Meyer (fenolftaleína), luminol e leucomalaquita verde, que detectam a atividade semelhante à peroxidase do heme. Para confirmar sangue humano: testes imunocromatográficos de hemoglobina humana.',
+        'O luminol revela manchas invisíveis por quimiluminescência, mesmo após lavagem, e em geral não impede o DNA depois. Falsos positivos: oxidantes (hipoclorito), peroxidases de vegetais e alguns metais.',
+        'Presuntivo indica "possível sangue"; não confirma que é sangue, nem que é humano.');
+      C('met-pres', 'Quais testes se usam para sêmen?',
+        'Presuntivo: fosfatase ácida. Confirmatórios: ver espermatozoides ao microscópio (coloração "árvore de Natal") e detectar PSA (p30) ou semenogelina.',
+        'O PSA é útil em vasectomizados ou azoospérmicos (sêmen sem espermatozoides). Luz forense ajuda a localizar manchas. Em violência sexual, a extração diferencial separa os espermatozoides das células da vítima.',
+        'Fosfatase ácida também aparece em secreção vaginal (em níveis menores); por isso é só presuntiva.');
+      C('met-pres', 'Como se identifica a saliva?',
+        'Pela atividade da alfa-amilase, em testes presuntivos.',
+        'Saliva é fonte rica de DNA (células da mucosa): bitucas, copos, selos, marcas de mordida. O swab bucal é a amostra de referência padrão para pessoas vivas.',
+        'A amilase também ocorre em baixos níveis em outros fluidos, como suor e fezes.');
+      C('met-pres', 'Qual a ordem lógica dos exames num vestígio?',
+        'Documentar, fazer exames não destrutivos (visual, luz forense, fotografia), testes presuntivos mínimos, coletar para DNA e fazer os confirmatórios, preservando parte do material.',
+        'Se há impressão papilar sobre sangue, planeje para não destruir nenhum vestígio: fotografe e revele a impressão e colete o sangue sem apagar as cristas. Nunca presuma de quem é cada vestígio.',
+        'Item 75 de 2025 ("preferir a papiloscopia porque a impressão é do autor e o sangue da vítima") está ERRADO.');
+      MC('met-pres', 'Qual exame confirma sêmen mesmo num homem vasectomizado?',
+        ['Detecção de PSA (p30)', 'Fosfatase ácida', 'Pesquisa de espermatozoides ao microscópio', 'Luminol', 'Kastle-Meyer'], 0,
+        'Sem espermatozoides, a microscopia é negativa; o PSA vem da próstata e continua presente.');
+
+      T('met-ext', 'Extração, purificação e quantificação');
+      C('met-ext', 'Quais os principais métodos de extração de DNA?',
+        'Orgânico (fenol-clorofórmio), Chelex-100, sílica (colunas ou esferas magnéticas) e extração diferencial.',
+        'Orgânico: bom rendimento e pureza, mas tóxico e trabalhoso. Chelex: resina quelante, rápida, gera DNA de fita simples (serve só para PCR). Sílica: o DNA se liga à sílica em alta concentração de sal e depois é eluído; é automatizável e o mais usado hoje. A lise usa detergente e proteinase K.',
+        'Proteinase K digere proteínas (inclusive nucleases); ela não é uma nuclease.');
+      C('met-ext', 'O que é extração diferencial?',
+        'É a separação das células espermáticas das células epiteliais em amostras de violência sexual, gerando uma fração feminina e uma masculina.',
+        'Uma lise branda rompe as células epiteliais; os espermatozoides resistem por causa das pontes dissulfeto das proteínas da cabeça. Depois da centrifugação, o sedimento de espermatozoides é lisado com DTT. Isso reduz a mistura e facilita obter o perfil do agressor.',
+        'O DTT (ditiotreitol) é o reagente que rompe a cabeça do espermatozoide.');
+      C('met-ext', 'Quais inibidores de PCR são comuns e como removê-los?',
+        'Heme (sangue), ácido húmico (solo), índigo (jeans), melanina (cabelo), colágeno (osso), polissacarídeos e resíduos de EDTA ou etanol.',
+        'A purificação em sílica e as lavagens removem a maioria. Na qPCR, o controle interno de amplificação revela inibição (o seu Ct atrasa). Soluções: diluir o extrato, purificar de novo, usar polimerases mais tolerantes ou adicionar BSA.',
+        'Diluir o extrato pode salvar a PCR: reduz o inibidor proporcionalmente mais do que prejudica a detecção do DNA.');
+      C('met-ext', 'Para que serve a quantificação por qPCR no fluxo forense?',
+        'Para medir o DNA humano total e o masculino, avaliar degradação e inibição e decidir quanto DNA colocar na PCR de STR.',
+        'A fluorescência é medida a cada ciclo; o Ct é inversamente proporcional à quantidade inicial (mais DNA, Ct menor). Kits usam um alvo curto e um longo, e a razão entre eles é o índice de degradação. A espectrofotometria não distingue DNA humano de bacteriano.',
+        'Entre a extração e a amplificação vem a QUANTIFICAÇÃO, não a "validação" (item 78 de 2025).');
+      MC('met-ext', 'Na qPCR, um Ct atrasado do controle interno de amplificação indica:',
+        ['Presença de inibidores da PCR', 'Excesso de DNA masculino', 'DNA de outra espécie', 'Contaminação do controle negativo', 'Mistura de dois contribuintes'], 0,
+        'O controle interno é adicionado em quantidade conhecida; se ele amplifica tarde, algo na amostra está inibindo a reação.');
+      ORD('met-ext', 'Ordene as etapas do exame de DNA de uma amostra questionada.',
+        ['Avaliação e amostragem', 'Extração', 'Quantificação', 'Amplificação (PCR)', 'Eletroforese capilar', 'Análise e interpretação'],
+        'A quantificação define a quantidade ideal de DNA para a PCR.');
+
+      T('met-pcr', 'PCR e eletroforese');
+      C('met-pcr', 'Quais os componentes da PCR e a função de cada um?',
+        'DNA molde, primers (definem a região), dNTPs (os blocos da nova fita), DNA polimerase termoestável, Mg²⁺ (cofator) e tampão.',
+        'Nos kits forenses, um primer de cada par é marcado com fluorescência, e vários loci são amplificados juntos (multiplex). A quantidade ideal de DNA costuma ficar entre 0,5 e 1 ng. Controles positivo e negativo são obrigatórios.',
+        'Mg²⁺ em excesso reduz a especificidade; o EDTA sequestra o Mg²⁺ e pode inibir a reação.');
+      C('met-pcr', 'Quais são as etapas de cada ciclo da PCR?',
+        'Desnaturação (~94–95 °C), anelamento dos primers (~55–60 °C) e extensão pela polimerase (~72 °C).',
+        'A quantidade de produto dobra a cada ciclo em teoria; os kits forenses usam cerca de 28 a 30 ciclos. Uma extensão final mais longa completa a adição de A pela polimerase e evita picos −A.',
+        'Ciclos demais aumentam artefatos e o risco de contaminação aparecer.');
+      C('met-pcr', 'Como funciona a eletroforese capilar de STR?',
+        'Os amplicons fluorescentes migram num capilar com polímero, separados por tamanho (os menores andam mais rápido); um laser excita os corantes e o detector registra os picos no eletroferograma.',
+        'Um padrão interno de tamanho em cada amostra calibra a corrida; a escada alélica (ladder) permite nomear os alelos. A altura do pico (em RFU) reflete a quantidade de DNA. A resolução de 1 pb distingue alelos intermediários.',
+        'O DNA migra para o polo POSITIVO, por causa dos fosfatos de carga negativa.');
+      C('met-pcr', 'Qual a diferença entre eletroforese em gel (placa) e capilar?',
+        'No gel de agarose ou poliacrilamida, as bandas aparecem com corante; a capilar é automatizada, detecta por fluorescência e tem resolução de 1 pb.',
+        'A agarose separa fragmentos maiores e é usada para conferir a integridade do DNA ou produtos de PCR; a poliacrilamida tem maior resolução. A capilar substituiu o gel na tipagem de STR pela automação e precisão.',
+        'Agarose: fragmentos grandes, menor resolução. Poliacrilamida: fragmentos pequenos, alta resolução.');
+      MC('met-pcr', 'A temperatura típica da etapa de extensão na PCR é de cerca de:',
+        ['72 °C', '95 °C', '37 °C', '55 °C', '4 °C'], 0,
+        '72 °C é a temperatura ótima de trabalho da polimerase termoestável.');
+      ORD('met-pcr', 'Ordene as etapas de um ciclo da PCR.',
+        ['Desnaturação (~95 °C)', 'Anelamento dos primers (~55–60 °C)', 'Extensão (~72 °C)'],
+        'O ciclo se repete cerca de 28 a 30 vezes nos kits forenses.');
+      CLZ('met-pcr', 'Na eletroforese, o DNA migra para o polo ___, por causa dos grupos fosfato.',
+        ['positivo (ânodo)', 'negativo (cátodo)', 'neutro', 'mais próximo da amostra'], 0,
+        'Os fosfatos dão carga negativa ao DNA, que é atraído pelo polo positivo.');
+
+      T('met-seq', 'Sequenciamento: Sanger e MPS');
+      C('met-seq', 'Como funciona o sequenciamento de Sanger?',
+        'Síntese de DNA com dNTPs e uma pequena fração de ddNTPs fluorescentes que interrompem a cadeia; os fragmentos são separados por tamanho e a cor do último nucleotídeo revela a sequência.',
+        'Os ddNTPs não têm a hidroxila 3′, então a polimerase não consegue continuar. Lê de 700 a 1.000 pb por reação com alta acurácia. É o método clássico para a região controle do mtDNA.',
+        'ddNTP = didesoxi (sem 3′-OH). dNTP = desoxi (com 3′-OH).');
+      C('met-seq', 'Qual a limitação do Sanger com misturas?',
+        'Em misturas ou heteroplasmia surgem picos sobrepostos na mesma posição, difíceis de separar; é uma limitação, não uma vantagem.',
+        'O Sanger gera uma sequência "média" do conjunto de moléculas e não separa as contribuições. O MPS lê cada molécula individualmente (contagem de reads) e permite quantificar misturas e heteroplasmia.',
+        'Item 82 de 2025 (picos ambíguos como "ferramenta útil") está ERRADO.');
+      C('met-seq', 'O que é o sequenciamento massivo paralelo (MPS/NGS)?',
+        'São tecnologias que sequenciam milhões de fragmentos ao mesmo tempo, permitindo analisar STRs, SNPs e mtDNA numa única corrida.',
+        'Usa bibliotecas com adaptadores e índices, o que permite várias amostras juntas. Revela variação de sequência dentro dos STRs. Desvantagens: custo, preparo longo e análise bioinformática complexa; uma corrida leva de muitas horas a dias.',
+        'A vantagem do MPS é a quantidade de informação, não a rapidez (o item 84 de 2025 foi anulado, mas a banca explorou essa troca).');
+      C('met-seq', 'Quando usar cada técnica de análise?',
+        'STR por eletroforese capilar: rotina e bancos. Sanger: mtDNA e confirmação de sequências pontuais. MPS: amostras difíceis, misturas, mtDNA completo, ancestralidade, fenótipo e genealogia.',
+        'A escolha depende do vestígio, da pergunta do caso, do custo e da validação do método no laboratório. Resultados de STR por MPS podem ser convertidos para a nomenclatura por tamanho usada nos bancos.',
+        'Os bancos (CODIS e BNPG) trabalham com STR por tamanho.');
+      MC('met-seq', 'No Sanger, os ddNTPs interrompem a síntese porque:',
+        ['Não têm a hidroxila 3′', 'Não têm base nitrogenada', 'Têm ribose no lugar de desoxirribose', 'Ficam presos à polimerase', 'Não são fluorescentes'], 0,
+        'Sem a 3′-OH, não há onde ligar o próximo nucleotídeo: a cadeia termina ali.');
+
+      T('met-emg', 'Tecnologias emergentes');
+      C('met-emg', 'O que é DNA rápido (Rapid DNA)?',
+        'Equipamentos integrados que fazem lise, extração, amplificação, eletroforese e análise de STR em cerca de 1 a 2 horas, sem manipulação humana.',
+        'É usado principalmente com amostras de referência (swab bucal) e na identificação de vítimas de desastres; para vestígios de local de crime, a sensibilidade e a análise de misturas são limitadas. Nos EUA, uma lei de 2017 permitiu usar o Rapid DNA para perfis de referência de presos.',
+        'Item 86 de 2025 (todas as etapas num só equipamento em 1–2 h) é CERTO.');
+      C('met-emg', 'O que é a predição fenotípica por DNA?',
+        'É a inferência de características externas (cor dos olhos, do cabelo e da pele), da ancestralidade biogeográfica e da idade, para gerar pistas quando não há referência para comparar.',
+        'Usa SNPs (como o HIrisPlex-S) e metilação (idade). É probabilística e orienta a investigação; não identifica ninguém. Tem implicações éticas de privacidade e de risco de discriminação.',
+        'Fenotipagem é pista; identificação exige comparação de perfis.');
+      C('met-emg', 'O que é a genealogia genética forense?',
+        'É a comparação de centenas de milhares de SNPs de um vestígio com bancos genealógicos de consumidores para achar parentes distantes e, montando árvores genealógicas, chegar a um suspeito.',
+        'O caso mais famoso é o do Golden State Killer, nos EUA, em 2018. A identificação é sempre confirmada depois com STR de uma amostra de referência. Levanta questões de privacidade e de consentimento dos usuários dos bancos.',
+        'A confirmação final é sempre com amostra de referência do suspeito.');
+      C('met-emg', 'Quais os limites das tecnologias emergentes no Brasil?',
+        'Custo, necessidade de validação, bancos populacionais de referência, interpretação probabilística e questões legais e éticas.',
+        'A Lei 12.654/2012 proíbe que os bancos de perfis revelem traços somáticos ou comportamentais (exceto o gênero), o que restringe fenotipagem e genealogia nos bancos oficiais. Qualquer técnica precisa ser validada antes de ir a um laudo (ISO/IEC 17025).',
+        'Tecnologia sem validação não deve ser usada em laudo.');
+      MC('met-emg', 'A genealogia genética forense depende principalmente de:',
+        ['Centenas de milhares de SNPs comparados a bancos genealógicos', 'Os 20 STRs do CODIS', 'Apenas Y-STRs', 'Testes presuntivos de saliva', 'Eletroforese em gel de agarose'], 0,
+        'É preciso um volume enorme de SNPs para detectar parentesco distante, como primos de terceiro ou quarto grau.');
+
+      /* ---------- Genética de populações ---------- */
+      T('gpop-hw', 'Hardy-Weinberg e frequências');
+      C('gpop-hw', 'O que diz o equilíbrio de Hardy-Weinberg?',
+        'Numa população ideal, as frequências alélicas (p e q) e genotípicas (p², 2pq e q²) permanecem constantes de uma geração para outra.',
+        'Condições: população muito grande, cruzamentos ao acaso, sem mutação, seleção, migração e deriva. Na perícia, verifica-se se os bancos de frequências estão em equilíbrio para poder aplicar a regra do produto.',
+        'No modelo ideal NÃO há forças evolutivas atuando; não é um "equilíbrio de forças que se compensam" (item 72 de 2025).');
+      C('gpop-hw', 'Como calcular as frequências alélicas a partir dos genótipos?',
+        'p = (2 × homozigotos AA + heterozigotos) / (2 × N) e q = 1 − p.',
+        'Exemplo da prova de 2025: 150 BB, 200 BN e 150 NN (N = 500). p(B) = (300 + 200) / 1.000 = 0,5. O esperado seria 125 BB, 250 BN e 125 NN. Como há menos heterozigotos que o esperado, a população não está em equilíbrio.',
+        'Homozigotos "simétricos" não garantem equilíbrio; compare sempre os heterozigotos com 2pq.');
+      C('gpop-hw', 'Para que servem as frequências alélicas na perícia?',
+        'Para calcular a probabilidade de coincidência ao acaso do perfil e o LR, usando um banco de dados da população de referência.',
+        'Heterozigoto: 2pq. Homozigoto: p² (com correção θ quando necessário). As frequências vêm de amostras populacionais; no Brasil, usam-se dados regionais por causa da miscigenação. Alelos raros recebem uma frequência mínima.',
+        'Frequência é atributo da população, não do indivíduo (item 89 de 2025).');
+      C('gpop-hw', 'O que causa desvios de Hardy-Weinberg?',
+        'Endogamia, subestrutura da população (efeito Wahlund), seleção, migração, deriva, erros de genotipagem (alelos nulos, drop-out) e amostras pequenas.',
+        'Excesso de homozigotos pode indicar endogamia, subestrutura ou alelos nulos (mutação no local de ligação do primer). Por isso os laboratórios testam o equilíbrio e o desequilíbrio de ligação nos bancos populacionais.',
+        'Efeito Wahlund: juntar subpopulações diferentes num só banco reduz a heterozigosidade observada.');
+      MC('gpop-hw', 'Numa população em Hardy-Weinberg com p = 0,7, a frequência esperada de heterozigotos é:',
+        ['0,42', '0,49', '0,09', '0,21', '0,70'], 0,
+        '2pq = 2 × 0,7 × 0,3 = 0,42.');
+      CLZ('gpop-hw', 'Em Hardy-Weinberg, a frequência esperada de homozigotos para um alelo de frequência q é ___.',
+        ['q²', '2pq', '2q', 'q/2'], 0,
+        'p² para AA, 2pq para Aa e q² para aa.');
+
+      T('gpop-for', 'Forças evolutivas e estrutura populacional');
+      C('gpop-for', 'Quais são as forças evolutivas e o efeito de cada uma?',
+        'Mutação (cria alelos), seleção natural (favorece alelos vantajosos), deriva genética (mudança ao acaso) e fluxo gênico (troca de alelos entre populações).',
+        'A mutação é a fonte primária de variação. A seleção é a única força que leva à adaptação. A deriva é forte em populações pequenas e pode fixar ou eliminar alelos. O fluxo gênico deixa populações mais parecidas e aumenta a variabilidade local.',
+        'Deriva é aleatória; seleção não é.');
+      C('gpop-for', 'O que é endogamia e quais os seus efeitos?',
+        'É o cruzamento entre aparentados, que aumenta a homozigose sem mudar as frequências alélicas.',
+        'É medida pelo coeficiente de endogamia (F). Aumenta a chance de herdar dois alelos idênticos por descendência, elevando as doenças recessivas. Em populações isoladas, a chance de dois perfis coincidirem é maior.',
+        'Item 73 de 2025 (consanguinidade "aumenta heterozigotos") está ERRADO.');
+      C('gpop-for', 'O que são as estatísticas F de Wright e o θ forense?',
+        'FIS mede a endogamia dentro da subpopulação, FST a diferenciação entre subpopulações e FIT a endogamia total. O θ (próximo do FST) corrige a subestrutura no cálculo forense.',
+        'O NRC II (1996) recomenda as fórmulas de Balding-Nichols com θ, tipicamente entre 0,01 e 0,03, considerando que o suspeito e o verdadeiro autor podem ser da mesma subpopulação. Isso deixa o cálculo conservador, a favor da defesa.',
+        'O θ aumenta a probabilidade de coincidência e, portanto, diminui o LR (item 70 de 2025, CERTO).');
+      C('gpop-for', 'O que são gargalo genético e efeito fundador?',
+        'Gargalo: redução drástica do tamanho da população. Efeito fundador: nova população iniciada por poucos indivíduos. Os dois reduzem a variabilidade e mudam as frequências ao acaso.',
+        'São casos particulares de deriva. Explicam por que populações isoladas têm alelos raros em alta frequência e menos diversidade de perfis. No Brasil, a mistura entre europeus, africanos e indígenas teve efeito oposto, aumentando a diversidade.',
+        'Mistura de populações é consequência do fluxo gênico (item 71 de 2025, CERTO).');
+      MC('gpop-for', 'Qual força evolutiva é a única que leva de forma consistente à adaptação?',
+        ['Seleção natural', 'Deriva genética', 'Mutação', 'Fluxo gênico', 'Endogamia'], 0,
+        'A seleção natural aumenta a frequência dos alelos que melhoram a sobrevivência e a reprodução; as outras forças não são direcionais.');
+
+      T('gpop-her', 'Padrões de herança e ligação');
+      C('gpop-her', 'Como reconhecer herança autossômica dominante e recessiva num heredograma?',
+        'Dominante: afetados em todas as gerações; todo afetado tem um genitor afetado. Recessiva: pode pular gerações; afetados costumam ter pais normais (portadores); a consanguinidade aumenta os casos.',
+        'Nas duas, homens e mulheres são afetados igualmente. Na recessiva, o cruzamento de dois portadores (Aa × Aa) gera 1/4 de afetados. Na dominante, Aa × aa gera 1/2 de afetados.',
+        'Pais normais com filho afetado indicam herança recessiva.');
+      C('gpop-her', 'Como é a herança ligada ao X?',
+        'Na recessiva ligada ao X, há mais homens afetados, não há transmissão de pai para filho homem, e a mãe portadora transmite o alelo para metade dos filhos.',
+        'Os homens têm um só X (hemizigotos), então um alelo recessivo se manifesta. Exemplos: hemofilia A, daltonismo, distrofia de Duchenne. Em perícia, os X-STRs ajudam em parentescos complexos, como irmãs por parte de pai.',
+        'O pai passa o seu X para TODAS as filhas e o Y para todos os filhos.');
+      C('gpop-her', 'O que é desequilíbrio de ligação?',
+        'É a associação não aleatória entre alelos de loci diferentes, geralmente por estarem próximos no mesmo cromossomo.',
+        'A recombinação desfaz essa associação ao longo das gerações; loci muito próximos continuam associados. Se dois STRs estiverem ligados, não se pode simplesmente multiplicar as suas frequências. Em casos de irmãos, a ligação entre loci do mesmo cromossomo (como vWA e D12S391) pode exigir ajuste.',
+        'A independência dos loci é premissa da regra do produto.');
+      C('gpop-her', 'Como se herdam os marcadores de linhagem?',
+        'Y-STR: do pai para o filho homem, sem recombinação. mtDNA: da mãe para todos os filhos, mas só as filhas o transmitem adiante.',
+        'Servem para rastrear linhagens e identificar desaparecidos por meio de parentes distantes, mas não individualizam. No X-STR, o pai transmite o seu X inteiro às filhas.',
+        'Irmão por parte de mãe compartilha o mtDNA; irmão por parte de pai compartilha o Y.');
+      MC('gpop-her', 'Na herança recessiva ligada ao X, é correto afirmar:',
+        ['Não há transmissão do pai para o filho homem', 'As mulheres são mais afetadas que os homens', 'Todo afetado tem pai afetado', 'O traço aparece obrigatoriamente em todas as gerações', 'O pai afetado transmite o traço a todos os filhos homens'], 0,
+        'O filho homem recebe do pai o Y, não o X.');
+
+      T('gpop-evo', 'Filogenia e evolução molecular');
+      C('gpop-evo', 'O que é análise filogenética?',
+        'É a reconstrução das relações evolutivas entre organismos ou sequências, representada em árvores filogenéticas.',
+        'Métodos: distância (neighbor-joining, UPGMA), máxima parcimônia (menor número de mudanças), máxima verossimilhança e inferência bayesiana. O bootstrap avalia o suporte dos ramos. Usos forenses: identificar espécies, rastrear a transmissão de vírus em casos criminais e classificar haplogrupos de mtDNA e Y.',
+        'Grupo monofilético = um ancestral comum e todos os seus descendentes.');
+      C('gpop-evo', 'O que é o relógio molecular?',
+        'É a ideia de que mutações neutras se acumulam a uma taxa aproximadamente constante, o que permite estimar há quanto tempo duas linhagens divergiram.',
+        'Baseia-se na teoria neutra de Kimura: boa parte da variação molecular é neutra e se fixa por deriva. Precisa de calibração com fósseis ou eventos datados. As taxas variam entre genes; o mtDNA evolui mais rápido que a maior parte do DNA nuclear.',
+        'Regiões não codificantes evoluem mais rápido que as codificantes, porque sofrem menos seleção.');
+      C('gpop-evo', 'O que são haplogrupos e para que servem?',
+        'São grupos de haplótipos de Y ou mtDNA que compartilham um ancestral comum, definidos por SNPs e com distribuição geográfica característica.',
+        'Indicam a origem da linhagem paterna ou materna (por exemplo, haplogrupos L africanos e A, B, C e D nativo-americanos no mtDNA). No Brasil, as linhagens paternas são majoritariamente europeias e as maternas têm grande contribuição africana e indígena.',
+        'O haplogrupo indica UMA linhagem, não toda a ancestralidade da pessoa.');
+      C('gpop-evo', 'Como a seleção natural atuou na formação genética do Brasil?',
+        'Depois da miscigenação, alelos vantajosos ligados a imunidade, metabolismo e fertilidade aumentaram de frequência em poucas gerações.',
+        'O estudo citado na prova de 2025 (2.723 genomas brasileiros, publicado na Science) sugere seleção recente em genes de imunidade (origem africana), metabolismo (indígena) e fertilidade (europeia). É um exemplo de fluxo gênico e seleção atuando juntos.',
+        'O fluxo gênico introduz os alelos; a seleção muda a frequência dos que dão vantagem.');
+      MC('gpop-evo', 'O relógio molecular se baseia principalmente:',
+        ['No acúmulo aproximadamente constante de mutações neutras', 'Na seleção de genes de fertilidade', 'No número de cromossomos de cada espécie', 'Na metilação do DNA ao longo da vida', 'No crossing-over na meiose'], 0,
+        'Mutações neutras se acumulam por deriva a uma taxa relativamente constante, servindo de "relógio".');
+
+      /* ---------- Estatística forense ---------- */
+      T('est-bay', 'Teorema de Bayes e razão de verossimilhança');
+      C('est-bay', 'O que diz o teorema de Bayes na forma de chances?',
+        'Chance a posteriori = LR × chance a priori, sendo LR = P(E|H1) / P(E|H2).',
+        'A chance a priori vem das outras provas do caso (papel do julgador); o LR é a contribuição da evidência científica (papel do perito). Para converter: probabilidade = chance / (1 + chance). Exemplo da prova: chance 1/299 × LR 100 = 100/299, ou seja, probabilidade de cerca de 25%.',
+        'O perito não informa a probabilidade de culpa; informa o LR.');
+      C('est-bay', 'Como interpretar o valor do LR?',
+        'LR maior que 1 apoia H1, igual a 1 é neutro e menor que 1 apoia H2. Quanto mais longe de 1, mais forte o apoio.',
+        'Escalas verbais, como a da ENFSI, traduzem faixas: 2–10 apoio fraco, 10–100 moderado, 100–1.000 moderadamente forte, 1.000–10.000 forte, 10.000–1.000.000 muito forte e acima disso extremamente forte. As hipóteses devem ser mutuamente exclusivas e definidas antes da análise.',
+        'Com LR = 1, as chances a posteriori ficam iguais às a priori (item 96 de 2025).');
+      C('est-bay', 'O que é a falácia do promotor?',
+        'É confundir P(evidência | inocente) com P(inocente | evidência).',
+        'Exemplo: "a chance de coincidência ao acaso é 1 em 1 milhão, então a chance de ele ser inocente é 1 em 1 milhão". Errado: a probabilidade de inocência também depende da chance a priori. A falácia da defesa é o inverso: desprezar a evidência porque muitas pessoas na cidade teriam o mesmo perfil.',
+        'Coincidência genética não prova autoria (item 101 de 2025).');
+      C('est-bay', 'Em que níveis se formulam as hipóteses?',
+        'Fonte (de quem é o DNA), subfonte (de quem é o DNA de um determinado fluido), atividade (como o DNA chegou ali) e crime.',
+        'O perito trabalha tipicamente nos níveis de fonte e subfonte. Perguntas de atividade (transferência e persistência, como no estudo do DNA sob as unhas) exigem dados experimentais e são mais complexas. Avaliar no nível certo evita conclusões além do que a evidência permite.',
+        'DNA presente não diz, por si só, como nem quando chegou ao local.');
+      MC('est-bay', 'A chance a priori é de 1:999 e o LR é 1.000. A chance a posteriori é de aproximadamente:',
+        ['1:1 (probabilidade de cerca de 50%)', '1.000:1', '1:999.000', '999:1', '1:1.000'], 0,
+        '1.000 × 1/999 ≈ 1, ou seja, chances iguais. Um LR alto não leva a "certeza" quando a chance a priori é muito baixa.');
+      CLZ('est-bay', 'Chance a posteriori = ___ × chance a priori.',
+        ['LR', 'RMP', '1/LR', 'W'], 0,
+        'É o teorema de Bayes na forma de chances.');
+
+      T('est-coin', 'Coincidência de perfis e misturas');
+      C('est-coin', 'Como se calcula a frequência de um perfil STR?',
+        'Em cada locus: heterozigoto 2pq, homozigoto p². A frequência do perfil é o produto dos loci, se forem independentes (regra do produto).',
+        'Exemplo: locus 1 heterozigoto com p = 0,1 e q = 0,2 dá 0,04; locus 2 homozigoto com p = 0,3 dá 0,09; o perfil tem frequência 0,0036. Com 20 loci, os valores ficam muito pequenos. Para coincidência simples, LR ≈ 1 / frequência.',
+        'Frequência de 1/1.000.000 dá LR = 1.000.000 (o item 97 de 2025 foi anulado, mas a relação vale para fonte única).');
+      C('est-coin', 'Qual a diferença entre probabilidade de coincidência aleatória (RMP) e LR?',
+        'A RMP é a chance de uma pessoa ao acaso, não aparentada, ter o mesmo perfil. Para uma fonte única, LR = 1/RMP.',
+        'Em misturas e perfis parciais, o LR é mais adequado, porque compara hipóteses completas (ex.: vítima + suspeito versus vítima + desconhecido). Parentes do suspeito têm chance muito maior de coincidir, e isso pode entrar como hipótese alternativa.',
+        'A RMP não é a probabilidade de o suspeito ser inocente.');
+      C('est-coin', 'Como se avaliam misturas de DNA?',
+        'Estimando o número de contribuintes e calculando o LR sob hipóteses alternativas, de preferência com softwares de genotipagem probabilística.',
+        'Há métodos binários (incluir ou excluir), semicontínuos (consideram drop-out e drop-in) e contínuos (usam a altura dos picos, como STRmix e EuroForMix). Contribuintes conhecidos, como a vítima, são incluídos nas duas hipóteses.',
+        'Quanto mais contribuintes, mais incerta a interpretação; não basta "contar alelos".');
+      C('est-coin', 'Por que corrigir com θ e escolher a população de referência certa?',
+        'Porque pessoas da mesma subpopulação compartilham mais alelos; o θ e a população correta evitam exagerar a força da evidência.',
+        'No Brasil, com população miscigenada e diferenças regionais, usam-se bancos de frequência regionais ou nacionais. Frequências mínimas para alelos raros evitam valores irrealmente baixos. O cálculo é feito de forma conservadora.',
+        'Ajustar pelo coeficiente de Wright corrige a estrutura populacional e a endogamia (item 70 de 2025, CERTO).');
+      MC('est-coin', 'Locus 1 heterozigoto (p = 0,1 e q = 0,2) e locus 2 homozigoto (p = 0,3), independentes. A frequência do perfil é:',
+        ['0,0036', '0,0018', '0,02', '0,09', '0,04'], 0,
+        '(2 × 0,1 × 0,2) × (0,3²) = 0,04 × 0,09 = 0,0036.');
+
+      T('est-vin', 'Vínculo genético: paternidade e parentesco');
+      C('est-vin', 'O que é o índice de paternidade (IP)?',
+        'IP = X/Y: a probabilidade de o suposto pai transmitir o alelo paterno obrigatório dividida pela probabilidade de um homem ao acaso transmiti-lo (a frequência do alelo).',
+        'Exemplo: mãe AA, filho AB e suposto pai BB. X = 1 (ele sempre transmite B) e Y = p(B), então IP = 1/p(B). Se o suposto pai fosse AB, X = 1/2 e IP = 1/(2 × p(B)). O IP combinado é o produto dos IPs de todos os loci.',
+        'O IP é um LR: compara "é o pai" com "é um homem ao acaso, não aparentado".');
+      C('est-vin', 'Como se obtém a probabilidade de paternidade?',
+        'W = IPC / (IPC + 1), assumindo probabilidade a priori de 50% (fórmula de Essen-Möller).',
+        'Exemplos: IPC = 99 dá W = 99%; IPC = 10.000 dá W ≈ 99,99%. Os laudos costumam exigir valores muito altos, com muitos loci. A priori de 50% é uma convenção e pode ser criticada.',
+        'Um único locus nunca é conclusivo para paternidade (item 92 de 2025).');
+      C('est-vin', 'Quando se conclui pela exclusão de paternidade?',
+        'Quando há incompatibilidades em vários loci (em geral 3 ou mais); uma ou duas podem ser mutações e entram no cálculo.',
+        'As taxas de mutação dos STRs (cerca de 0,1% a 0,3% por locus por geração) tornam possível uma incompatibilidade de um passo mesmo no pai biológico. Mutações de origem paterna são mais frequentes que as maternas. Com poucas incompatibilidades, aumenta-se o número de loci.',
+        'Um alelo não compartilhado não exclui com 100% de certeza (item 98 de 2025).');
+      C('est-vin', 'Por que o genótipo da mãe é útil no teste de paternidade?',
+        'Porque permite saber qual alelo do filho veio da mãe e, portanto, qual é o alelo paterno obrigatório.',
+        'Sem a mãe (caso "deficiente"), os dois alelos do filho são candidatos a paternos e o IP tende a ser menor. Se mãe e filho são heterozigotos iguais (ex.: AB e AB), o alelo paterno pode ser A ou B, e o cálculo considera as duas possibilidades.',
+        'Mãe AB e filho AB: o alelo paterno pode ser A ou B (o item 93 de 2025 foi anulado).');
+      MC('est-vin', 'Mãe AA, filho AB, suposto pai AB, frequência do alelo B = 0,1. O IP desse locus é:',
+        ['5', '10', '1', '0,5', '20'], 0,
+        'O alelo paterno obrigatório é B. X = 1/2 (o pai AB transmite B com chance de 1/2) e Y = 0,1. IP = 0,5 / 0,1 = 5.');
+      CLZ('est-vin', 'Com probabilidade a priori de 50%, W = IP / (IP + ___).',
+        ['1', '2', 'IP', '0,5'], 0,
+        'Fórmula de Essen-Möller: W = IP / (IP + 1).');
+
+      /* ---------- Gestão da qualidade ---------- */
+      T('qual-iso', 'ISO/IEC 17025 e acreditação');
+      C('qual-iso', 'Quais os grandes blocos da ISO/IEC 17025:2017?',
+        'Requisitos gerais (imparcialidade e confidencialidade), de estrutura, de recursos, de processo e do sistema de gestão.',
+        'Recursos: pessoal competente, instalações e condições ambientais, equipamentos, rastreabilidade metrológica e serviços externos. Processo: análise de pedidos, seleção e validação de métodos, amostragem, manuseio de itens, registros, incerteza, garantia da validade, relato de resultados, reclamações e trabalho não conforme. A versão 2017 adota o pensamento baseado em risco.',
+        'A norma exige validar métodos não normalizados, criados pelo laboratório ou usados fora do escopo.');
+      C('qual-iso', 'Como funciona a acreditação de laboratórios no Brasil?',
+        'A Cgcre do INMETRO avalia o laboratório pela ISO/IEC 17025: solicitação, análise documental, avaliação no local, tratamento das não conformidades e decisão; depois, reavaliações periódicas.',
+        'A acreditação reconhece a competência técnica para ensaios definidos (o escopo). Não é requisito legal para o laudo valer em juízo, mas reforça a sua confiabilidade. Laboratórios da RIBPG também seguem as resoluções do Comitê Gestor.',
+        'Acreditação não é obrigatória para o laudo ser aceito judicialmente (item 105 de 2025).');
+      C('qual-iso', 'Como a ISO/IEC 17025 trata a incerteza de medição?',
+        'O laboratório deve identificar as fontes e avaliar a incerteza; para métodos reconhecidos que já especificam limites de incerteza, considera-se o requisito atendido seguindo o método e as regras de relato (item 7.6.3).',
+        'Na genética forense, o genótipo é um resultado qualitativo; a incerteza aparece em medições como a quantificação e o tamanho dos fragmentos, e na interpretação estatística. O essencial é controlar e documentar os fatores de influência.',
+        'Item 104 de 2025: não estimar a incerteza de um método reconhecido e controlado NÃO é agir incorretamente.');
+      C('qual-iso', 'Quais elementos garantem a validade dos resultados?',
+        'Validação de métodos, controles positivos e negativos, materiais de referência, ensaios de proficiência, comparações interlaboratoriais, revisão técnica e rastreabilidade dos equipamentos.',
+        'Na genética forense incluem-se ainda: separação de áreas, bancos de eliminação, limiares definidos na validação interna, revisão do laudo por um segundo perito e tratamento de trabalho não conforme (como uma contaminação detectada).',
+        'A validação é do MÉTODO; as amostras são quantificadas e analisadas, não "validadas".');
+      MC('qual-iso', 'Segundo a ISO/IEC 17025, a validação é obrigatória para:',
+        ['Métodos não normalizados, desenvolvidos pelo laboratório ou normalizados usados fora do escopo', 'Cada amostra recebida', 'Apenas métodos normalizados usados como publicados', 'Somente equipamentos importados', 'Somente laudos de paternidade'], 0,
+        'Métodos normalizados usados como publicados exigem verificação; validação é para os casos citados na primeira alternativa.');
+
+      T('qual-pt', 'Ensaios de proficiência e interlaboratoriais');
+      C('qual-pt', 'O que é um ensaio de proficiência?',
+        'É uma avaliação EXTERNA do desempenho do laboratório: um provedor envia amostras e compara os resultados com valores de referência.',
+        'Os provedores devem seguir a ISO/IEC 17043. Na genética forense, as amostras simulam vestígios e referências. O resultado monitora o desempenho e é exigido para manter a acreditação.',
+        'É externo, não "avaliação interna" (item 112 de 2025).');
+      C('qual-pt', 'Qual a diferença entre ensaio interlaboratorial e de proficiência?',
+        'Interlaboratorial é qualquer ensaio dos mesmos itens por dois ou mais laboratórios; proficiência é o interlaboratorial feito para avaliar o desempenho de cada participante.',
+        'Os interlaboratoriais também servem para validar métodos e caracterizar materiais de referência. Participar é recomendado e, para a acreditação, exigido, tanto para laboratórios novos quanto para os já acreditados.',
+        'Não é só para quem ainda não é acreditado (item 110 de 2025).');
+      C('qual-pt', 'O que acontece quando o laboratório falha num ensaio de proficiência?',
+        'Abre-se o tratamento de não conformidade: investigação da causa, avaliação do impacto nos resultados já emitidos e ação corretiva.',
+        'A Cgcre acompanha o tratamento; sanções como suspensão ou redução do escopo dependem da gravidade e da resposta do laboratório. Não há perda automática da acreditação.',
+        'Item 111 de 2025 (perda automática) está ERRADO.');
+      C('qual-pt', 'Que outras ferramentas de controle de qualidade existem?',
+        'Controles internos em cada corrida, testes cegos internos, revisão técnica por pares, auditorias internas, análise crítica pela direção e monitoramento de contaminação.',
+        'Auditorias internas verificam se o sistema de gestão está funcionando; auditorias externas (Cgcre, RIBPG) verificam a conformidade com as normas. Registros completos permitem rastrear cada etapa.',
+        'Auditoria interna não é ensaio de proficiência.');
+      MC('qual-pt', 'Um laboratório acreditado teve resultado insatisfatório num ensaio de proficiência. Ele deve:',
+        ['Investigar a causa, avaliar o impacto e implementar ação corretiva', 'Perder automaticamente a acreditação', 'Ignorar o resultado, pois já é acreditado', 'Repetir o ensaio internamente e descartar o externo', 'Anular todos os laudos já emitidos sem análise'], 0,
+        'O caminho é o tratamento da não conformidade; sanções dependem da gravidade.');
+
+      T('qual-rib', 'Normas da genética forense e auditorias da RIBPG');
+      C('qual-rib', 'Que normas formam a estrutura normativa da genética forense no Brasil?',
+        'CF/1988, CPP (cadeia de custódia), Lei 12.654/2012, Lei 12.037/2009, LEP (art. 9º-A), Decreto 7.950/2013, resoluções do Comitê Gestor da RIBPG e ISO/IEC 17025, além de recomendações internacionais (ISFG, SWGDAM).',
+        'As resoluções do Comitê Gestor tratam de padronização de marcadores, inserção e exclusão de perfis, auditorias e controle de qualidade. Para os laboratórios da rede, são obrigatórias e complementam a ISO/IEC 17025.',
+        'As resoluções da RIBPG complementam, e não substituem, a ISO/IEC 17025 (item 107 de 2025, CERTO).');
+      C('qual-rib', 'Do que trata a Resolução nº 12/2019 do Comitê Gestor da RIBPG?',
+        'Dos requisitos técnicos para as auditorias nos laboratórios e bancos de perfis genéticos que compõem a RIBPG.',
+        'As auditorias verificam procedimentos, controles, qualidade dos perfis inseridos e segurança da informação. Não conformidades geram plano de ação com prazos. Leia o texto da resolução para os detalhes de periodicidade e consequências.',
+        'A banca considerou errado afirmar a suspensão obrigatória e automática do compartilhamento (item 109 de 2025).');
+      C('qual-rib', 'Por que um laboratório da RIBPG não audita a si mesmo?',
+        'Porque a auditoria precisa ser independente: ela é organizada no âmbito do Comitê Gestor, e o laboratório auditado não pode ser o auditor.',
+        'O objetivo é a confiança mútua entre os laboratórios que compartilham perfis. Perfis de baixa qualidade ou de origem irregular comprometeriam toda a rede.',
+        'Item 119 de 2025 (delegar a auditoria aos próprios laboratórios) está ERRADO.');
+      C('qual-rib', 'O que estabelece a ISO 18385?',
+        'Requisitos para minimizar o risco de contaminação por DNA humano em produtos usados na coleta, no armazenamento e na análise de material biológico forense (swabs, tubos, reagentes).',
+        'Fabricantes certificados oferecem consumíveis de grau forense. A norma complementa as medidas internas do laboratório, como bancos de eliminação e controles negativos.',
+        'Contaminação de fábrica já criou um "suspeito fantasma": o caso do Fantasma de Heilbronn, na Alemanha, era DNA de uma funcionária da fábrica de swabs.');
+      MC('qual-rib', 'Para um laboratório da RIBPG, as resoluções do Comitê Gestor:',
+        ['São obrigatórias e complementam a ISO/IEC 17025', 'Substituem a ISO/IEC 17025', 'São recomendações opcionais', 'Valem só para laboratórios não acreditados', 'Dispensam as auditorias'], 0,
+        'As exigências da rede somam-se às da norma; uma não substitui a outra.');
+
+      /* ---------- Bancos de perfis genéticos ---------- */
+      T('bpg-hist', 'Histórico e funcionamento dos bancos');
+      C('bpg-hist', 'Como surgiram os bancos de perfis genéticos?',
+        'O primeiro banco nacional foi criado no Reino Unido, em 1995. Nos EUA, o FBI criou o CODIS, com o banco nacional (NDIS) operando desde 1998.',
+        'A identificação por DNA começou com Alec Jeffreys (1984–1985) e foi usada no caso Colin Pitchfork, no Reino Unido. No Brasil, o FBI cedeu o CODIS por acordo de cooperação, e a base legal veio com a Lei 12.654/2012 e o Decreto 7.950/2013.',
+        'A cessão do CODIS pelo FBI e a criação da RIBPG favoreceram os bancos no Brasil (item 118 de 2025, CERTO).');
+      C('bpg-hist', 'Como funciona um banco de perfis genéticos?',
+        'Ele guarda perfis STR em categorias separadas (vestígios, condenados, identificados criminalmente, restos mortais, familiares de desaparecidos) e faz buscas automáticas por coincidências.',
+        'Uma coincidência entre vestígio e pessoa é informação investigativa e precisa ser confirmada com nova coleta e laudo. Coincidências entre vestígios ligam crimes diferentes ao mesmo autor desconhecido. A RIBPG integra bancos estaduais, distrital e federal.',
+        'Coincidência no banco é pista; a prova vem do laudo com amostra de referência.');
+      C('bpg-hist', 'O que é a RIBPG?',
+        'A Rede Integrada de Bancos de Perfis Genéticos: laboratórios estaduais, distrital e da Polícia Federal que compartilham perfis com o BNPG, sob coordenação de um Comitê Gestor.',
+        'Foi instituída pelo Decreto 7.950/2013, junto com o BNPG, que é administrado pela Polícia Federal. Exige padronização de marcadores e de procedimentos e publica relatórios periódicos com números de perfis e coincidências.',
+        'Estado integrado à rede não pode dispensar os protocolos nacionais (item 120 de 2025, ERRADO).');
+      C('bpg-hist', 'Quais as finalidades dos bancos de perfis no Brasil?',
+        'Apoiar a investigação criminal (ligar vestígios a autores e crimes entre si) e identificar pessoas desaparecidas.',
+        'A identificação de desaparecidos compara perfis de restos mortais com os de familiares, que doam material voluntariamente. Os bancos também ajudam na identificação de vítimas de desastres. Usam STRs não codificantes.',
+        'Item 114 de 2025 (o BNPG não serviria para desaparecidos) está ERRADO.');
+      MC('bpg-hist', 'Uma coincidência entre um vestígio e um condenado no banco de perfis genéticos:',
+        ['É informação investigativa a ser confirmada com nova coleta e laudo', 'É prova definitiva de autoria', 'Dispensa a cadeia de custódia', 'Revela traços físicos do autor', 'Só vale se o suspeito confessar'], 0,
+        'O banco aponta um possível autor; a prova pericial é produzida depois, com amostra de referência e laudo.');
+
+      T('bpg-leg', 'Legislação dos bancos de perfis');
+      C('bpg-leg', 'O que a Lei 12.654/2012 mudou?',
+        'Alterou a Lei 12.037/2009, permitindo a coleta de material biológico como identificação criminal (com decisão judicial), e a LEP, prevendo a coleta de condenados, com armazenamento em banco sigiloso.',
+        'Os dados são sigilosos, e quem permitir ou promover o seu uso indevido responde civil, penal e administrativamente. As informações não podem revelar traços somáticos ou comportamentais, exceto a determinação genética de gênero.',
+        'O banco de perfis não pode revelar traços físicos ou de saúde.');
+      C('bpg-leg', 'Quem é obrigado a fornecer perfil genético pela LEP (art. 9º-A)?',
+        'O condenado por crime doloso com violência grave contra a pessoa, por crime contra a vida, contra a liberdade sexual ou por crime sexual contra vulnerável.',
+        'A redação é da Lei 13.964/2019 (Pacote Anticrime), que também tornou falta grave a recusa do condenado e garantiu ao titular acesso aos seus dados e aos documentos da cadeia de custódia. A constitucionalidade da coleta obrigatória é discutida no STF (Tema 905 da repercussão geral).',
+        'A recusa do condenado em fornecer o material é falta grave.');
+      C('bpg-leg', 'Quando os perfis são excluídos do banco?',
+        'Pela Lei 12.037/2009 (art. 7º-A): em caso de absolvição do acusado, e, para o condenado, mediante requerimento, depois de 20 anos do cumprimento da pena.',
+        'As resoluções do Comitê Gestor trazem regras específicas para excluir perfis de vestígios e de familiares de referência (que podem pedir a retirada).',
+        'Para o condenado, a exclusão é a pedido, depois de 20 anos do cumprimento da pena; não é automática.');
+      C('bpg-leg', 'O que estabelece o Decreto 7.950/2013?',
+        'Institui o Banco Nacional de Perfis Genéticos e a Rede Integrada de Bancos de Perfis Genéticos, com um Comitê Gestor para padronizar, fiscalizar e promover o intercâmbio.',
+        'O BNPG fica no âmbito do Ministério da Justiça e Segurança Pública e é administrado pela Polícia Federal. O Comitê Gestor tem representantes federais e estaduais e edita resoluções técnicas, como a de auditorias.',
+        'Lei 12.654/2012 = base legal da coleta. Decreto 7.950/2013 = cria o BNPG e a RIBPG.');
+      MC('bpg-leg', 'Pela Lei 12.037/2009, o perfil genético de um condenado é excluído do banco:',
+        ['Mediante requerimento, depois de 20 anos do cumprimento da pena', 'Automaticamente após 5 anos', 'Nunca', 'Logo após o trânsito em julgado', 'Quando ele se recusar a fornecer novo material'], 0,
+        'A exclusão do condenado depende de requerimento e do prazo de 20 anos após o cumprimento da pena.');
+
+      return { topics:topics, cards:cards, questions:questions };
+    })();
+
+    // Itens da prova 2025 associados aos tópicos (aparecem no teste do tópico correspondente).
+    var QTOPIC = {
+      'pf25-51':'pol-uni', 'pf25-52':'bcm-cel', 'pf25-53':'pol-uni', 'pf25-54':'pol-uni', 'pf25-56':'bcm-epi',
+      'pf25-57':'bcm-exp', 'pf25-58':'bcm-epi', 'pf25-59':'bcm-exp', 'pf25-60':'bcm-bio', 'pf25-61':'bcm-bio',
+      'pf25-62':'bcm-bio', 'pf25-63':'bcm-exp', 'pf25-64':'met-ext', 'pf25-65':'pol-str', 'pf25-66':'bcm-epi',
+      'pf25-67':'bcm-gen', 'pf25-68':'pol-snp', 'pf25-69':'gpop-hw', 'pf25-70':'gpop-for', 'pf25-71':'gpop-for',
+      'pf25-72':'gpop-hw', 'pf25-73':'gpop-for', 'pf25-74':'met-col', 'pf25-75':'met-pres', 'pf25-76':'met-col',
+      'pf25-77':'met-pcr', 'pf25-78':'met-ext', 'pf25-79':'met-pcr', 'pf25-80':'met-pcr', 'pf25-81':'met-ext',
+      'pf25-82':'met-seq', 'pf25-83':'met-seq', 'pf25-85':'met-emg', 'pf25-86':'met-emg', 'pf25-87':'est-bay',
+      'pf25-88':'est-bay', 'pf25-89':'est-bay', 'pf25-90':'est-bay', 'pf25-92':'est-vin', 'pf25-95':'est-bay',
+      'pf25-96':'est-bay', 'pf25-98':'est-vin', 'pf25-100':'est-bay', 'pf25-101':'est-bay', 'pf25-102':'est-bay',
+      'pf25-103':'est-bay', 'pf25-104':'qual-iso', 'pf25-105':'qual-iso', 'pf25-107':'qual-rib', 'pf25-108':'bpg-leg',
+      'pf25-109':'qual-rib', 'pf25-110':'qual-pt', 'pf25-111':'qual-pt', 'pf25-112':'qual-pt', 'pf25-113':'bpg-hist',
+      'pf25-114':'bpg-hist', 'pf25-115':'bpg-hist', 'pf25-118':'bpg-hist', 'pf25-119':'qual-rib', 'pf25-120':'bpg-hist'
+    };
+    // Cards antigos de qualidade (ISO 17025) entram no tópico de acreditação.
+    var CTOPIC = { fc119:'qual-iso', fc120:'qual-iso', fc121:'qual-iso', fc122:'qual-iso', fc123:'qual-iso' };
+
+    SEED.flashcards = SEED.flashcards.concat(AREA19.cards);
+    SEED.questions = SEED.questions.concat(AREA19.questions);
+    SEED.flashcards.forEach(function(c){ if(CTOPIC[c.id]) c.topic = CTOPIC[c.id]; });
+    SEED.questions.forEach(function(q){ if(QTOPIC[q.id]) q.topic = QTOPIC[q.id]; });
+    // Tipo de interação de uma questão: mc (múltipla escolha), ce (certo/errado), cloze (completar), order (ordenar).
+    function qtype(q){
+      if(q.type) return q.type;
+      return (q.options && q.options.length === 2 && q.options[0] === 'Certo' && q.options[1] === 'Errado') ? 'ce' : 'mc';
+    }
+    var TOPICS = AREA19.topics;
+    var TOPIC_NAME = {};
+    TOPICS.forEach(function(t){ TOPIC_NAME[t.id] = t.name; });
 
     var Persistence = (function(){
       var KEY = 'reels_concurso_v1';
@@ -1250,7 +1933,7 @@ questions: [
     })();
 
     var Engine = (function(){
-      var P = { warmupCards:4, mainCards:8, blockSize:4, reinforceCards:4, reinforceQuestions:4 };
+      var P = { warmupCards:4, mainCards:8, blockSize:4, reinforceCards:4, reinforceQuestions:4, topicsPerRun:2, cardsPerTopic:5 };
 
       function shuffle(arr, rng){
         var a = arr.slice();
@@ -1302,6 +1985,55 @@ questions: [
         }
         return out;
       }
+      function seenCounts(){
+        var seen = {};
+        (Store.get().runs || []).forEach(function(r){
+          (r.answers || []).forEach(function(a){ seen[a.refId] = (seen[a.refId] || 0) + 1; });
+        });
+        return seen;
+      }
+      // Primeiro uma pergunta de múltipla escolha; depois alterna os outros tipos (ordenar, completar, certo/errado).
+      function pickVaried(list, n, rng, seen){
+        var byType = {};
+        shuffle(list, rng).sort(function(a, b){ return (seen[a.id] || 0) - (seen[b.id] || 0); }).forEach(function(q){
+          var t = qtype(q);
+          (byType[t] = byType[t] || []).push(q);
+        });
+        var types = ['mc', 'order', 'cloze', 'ce'];
+        var out = [];
+        for(var round=0; round<20 && out.length<n; round++){
+          var took = false;
+          types.forEach(function(t){
+            if(out.length < n && byType[t] && byType[t].length){ out.push(byType[t].shift()); took = true; }
+          });
+          if(!took) break;
+        }
+        return out;
+      }
+      function buildTopics(mainTopics, rng, usedCards, usedQs, queue){
+        var seen = seenCounts();
+        var cardsAll = Data.allFlashcards(), qsAll = Data.allQuestions();
+        var qPer = U.clamp(parseInt(Store.get().settings.questionCountPerBlock, 10) || 4, 1, 10);
+        var ranked = mainTopics.map(function(t){
+          var tc = cardsAll.filter(function(c){ return c.topic === t.id; });
+          var exposure = tc.reduce(function(a, c){ return a + (seen[c.id] || 0); }, 0) / Math.max(1, tc.length);
+          return { t:t, cards:tc, score: exposure + rng() * 0.5 };
+        }).filter(function(x){ return x.cards.length; }).sort(function(a, b){ return a.score - b.score; });
+        ranked.slice(0, P.topicsPerRun).forEach(function(x){
+          var cs = shuffle(x.cards.filter(function(c){ return !usedCards[c.id]; }), rng)
+            .sort(function(a, b){ return (seen[a.id] || 0) - (seen[b.id] || 0); })
+            .slice(0, P.cardsPerTopic);
+          cs.forEach(function(c){
+            usedCards[c.id] = true;
+            queue.push({ kind:'card', refId:c.id, syllabusId:c.syllabusId, topic:x.t.id });
+          });
+          var tq = qsAll.filter(function(q){ return q.topic === x.t.id && !usedQs[q.id]; });
+          pickVaried(tq, qPer, rng, seen).forEach(function(q){
+            usedQs[q.id] = true;
+            queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId, topic:x.t.id });
+          });
+        });
+      }
       function build(){
         var rng = U.mulberry32((Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0);
         var s = Store.get();
@@ -1315,6 +2047,11 @@ questions: [
         var weak = weakNodeIds();
         var weakQs = weakQuestionIds();
 
+        var mainTopics = TOPICS.filter(function(t){ return t.node === main.id; });
+        if(mainTopics.length){
+          // Matéria organizada por tópicos: 4–5 cards de um tópico e, em seguida, o teste daquele tópico.
+          buildTopics(mainTopics, rng, usedCards, usedQs, queue);
+        }else{
         // Aquecimento vem de outro conteúdo (fraco, se houver) para não esgotar os cards do conteúdo principal.
         var warmSrc = weak.filter(function(id){ return id !== main.id && (counts[id] || 0) > 0; })[0] || null;
         if(!warmSrc){
@@ -1343,6 +2080,7 @@ questions: [
           takeQuestions([main.id].concat(weak), qPerBlock, rng, usedQs, weakQs).forEach(function(q){
             queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
           });
+        }
         }
 
         if(weak.length || weakQs.length){
@@ -1692,16 +2430,34 @@ questions: [
         if(item.kind === 'card') paintCard(item); else paintQuestion(item);
       }
 
+      // Posição do item dentro do bloco do tópico (ex.: card 2 de 5).
+      function topicPos(r, item){
+        if(!item.topic) return '';
+        var total = 0, pos = 0;
+        r.queue.forEach(function(it, i){
+          if(it.topic === item.topic && it.kind === item.kind){ total++; if(i <= r.index) pos = total; }
+        });
+        return total > 1 ? ' · ' + pos + '/' + total : '';
+      }
+      function label(item){
+        return item.topic && TOPIC_NAME[item.topic] ? TOPIC_NAME[item.topic] : nodeName(item.syllabusId);
+      }
+
       function paintCard(item){
         var card = cardMap[item.refId];
         if(!card){ advance(); return; }
         revealed = false;
+        var r = Store.get().activeRun;
         stage.innerHTML =
           '<div class="reel">' +
-            '<div class="reel-tag">Flashcard · <span>' + U.esc(nodeName(item.syllabusId)) + '</span></div>' +
+            '<div class="reel-tag">Flashcard · <span>' + U.esc(label(item)) + '</span>' + topicPos(r, item) + '</div>' +
             '<div class="reel-q">' + U.esc(card.front) + '</div>' +
             '<button class="btn-primary" id="reveal">Mostrar resposta</button>' +
-            '<div class="reel-a" id="card-back" hidden>' + U.esc(card.back) + '</div>' +
+            '<div class="reel-a" id="card-back" hidden>' +
+              '<p class="ans">' + U.esc(card.back) + '</p>' +
+              (card.more ? '<div class="more-box"><b>Aprofunde</b><p>' + U.esc(card.more) + '</p></div>' : '') +
+              (card.tip ? '<div class="tip-box"><b>Pegadinha de prova</b><p>' + U.esc(card.tip) + '</p></div>' : '') +
+            '</div>' +
             '<div class="card-controls" id="card-controls" hidden>' +
               '<button class="btn-no" id="ans-no">Não sei</button>' +
               '<button class="btn-yes" id="ans-yes">Sei</button>' +
@@ -1718,7 +2474,7 @@ questions: [
           back.hidden = false;
           controls.hidden = false;
           revealBtn.hidden = true;
-          hint.textContent = 'Avalie: não sei ou sei';
+          hint.textContent = 'Leia o "Aprofunde" e avalie: não sei ou sei';
         });
         stage.querySelector('#ans-no').addEventListener('click', function(){
           if(locked) return; locked = true;
@@ -1733,47 +2489,128 @@ questions: [
         });
       }
 
+      var TYPE_LABEL = { mc:'Múltipla escolha', ce:'Certo ou errado', cloze:'Complete a lacuna', order:'Ordene as etapas' };
+
       function paintQuestion(item){
         var q = qMap[item.refId];
         if(!q){ advance(); return; }
-        var isCE = q.options.length === 2 && q.options[0] === 'Certo' && q.options[1] === 'Errado';
-        var letters = isCE ? ['C','E'] : ['A','B','C','D','E','F'];
-        var optsHtml = q.options.map(function(t, i){
-          return '<button class="opt" data-i="' + i + '"><span class="opt-letter">' + letters[i] + '</span><span>' + U.esc(t) + '</span></button>';
-        }).join('');
-        stage.innerHTML =
-          '<div class="reel">' +
-            '<div class="reel-tag">' + (isCE ? 'Certo ou errado' : 'Questão') + ' · <span>' + U.esc(nodeName(item.syllabusId)) + '</span>' + (q.source ? ' · ' + U.esc(q.source) : '') + '</div>' +
-            '<div class="reel-q' + (isCE ? ' reel-q-ce' : '') + '">' + U.esc(q.stem) + '</div>' +
-            '<div class="opts' + (isCE ? ' opts-ce' : '') + '" id="opts">' + optsHtml + '</div>' +
-            '<div class="feedback" id="q-feedback" hidden>' +
-              '<p class="fb-title"></p>' +
-              '<p class="fb-exp"></p>' +
-              '<button class="btn-primary" id="q-next">Próxima</button>' +
-            '</div>' +
+        var type = qtype(q);
+        var r = Store.get().activeRun;
+        var tag = '<div class="reel-tag">' + (item.topic ? 'Teste do tópico · ' : '') + TYPE_LABEL[type] +
+          ' · <span>' + U.esc(label(item)) + '</span>' + (q.source ? ' · ' + U.esc(q.source) : '') + '</div>';
+        var feedbackHtml =
+          '<div class="feedback" id="q-feedback" hidden>' +
+            '<p class="fb-title"></p>' +
+            '<div class="fb-extra"></div>' +
+            '<p class="fb-exp"></p>' +
+            '<button class="btn-primary" id="q-next">Próxima</button>' +
           '</div>';
         var answered = false;
-        var optEls = stage.querySelectorAll('.opt');
-        optEls.forEach(function(btn, idx){
-          btn.addEventListener('click', function(){
-            if(answered) return;
-            answered = true;
-            var correct = idx === q.answer;
-            record('question', q.id, q.syllabusId, correct);
-            optEls.forEach(function(b, i){
-              b.disabled = true;
-              if(i === q.answer) b.classList.add('correct');
-              else if(i === idx) b.classList.add('wrong');
+
+        function finishAnswer(correct, title, extraHtml){
+          record('question', q.id, q.syllabusId, correct);
+          var fb = stage.querySelector('#q-feedback');
+          fb.hidden = false;
+          fb.classList.add(correct ? 'ok' : 'bad');
+          fb.querySelector('.fb-title').textContent = (correct ? 'Você acertou' : 'Você errou') + (title ? ' · ' + title : '');
+          fb.querySelector('.fb-extra').innerHTML = extraHtml || '';
+          fb.querySelector('.fb-exp').textContent = q.explanation || '';
+          if(correct) Audio.correct();
+          chrome();
+          fb.scrollIntoView({ block:'nearest', behavior:'smooth' });
+        }
+
+        if(type === 'order'){
+          // Embaralha garantindo que não comece já na ordem certa.
+          var idxs = q.items.map(function(_, i){ return i; });
+          for(var tries=0; tries<10; tries++){
+            idxs.sort(function(){ return Math.random() - 0.5; });
+            if(idxs.some(function(v, i){ return v !== i; })) break;
+          }
+          stage.innerHTML =
+            '<div class="reel">' + tag +
+              '<div class="reel-q">' + U.esc(q.stem) + '</div>' +
+              '<p class="muted">Toque nas etapas na ordem correta. Toque numa etapa escolhida para desfazer.</p>' +
+              '<ol class="ord-picked" id="ord-picked"></ol>' +
+              '<div class="ord-pool" id="ord-pool">' + idxs.map(function(i, k){
+                return '<button class="ord-item" data-i="' + i + '"><span class="opt-letter">' + (k + 1) + '</span><span>' + U.esc(q.items[i]) + '</span></button>';
+              }).join('') + '</div>' +
+              '<button class="btn-primary" id="ord-check" disabled>Conferir ordem</button>' +
+              feedbackHtml +
+            '</div>';
+          var picked = [];
+          var pickedEl = stage.querySelector('#ord-picked');
+          var checkBtn = stage.querySelector('#ord-check');
+          function renderPicked(){
+            pickedEl.innerHTML = picked.map(function(i){ return '<li data-i="' + i + '">' + U.esc(q.items[i]) + '</li>'; }).join('');
+            checkBtn.disabled = picked.length !== q.items.length;
+            stage.querySelectorAll('.ord-item').forEach(function(b){ b.disabled = answered || picked.indexOf(+b.dataset.i) >= 0; });
+          }
+          stage.querySelectorAll('.ord-item').forEach(function(b){
+            b.addEventListener('click', function(){
+              if(answered || picked.indexOf(+b.dataset.i) >= 0) return;
+              picked.push(+b.dataset.i);
+              renderPicked();
             });
-            var fb = stage.querySelector('#q-feedback');
-            fb.hidden = false;
-            fb.classList.add(correct ? 'ok' : 'bad');
-            fb.querySelector('.fb-title').textContent = (correct ? 'Você acertou' : 'Você errou') + (isCE ? ' · gabarito: ' + q.options[q.answer].toUpperCase() : '');
-            fb.querySelector('.fb-exp').textContent = q.explanation || '';
-            if(correct) Audio.correct();
-            chrome();
           });
-        });
+          pickedEl.addEventListener('click', function(e){
+            var li = e.target.closest('li');
+            if(!li || answered) return;
+            picked.splice(picked.indexOf(+li.dataset.i), 1);
+            renderPicked();
+          });
+          checkBtn.addEventListener('click', function(){
+            if(answered || picked.length !== q.items.length) return;
+            answered = true;
+            var correct = picked.every(function(v, i){ return v === i; });
+            pickedEl.querySelectorAll('li').forEach(function(li, pos){
+              li.classList.add(+li.dataset.i === pos ? 'right' : 'off');
+            });
+            checkBtn.hidden = true;
+            stage.querySelector('#ord-pool').hidden = true;
+            finishAnswer(correct, correct ? '' : 'ordem correta abaixo',
+              correct ? '' : '<ol class="ord-answer">' + q.items.map(function(t){ return '<li>' + U.esc(t) + '</li>'; }).join('') + '</ol>');
+          });
+          renderPicked();
+        }else{
+          var isCE = type === 'ce';
+          // Múltipla escolha e lacuna: alternativas embaralhadas a cada vez.
+          var order = q.options.map(function(_, i){ return i; });
+          if(!isCE) order.sort(function(){ return Math.random() - 0.5; });
+          var letters = isCE ? ['C','E'] : ['A','B','C','D','E','F'];
+          var optsHtml = order.map(function(orig, pos){
+            return '<button class="opt' + (type === 'cloze' ? ' chip' : '') + '" data-i="' + orig + '"><span class="opt-letter">' + letters[pos] + '</span><span>' + U.esc(q.options[orig]) + '</span></button>';
+          }).join('');
+          var stemHtml = U.esc(q.stem);
+          if(type === 'cloze') stemHtml = stemHtml.replace('___', '<span class="blank" id="blank">______</span>');
+          stage.innerHTML =
+            '<div class="reel">' + tag +
+              '<div class="reel-q' + (isCE ? ' reel-q-ce' : '') + '">' + stemHtml + '</div>' +
+              '<div class="opts' + (isCE ? ' opts-ce' : '') + (type === 'cloze' ? ' opts-chips' : '') + '" id="opts">' + optsHtml + '</div>' +
+              feedbackHtml +
+            '</div>';
+          var optEls = stage.querySelectorAll('.opt');
+          optEls.forEach(function(btn){
+            btn.addEventListener('click', function(){
+              if(answered) return;
+              answered = true;
+              var chosen = +btn.dataset.i;
+              var correct = chosen === q.answer;
+              optEls.forEach(function(b){
+                b.disabled = true;
+                if(+b.dataset.i === q.answer) b.classList.add('correct');
+                else if(b === btn) b.classList.add('wrong');
+              });
+              if(type === 'cloze'){
+                var bl = stage.querySelector('#blank');
+                if(bl){ bl.textContent = q.options[q.answer]; bl.classList.add(correct ? 'ok' : 'bad'); }
+              }
+              var title = isCE ? 'gabarito: ' + q.options[q.answer].toUpperCase()
+                : (correct ? '' : 'resposta: ' + q.options[q.answer]);
+              finishAnswer(correct, title, '');
+            });
+          });
+        }
         stage.querySelector('#q-next').addEventListener('click', function(){
           if(locked) return; locked = true;
           advance();
@@ -1805,6 +2642,12 @@ questions: [
             }
           }else{
             var idx = parseInt(e.key, 10) - 1;
+            var ordItems = stage.querySelectorAll('.ord-item');
+            if(ordItems.length){
+              if(e.key === 'Enter'){ e.preventDefault(); var oc = stage.querySelector('#ord-check'); if(oc && !oc.disabled) oc.click(); }
+              else if(idx >= 0 && idx < ordItems.length){ e.preventDefault(); ordItems[idx].click(); }
+              return;
+            }
             var opts = stage.querySelectorAll('.opt');
             if(idx >= 0 && idx < opts.length){ e.preventDefault(); opts[idx].click(); }
           }
@@ -2254,8 +3097,8 @@ questions: [
             '<div class="card soft">' +
               '<h2 class="h2">Como funciona</h2>' +
               '<ul class="steps">' +
-                '<li><b>1.</b> Flashcards em ritmo de reels.</li>' +
-                '<li><b>2.</b> Bloco de questões a cada 4 cards.</li>' +
+                '<li><b>1.</b> 4 a 5 flashcards de um tópico, com "Aprofunde" e "Pegadinha de prova".</li>' +
+                '<li><b>2.</b> Teste do tópico: múltipla escolha, ordenar, completar e certo/errado.</li>' +
                 '<li><b>3.</b> Sumário reforça o que você errou.</li>' +
               '</ul>' +
             '</div>' +
@@ -2338,6 +3181,15 @@ questions: [
                 '<div class="plan-meta">' + Data.countFlashcards(n.id) + ' cards · ' + Data.countQuestions(n.id) + ' questões' +
                   (info.target ? ' · meta ' + U.fmtDate(info.target) : '') + '</div>' +
                 '<div class="bar"><span style="width:' + info.pct + '%"></span></div>' +
+                (function(){
+                  var ts = TOPICS.filter(function(t){ return t.node === n.id; });
+                  var list = ts.length ? '<ul class="topic-list">' + ts.map(function(t){
+                    var nc = Data.allFlashcards().filter(function(c){ return c.topic === t.id; }).length;
+                    var nq = Data.allQuestions().filter(function(q){ return q.topic === t.id; }).length;
+                    return '<li>' + U.esc(t.name) + ' <span>' + nc + ' cards · ' + nq + ' perguntas</span></li>';
+                  }).join('') + '</ul>' : '';
+                  return (EDITAL[n.id] || ts.length) ? '<details class="edital"><summary>' + (ts.length ? ts.length + ' tópicos · o que cai no edital' : 'O que cai no edital') + '</summary>' + list + (EDITAL[n.id] ? '<p>' + U.esc(EDITAL[n.id]) + '</p>' : '') + '</details>' : '';
+                })() +
               '</li>';
           });
           html += '</ul></div>';
