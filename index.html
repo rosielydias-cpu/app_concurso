@@ -233,6 +233,8 @@
   .ord-picked li.right{border-color:var(--ok); background:rgba(55,217,154,.12)}
   .ord-picked li.off{border-color:var(--danger); background:rgba(255,92,122,.12)}
   .ord-answer li{color:var(--ok); font-weight:600}
+  #cloud-card .field{flex-wrap:wrap}
+  #cloud-card .field input{max-width:none; flex:1 1 220px; min-width:0}
   .edital{margin-top:8px; font-size:12.5px; color:var(--muted)}
   .edital summary{cursor:pointer; color:var(--accent-2); font-weight:700; padding:4px 0}
   .edital p{margin-top:6px; line-height:1.5}
@@ -2443,6 +2445,191 @@ questions: [
     var TOPIC_NAME = {};
     TOPICS.forEach(function(t){ TOPIC_NAME[t.id] = t.name; });
 
+    // Conteúdo embutido no app (usado para preencher a planilha na primeira vez).
+    var BUILTIN = { syllabus: SEED.syllabus.slice(), flashcards: SEED.flashcards.slice(), questions: SEED.questions.slice(), topics: TOPICS.slice() };
+
+    /* ===== Banco de dados no Google Planilhas (Apps Script) =====
+       Conteúdo: lido da planilha e guardado em cache local (funciona offline com a última cópia).
+       Progresso: o estado inteiro é enviado à aba Progresso; vale o mais recente (updatedAt). */
+    var Cloud = (function(){
+      var CFG_KEY = 'reels_sheet_cfg', CACHE_KEY = 'reels_sheet_content';
+      var TIPO_IN = { multipla:'mc', certo_errado:'ce', lacuna:'cloze', ordenar:'order' };
+      var TIPO_OUT = { mc:'multipla', ce:'certo_errado', cloze:'lacuna', order:'ordenar' };
+      var LETRAS = 'ABCDEFGHIJ';
+      var pushTimer = null, pushing = false, suspended = false;
+
+      function readLS(k){ try{ return JSON.parse(localStorage.getItem(k) || 'null'); }catch(e){ return null; } }
+      function writeLS(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+      function cfg(){ return readLS(CFG_KEY) || {}; }
+      function setCfg(patch){ var c = Object.assign(cfg(), patch); writeLS(CFG_KEY, c); return c; }
+      function enabled(){ return !!cfg().url; }
+      function canSync(){ var c = cfg(); return !!(c.url && c.token); }
+
+      function request(method, params, body){
+        var c = cfg();
+        if(!c.url) return Promise.reject(new Error('Planilha não configurada.'));
+        var url = c.url;
+        if(params){
+          url += (url.indexOf('?') < 0 ? '?' : '&') + Object.keys(params).map(function(k){
+            return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+          }).join('&');
+        }
+        var opts = { method:method, redirect:'follow' };
+        if(body){
+          // text/plain evita a requisição prévia (preflight) que o Apps Script não atende.
+          opts.headers = { 'Content-Type':'text/plain;charset=utf-8' };
+          opts.body = JSON.stringify(Object.assign({ token:c.token }, body));
+        }
+        return fetch(url, opts).then(function(r){
+          if(!r.ok) throw new Error('A planilha respondeu com erro ' + r.status + '.');
+          return r.json();
+        }).then(function(j){
+          if(j && j.error){ var e = new Error(j.error); e.code = j.code; e.data = j; throw e; }
+          return j;
+        });
+      }
+
+      /* ---- Conversão planilha ↔ app ---- */
+      function split(s){ return String(s || '').split('|').map(function(x){ return x.trim(); }).filter(function(x){ return x; }); }
+      function fromSheet(raw){
+        var syllabus = (raw.materias || []).map(function(m){
+          return { id:String(m.id).trim(), name:m.nome || m.id, parentId:null, weight:Number(m.peso) || 1, order:Number(m.ordem) || 99, discipline:m.grupo || 'Outros' };
+        });
+        var ids = {}; syllabus.forEach(function(n){ ids[n.id] = true; });
+        var topics = (raw.topicos || []).filter(function(t){ return ids[t.materia]; }).map(function(t){
+          return { id:String(t.id).trim(), node:String(t.materia).trim(), name:t.nome || t.id };
+        });
+        var ignored = 0;
+        var flashcards = [];
+        (raw.cards || []).forEach(function(c){
+          if(!ids[c.materia] || !c.frente || !c.resposta){ ignored++; return; }
+          var o = { id:String(c.id).trim(), syllabusId:String(c.materia).trim(), front:c.frente, back:c.resposta };
+          if(c.topico) o.topic = String(c.topico).trim();
+          if(c.aprofunde) o.more = c.aprofunde;
+          if(c.pegadinha) o.tip = c.pegadinha;
+          flashcards.push(o);
+        });
+        var questions = [];
+        (raw.questoes || []).forEach(function(q){
+          var type = TIPO_IN[String(q.tipo || '').trim().toLowerCase()] || 'mc';
+          var o = { id:String(q.id).trim(), syllabusId:String(q.materia).trim(), stem:q.enunciado, explanation:q.explicacao || '' };
+          if(q.topico) o.topic = String(q.topico).trim();
+          if(q.fonte) o.source = q.fonte;
+          var g = String(q.gabarito || '').trim().toUpperCase();
+          if(type === 'order'){
+            o.type = 'order'; o.items = split(q.alternativas);
+            if(o.items.length < 2){ ignored++; return; }
+          }else if(type === 'ce'){
+            o.options = ['Certo', 'Errado'];
+            o.answer = (g === 'C' || g === 'CERTO') ? 0 : (g === 'E' || g === 'ERRADO') ? 1 : -1;
+          }else{
+            if(type === 'cloze') o.type = 'cloze';
+            o.options = split(q.alternativas);
+            o.answer = LETRAS.indexOf(g.charAt(0));
+          }
+          if(!ids[o.syllabusId] || !o.stem || (o.options && !(o.answer >= 0 && o.answer < o.options.length))){ ignored++; return; }
+          questions.push(o);
+        });
+        return { syllabus:syllabus, topics:topics, flashcards:flashcards, questions:questions, ignored:ignored };
+      }
+      function toSheet(src){
+        return {
+          materias: src.syllabus.map(function(n){ return { id:n.id, nome:n.name, peso:n.weight, ordem:n.order, grupo:n.discipline }; }),
+          topicos: src.topics.map(function(t){ return { id:t.id, materia:t.node, nome:t.name }; }),
+          cards: src.flashcards.map(function(c){ return { id:c.id, materia:c.syllabusId, topico:c.topic || '', frente:c.front, resposta:c.back, aprofunde:c.more || '', pegadinha:c.tip || '' }; }),
+          questoes: src.questions.map(function(q){
+            var t = qtype(q);
+            return {
+              id:q.id, materia:q.syllabusId, topico:q.topic || '', tipo:TIPO_OUT[t], enunciado:q.stem,
+              alternativas: t === 'order' ? q.items.join(' | ') : t === 'ce' ? '' : q.options.join(' | '),
+              gabarito: t === 'order' ? '' : t === 'ce' ? (q.answer === 0 ? 'C' : 'E') : LETRAS.charAt(q.answer),
+              explicacao:q.explanation || '', fonte:q.source || ''
+            };
+          })
+        };
+      }
+
+      /* ---- Aplicar conteúdo ---- */
+      function apply(raw){
+        var c = fromSheet(raw || {});
+        if(!c.syllabus.length || !(c.flashcards.length || c.questions.length)) return null;
+        SEED.syllabus = c.syllabus;
+        SEED.flashcards = c.flashcards;
+        SEED.questions = c.questions;
+        TOPICS = c.topics;
+        TOPIC_NAME = {};
+        TOPICS.forEach(function(t){ TOPIC_NAME[t.id] = t.name; });
+        return c;
+      }
+      function applyCached(){
+        if(!enabled()) return null;
+        var cache = readLS(CACHE_KEY);
+        return cache && cache.raw ? apply(cache.raw) : null;
+      }
+      function refreshContent(){
+        return request('GET', { action:'content', t:Date.now() }).then(function(raw){
+          var old = readLS(CACHE_KEY);
+          var changed = !old || JSON.stringify(old.raw) !== JSON.stringify(raw);
+          var applied = apply(raw);
+          if(!applied){ setCfg({ lastContentAt:Date.now(), contentNote:'planilha sem conteúdo: usando o conteúdo do app' }); return { changed:false, empty:true }; }
+          if(changed) writeLS(CACHE_KEY, { raw:raw, at:Date.now() });
+          setCfg({ lastContentAt:Date.now(), contentNote: applied.flashcards.length + ' cards e ' + applied.questions.length + ' perguntas' + (applied.ignored ? ' (' + applied.ignored + ' linhas ignoradas por erro de preenchimento)' : ''), lastError:'' });
+          return { changed:changed, stats:applied };
+        });
+      }
+
+      /* ---- Progresso ---- */
+      function compact(state){
+        var s = JSON.parse(JSON.stringify(state));
+        s.runs = (s.runs || []).map(function(r){ var x = Object.assign({}, r); delete x.queue; return x; });
+        return s;
+      }
+      function pushNow(){
+        if(!canSync() || pushing || suspended) return Promise.resolve(false);
+        pushing = true;
+        var st = Store.get();
+        return request('POST', null, { action:'saveProgress', data:JSON.stringify(compact(st)), updatedAt:st.updatedAt || Date.now() })
+          .then(function(){ setCfg({ lastPushAt:Date.now(), pending:false, lastError:'' }); return true; })
+          .catch(function(e){ setCfg({ pending:true, lastError:e.message }); return false; })
+          .then(function(ok){ pushing = false; return ok; });
+      }
+      function schedulePush(){
+        if(!canSync() || suspended) return;
+        setCfg({ pending:true });
+        clearTimeout(pushTimer);
+        pushTimer = setTimeout(pushNow, 4000);
+      }
+      function pullProgress(){
+        if(!canSync()) return Promise.resolve('off');
+        return request('GET', { action:'progress', token:cfg().token, t:Date.now() }).then(function(res){
+          var local = Store.get();
+          var localAt = local.updatedAt || 0;
+          if(res && res.data && res.updatedAt > localAt + 1000){
+            var remote;
+            try{ remote = JSON.parse(res.data); }catch(e){ throw new Error('Progresso na planilha está corrompido.'); }
+            suspended = true;
+            Persistence.save(remote);
+            Store.init();
+            suspended = false;
+            setCfg({ lastPullAt:Date.now(), lastError:'' });
+            return 'pulled';
+          }
+          if(!res || !res.data || localAt > (res.updatedAt || 0) + 1000) return pushNow().then(function(){ return 'pushed'; });
+          setCfg({ lastPullAt:Date.now() });
+          return 'same';
+        });
+      }
+      function seed(overwrite){
+        return request('POST', null, { action:'seedContent', overwrite:!!overwrite, content:toSheet(BUILTIN) });
+      }
+      function test(){ return request('GET', { action:'ping', token:cfg().token, t:Date.now() }); }
+      function disconnect(){ try{ localStorage.removeItem(CFG_KEY); localStorage.removeItem(CACHE_KEY); }catch(e){} }
+
+      return { cfg:cfg, setCfg:setCfg, enabled:enabled, canSync:canSync, applyCached:applyCached, refreshContent:refreshContent,
+        pullProgress:pullProgress, pushNow:pushNow, schedulePush:schedulePush, seed:seed, test:test, disconnect:disconnect,
+        isSuspended:function(){ return suspended; } };
+    })();
+
     var Persistence = (function(){
       var KEY = 'reels_concurso_v1';
       var backend = 'memory';
@@ -2533,8 +2720,12 @@ questions: [
           try{ fn(state); }catch(e){ window.reportError('Falha ao atualizar a tela: ' + e.message, e); }
         });
       }
-      function set(patch){ Object.assign(state, patch); emit(); persist(); }
-      function update(fn){ fn(state); emit(); persist(); }
+      var quiet = false;
+      // Alterações automáticas (inicialização, sincronização) não contam como "editado agora".
+      function quietly(fn){ quiet = true; try{ fn(); }finally{ quiet = false; } }
+      function touch(){ if(!quiet && !Cloud.isSuspended()) state.updatedAt = Date.now(); }
+      function set(patch){ Object.assign(state, patch); touch(); emit(); persist(); }
+      function update(fn){ fn(state); touch(); emit(); persist(); }
       function subscribe(fn){
         listeners.push(fn);
         return function(){
@@ -2542,7 +2733,7 @@ questions: [
           if(i >= 0) listeners.splice(i,1);
         };
       }
-      return { init:init, get:get, set:set, update:update, subscribe:subscribe, defaults:defaults };
+      return { init:init, get:get, set:set, update:update, subscribe:subscribe, defaults:defaults, quietly:quietly };
     })();
 
     var Data = (function(){
@@ -3840,6 +4031,33 @@ questions: [
             '</div>' +
             '<p class="hint">Armazenamento: ' + (Persistence.isPersistent() ? 'salvo neste navegador' : 'temporário (exporte antes de fechar)') + '</p>' +
           '</div>' +
+          (function(){
+            var c = Cloud.cfg();
+            return '<div class="card" id="cloud-card">' +
+              '<h2 class="h2">Banco de dados no Google Planilhas</h2>' +
+              '<p class="muted">Conteúdo (matérias, tópicos, cards e perguntas) vem da sua planilha, e o progresso fica salvo nela e sincronizado entre aparelhos. Sem internet, o app usa a última cópia.</p>' +
+              '<label class="field"><span>URL do Apps Script</span><input type="url" id="cloud-url" placeholder="https://script.google.com/macros/s/.../exec" value="' + U.esc(c.url || '') + '"></label>' +
+              '<label class="field"><span>Token</span><input type="password" id="cloud-token" autocomplete="off" placeholder="gerado na planilha" value="' + U.esc(c.token || '') + '"></label>' +
+              '<div class="row" style="margin-top:10px">' +
+                '<button class="btn-primary" id="cloud-save" style="margin-top:0">Salvar e testar</button>' +
+              '</div>' +
+              (c.url ?
+                '<div class="row">' +
+                  '<button class="btn-ghost" id="cloud-sync">Sincronizar agora</button>' +
+                  '<button class="btn-ghost" id="cloud-seed">Enviar conteúdo do app para a planilha</button>' +
+                '</div>' +
+                '<div class="confirm-box" id="cloud-seed-confirm" hidden>' +
+                  '<p class="muted" id="cloud-seed-msg">A planilha já tem conteúdo. Substituir tudo pelo conteúdo do app? Suas edições na planilha serão perdidas.</p>' +
+                  '<div class="row" style="margin-top:10px">' +
+                    '<button class="btn-ghost" id="cloud-seed-cancel" style="margin-top:0">Cancelar</button>' +
+                    '<button class="btn-danger solid" id="cloud-seed-overwrite" style="margin-top:0">Substituir</button>' +
+                  '</div>' +
+                '</div>' +
+                '<button class="btn-danger" id="cloud-off">Desconectar a planilha</button>'
+              : '') +
+              '<p class="hint" id="cloud-status">' + U.esc(cloudStatusText()) + '</p>' +
+            '</div>';
+          })() +
         '</section>';
       vp.querySelector('#settings-save').addEventListener('click', function(){
         var th = parseInt(vp.querySelector('#pass-threshold').value, 10);
@@ -3856,6 +4074,93 @@ questions: [
         Router.go('settings');
       });
       bindBackup(vp);
+      bindCloud(vp);
+    }
+
+    function fmtWhen(ts){
+      if(!ts) return 'nunca';
+      var d = new Date(ts);
+      return U.fmtDate(d) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+    }
+    function cloudStatusText(){
+      var c = Cloud.cfg();
+      if(!c.url) return 'Não conectado. O conteúdo e o progresso ficam só neste aparelho.';
+      var parts = [];
+      parts.push('Conteúdo: ' + (c.contentNote || 'ainda não carregado') + ' (atualizado ' + fmtWhen(c.lastContentAt) + ')');
+      parts.push('Progresso enviado: ' + fmtWhen(c.lastPushAt) + (c.pending ? ' · alterações aguardando envio' : ''));
+      if(c.lastError) parts.push('Último erro: ' + c.lastError);
+      return parts.join(' · ');
+    }
+
+    function bindCloud(vp){
+      var status = vp.querySelector('#cloud-status');
+      function setStatus(msg){ if(status) status.textContent = msg || cloudStatusText(); }
+      function busy(btn, on, label){ if(!btn) return; btn.disabled = on; if(label) btn.textContent = label; }
+
+      var saveBtn = vp.querySelector('#cloud-save');
+      if(saveBtn) saveBtn.addEventListener('click', function(){
+        var url = vp.querySelector('#cloud-url').value.trim();
+        var token = vp.querySelector('#cloud-token').value.trim();
+        if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(url) && !/^https?:\/\/(localhost|127\.0\.0\.1)/.test(url)){
+          toast('Cole a URL do App da Web (começa com https://script.google.com/ e termina em /exec).');
+          return;
+        }
+        if(!token){ toast('Cole o token gerado na planilha.'); return; }
+        Cloud.setCfg({ url:url, token:token, lastError:'' });
+        busy(saveBtn, true, 'Testando…');
+        Cloud.test().then(function(r){
+          var n = r.contagem || {};
+          toast('Conectado! Planilha com ' + (n.cards || 0) + ' cards e ' + (n.questoes || 0) + ' perguntas.');
+          return cloudStartup();
+        }).catch(function(e){
+          Cloud.setCfg({ lastError:e.message });
+          toast('Não conectou: ' + e.message);
+        }).then(function(){ Router.go('settings'); });
+      });
+
+      var syncBtn = vp.querySelector('#cloud-sync');
+      if(syncBtn) syncBtn.addEventListener('click', function(){
+        busy(syncBtn, true, 'Sincronizando…');
+        cloudStartup().then(function(){
+          return Cloud.pushNow();
+        }).then(function(){
+          toast(Cloud.cfg().lastError ? 'Erro: ' + Cloud.cfg().lastError : 'Sincronizado.');
+          Router.go('settings');
+        });
+      });
+
+      var seedBtn = vp.querySelector('#cloud-seed');
+      var box = vp.querySelector('#cloud-seed-confirm');
+      function doSeed(overwrite){
+        busy(seedBtn, true, 'Enviando…');
+        Cloud.seed(overwrite).then(function(r){
+          var n = r.contagem || {};
+          toast('Planilha preenchida: ' + n.materias + ' matérias, ' + n.cards + ' cards e ' + n.questoes + ' perguntas.');
+          return cloudStartup();
+        }).then(function(){ Router.go('settings'); }).catch(function(e){
+          if(e.code === 'NOT_EMPTY'){
+            busy(seedBtn, false, 'Enviar conteúdo do app para a planilha');
+            if(box){ box.hidden = false; seedBtn.hidden = true; }
+            return;
+          }
+          Cloud.setCfg({ lastError:e.message });
+          toast('Não foi possível enviar: ' + e.message);
+          Router.go('settings');
+        });
+      }
+      if(seedBtn) seedBtn.addEventListener('click', function(){ doSeed(false); });
+      var cancel = vp.querySelector('#cloud-seed-cancel');
+      if(cancel) cancel.addEventListener('click', function(){ box.hidden = true; seedBtn.hidden = false; });
+      var over = vp.querySelector('#cloud-seed-overwrite');
+      if(over) over.addEventListener('click', function(){ box.hidden = true; seedBtn.hidden = false; doSeed(true); });
+
+      var off = vp.querySelector('#cloud-off');
+      if(off) off.addEventListener('click', function(){
+        Cloud.disconnect();
+        toast('Planilha desconectada. O app voltou ao conteúdo embutido.');
+        setTimeout(function(){ location.reload(); }, 900);
+      });
+      setStatus();
     }
 
     function downloadJson(obj, filename){
@@ -3885,10 +4190,12 @@ questions: [
           toast('Este arquivo não é um backup do Reels de Concurso.');
           return done && done(false);
         }
+        obj.updatedAt = Date.now();
         Persistence.save(obj);
         Store.init();
-        syncSyllabus();
+        Store.quietly(syncSyllabus);
         Persistence.save(Store.get());
+        Cloud.schedulePush();
         applyTheme();
         toast('Backup restaurado: ' + Store.get().runs.length + ' runs.');
         done && done(true);
@@ -3916,8 +4223,10 @@ questions: [
         vp.querySelector('#backup-reset-confirm').addEventListener('click', function(){
           var fresh = Store.defaults();
           fresh.syllabus = SEED.syllabus.map(function(n){ return Object.assign({}, n); });
+          fresh.updatedAt = Date.now();
           Persistence.save(fresh);
           Store.init();
+          Cloud.schedulePush();
           applyTheme();
           toast('Dados apagados. Comece de novo quando quiser.');
           Router.go('settings');
@@ -4219,26 +4528,60 @@ questions: [
       if(JSON.stringify(merged) !== JSON.stringify(cur)) Store.set({ syllabus: merged });
     }
 
+    function normalizeState(){
+      Store.quietly(function(){
+        // Streak quebrado: se o último estudo foi antes de ontem, a sequência atual volta a 0.
+        var stk = Store.get().streak;
+        if(stk.lastStudyDate && stk.current){
+          var gap = Math.round((U.parseDate(U.todayStr()) - U.parseDate(stk.lastStudyDate)) / 86400000);
+          if(gap > 1) Store.update(function(st){ st.streak.current = 0; });
+        }
+        syncSyllabus();
+      });
+    }
+
+    function refreshView(){
+      var cur = Router.get();
+      if(cur !== 'run') Router.go(cur);
+    }
+
+    // Ao abrir: atualiza o conteúdo da planilha e sincroniza o progresso (sem travar o uso offline).
+    function cloudStartup(){
+      if(!Cloud.enabled()) return Promise.resolve();
+      return Cloud.refreshContent().then(function(r){
+        if(r.changed){ normalizeState(); refreshView(); toast('Conteúdo atualizado da planilha.'); }
+      }).catch(function(e){
+        Cloud.setCfg({ lastError:e.message });
+      }).then(function(){
+        if(Router.get() === 'run') return Cloud.pushNow();
+        return Cloud.pullProgress().then(function(res){
+          if(res === 'pulled'){ normalizeState(); applyTheme(); refreshView(); toast('Progresso sincronizado da planilha.'); }
+        });
+      }).catch(function(e){
+        Cloud.setCfg({ lastError:e.message });
+      });
+    }
+
     function init(){
       var backend = Persistence.init();
+      Cloud.applyCached();
       Store.init();
-      // Streak quebrado: se o último estudo foi antes de ontem, a sequência atual volta a 0.
-      var stk = Store.get().streak;
-      if(stk.lastStudyDate && stk.current){
-        var gap = Math.round((U.parseDate(U.todayStr()) - U.parseDate(stk.lastStudyDate)) / 86400000);
-        if(gap > 1) Store.update(function(st){ st.streak.current = 0; });
-      }
-      syncSyllabus();
+      normalizeState();
       applyTheme();
       registerViews();
       bindTabbar();
+      Store.subscribe(function(){ Cloud.schedulePush(); });
       window.addEventListener('beforeunload', function(){ Persistence.save(Store.get()); });
-      document.addEventListener('visibilitychange', function(){ if(document.hidden) Persistence.save(Store.get()); });
+      document.addEventListener('visibilitychange', function(){
+        if(document.hidden){ Persistence.save(Store.get()); if(Cloud.cfg().pending) Cloud.pushNow(); }
+      });
+      window.addEventListener('online', function(){ if(Cloud.cfg().pending) Cloud.pushNow(); });
       document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
       Router.go('home');
       if(backend === 'memory'){
         setTimeout(function(){ toast('Sessão não será salva (armazenamento indisponível).'); }, 700);
       }
+      cloudStartup();
     }
 
     document.addEventListener('DOMContentLoaded', init);
