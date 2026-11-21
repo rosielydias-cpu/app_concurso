@@ -6,6 +6,47 @@
 <meta name="color-scheme" content="dark light">
 <title>Reels de Concurso</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2337d99a'/%3E%3C/svg%3E">
+<script>
+  /* Monitor de erros: roda antes do app, então captura até erros de sintaxe do script principal.
+     Todo erro vai para o console (prefixo [Reels]) e aparece numa faixa vermelha na tela. */
+  (function(){
+    var list = [];
+    window.__reelsErrors = list;
+    function panel(){
+      var el = document.getElementById('err-panel');
+      if(el || !document.body) return el;
+      el = document.createElement('div');
+      el.id = 'err-panel';
+      el.setAttribute('role', 'alert');
+      el.style.cssText = 'position:fixed;left:8px;right:8px;top:calc(8px + env(safe-area-inset-top,0px));z-index:9999;background:#b3123a;color:#fff;border-radius:12px;padding:10px 12px;font:13px/1.4 system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.4);max-height:40vh;overflow:auto';
+      el.innerHTML = '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>Erro no app</b><button type="button" id="err-close" style="background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:8px;padding:4px 10px;font:inherit;cursor:pointer">Fechar</button></div><ul id="err-list" style="margin:6px 0 0 18px"></ul>';
+      document.body.appendChild(el);
+      el.querySelector('#err-close').addEventListener('click', function(){ el.remove(); });
+      return el;
+    }
+    function show(msg){
+      var el = panel();
+      if(!el){ document.addEventListener('DOMContentLoaded', function(){ show(msg); }); return; }
+      var li = document.createElement('li');
+      li.textContent = msg;
+      el.querySelector('#err-list').appendChild(li);
+    }
+    window.reportError = function(msg, err){
+      var full = String(msg) + (err && err.stack ? '\n' + err.stack : '');
+      list.push({ at: new Date().toISOString(), msg: String(msg) });
+      console.error('[Reels] ' + full);
+      show(String(msg));
+    };
+    window.addEventListener('error', function(e){
+      var where = e.lineno ? ' (linha ' + e.lineno + (e.colno ? ':' + e.colno : '') + ')' : '';
+      window.reportError((e.message || 'Erro desconhecido') + where, e.error);
+    });
+    window.addEventListener('unhandledrejection', function(e){
+      var r = e.reason;
+      window.reportError('Promessa rejeitada: ' + (r && r.message ? r.message : r), r);
+    });
+  })();
+</script>
 <style>
   :root{
     --font: system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
@@ -22,6 +63,7 @@
     --shadow:0 10px 30px rgba(20,40,70,.10);
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none !important}
   svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   html,body{height:100%}
   body{
@@ -154,7 +196,27 @@
   .run-score-wrap svg{width:15px; height:15px}
   .banner{padding:8px 12px; background:var(--warn); color:#04120c; font-size:12px; margin-bottom:12px; border-radius:var(--radius-sm)}
   .banner.warning{background:var(--danger)}
-  .banner button{margin-left:8px; background:transparent; border:0; color inherit; padding:0; font:inherit; cursor:pointer}
+  .banner button{margin-left:8px; background:rgba(0,0,0,.15); border:0; color:inherit; padding:2px 8px; border-radius:8px; font:inherit; font-weight:700; cursor:pointer}
+  .field select{background:var(--surface-2); border:1px solid var(--border); border-radius:10px; color:var(--text); padding:10px 12px; font-size:14px; font-family:var(--font); max-width:180px}
+  .field input[type="checkbox"]{width:22px; height:22px; accent-color:var(--accent)}
+  .field input[type="text"]{width:100%}
+  .btn-danger{width:100%; margin-top:10px; padding:14px; border:1px solid var(--danger); border-radius:14px; background:transparent; color:var(--danger); font-weight:700; font-size:15px; cursor:pointer}
+  .btn-danger.solid{background:var(--danger); color:#fff}
+  .row{display:flex; gap:10px; flex-wrap:wrap}
+  .row > *{flex:1 1 140px}
+  .confirm-box{margin-top:10px; padding:12px; border:1px solid var(--danger); border-radius:12px; background:rgba(255,92,122,.08)}
+  .goal-bar{height:10px; margin-top:10px}
+  .tip{font-size:14px; line-height:1.45; color:var(--text)}
+  .tip + .tip{margin-top:12px}
+  .tip b{color:var(--accent)}
+  .check{display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; cursor:pointer}
+  .check:last-child{border-bottom:0}
+  .check input{width:20px; height:20px; accent-color:var(--accent)}
+  .check.done span{color:var(--muted); text-decoration:line-through}
+  html{--fs:1}
+  .reel-q{font-size:calc(20px * var(--fs))}
+  .reel-a, .opt{font-size:calc(15.5px * var(--fs))}
+  .fb-exp{font-size:calc(13.5px * var(--fs))}
   .reel{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; min-height:58vh; display:flex; flex-direction:column; gap:14px; animation:fade .2s ease}
   .reel-tag{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); font-weight:700}
   .reel-tag span{color:var(--accent-2)}
@@ -373,58 +435,58 @@
         { id:'fc56', syllabusId:'rl', front:'O que é uma proposição lógica?', back:'Uma sentença declarativa que pode ser valorada como verdadeira ou falsa.' },
         { id:'fc57', syllabusId:'inf', front:'O que o HTTPS garante?', back:'Comunicação criptografada entre cliente e servidor, com confidencialidade e integridade.' },
         { id:'fc58', syllabusId:'inf', front:'O que é backup incremental?', back:'Cópia apenas dos dados alterados desde o último backup.' },
-        { id:'fc59', syllabusId:'far', front:'Receptores acoplados à proteína G (GPCRs) são a maior superfamília de receptores de membrana, transduzindo sinais via proteínas G α, βγ e efetores segundos mensageiros.', back:'GPCRs acionam vias como cAMP, IP3/DAG e Ca²⁺ dependendo da subunidade α; envolvem troca de GDP por GTP.' },
-        { id:'fc60', syllabusId:'far', front':'Canais iônicos transmembrana podem ser considerados receptores farmacológicos.', back:'Canais iônicos (ex.: Na⁺, K⁺, Ca²⁺) são receptores para fármacos que modulam sua condução; diferem dos GPCRs ao não acoplarem a proteínas G.' },
-        { id:'fc61', syllabusId:'far', front:'A fase I da biotransformação envolve principalmente reações de oxidação, redução e hidrólise, mediadas pelo citocromo P450.', back:'O citocromo P450 (CYP) localizado no RETículo endoplasmático realiza hidrólise, redução, oxidação e desmetilação de fármacos lipofílicos.' },
-        { id:'fc62', syllabusId:'far', front:'A fase II da biotransformação consiste em reações de conjugação (glicuronidação, sulfatação, acetilação) que aumentam a hidrossolubilidade dos fármacos para excreção renal.', back:'Fármacos fases I e II tornam-se mais polar; conjugações comuns: glicuronídeos, sulfatos, acetilas, glicil- glicina.' },
-        { id:'fc63', syllabusId:'far', front:'Os AINEs inibem as ciclo-oxigenases (COX-1 e COX-2), reduzindo a síntese de prostaglandinas, responsáveis pela inflamação, dor e febre.', back:'COX-1 está presente em tecidos normais; COX-2 é induzida na inflamação. Fármacos seletivos COX-2 reduzem efeitos gastrointestinales.' },
+        { id:'fc59', syllabusId:'far', front:'Receptores acoplados à proteína G (GPCRs) são a maior superfamília de receptores de membrana, transduzindo sinais via proteínas G α, βγ e efetores de segundos mensageiros.', back:'GPCRs acionam vias como cAMP, IP3/DAG e Ca²⁺ dependendo da subunidade α; envolvem troca de GDP por GTP.' },
+        { id:'fc60', syllabusId:'far', front:'Canais iônicos transmembrana podem ser considerados receptores farmacológicos.', back:'Canais iônicos (ex.: Na⁺, K⁺, Ca²⁺) são receptores para fármacos que modulam sua condução; diferem dos GPCRs ao não acoplarem a proteínas G.' },
+        { id:'fc61', syllabusId:'far', front:'A fase I da biotransformação envolve principalmente reações de oxidação, redução e hidrólise, mediadas pelo citocromo P450.', back:'O citocromo P450 (CYP) localizado no retículo endoplasmático realiza principalmente oxidações (como hidroxilações e desmetilações) de fármacos lipofílicos.' },
+        { id:'fc62', syllabusId:'far', front:'A fase II da biotransformação consiste em reações de conjugação (glicuronidação, sulfatação, acetilação) que aumentam a hidrossolubilidade dos fármacos para excreção renal.', back:'Após as fases I e II os fármacos tornam-se mais polares; conjugações comuns: glicuronidação, sulfatação, acetilação, conjugação com glutationa e com glicina.' },
+        { id:'fc63', syllabusId:'far', front:'Os AINEs inibem as ciclo-oxigenases (COX-1 e COX-2), reduzindo a síntese de prostaglandinas, responsáveis pela inflamação, dor e febre.', back:'COX-1 está presente em tecidos normais; COX-2 é induzida na inflamação. Fármacos seletivos COX-2 reduzem efeitos gastrointestinais.' },
         { id:'fc64', syllabusId:'far', front:'Os betalactâmicos (penicilinas, cefalosporinas) inibem a síntese da parede bacteriana ao bloquear a transpeptidação do peptidoglicano.', back:'A ligação cruzada do peptidoglicano é essencial para a integridade da parede bacteriana; a inibição leva à lise celular.' },
-        { id:'fc65', syllabusId:'far', front':'Os benzodiazepínicos potencializam a ação do GABA no receptor GABA-A, aumentando a abertura do canal de Cl⁻ e promovendo hiperpolarização neuronal.', back:'O complexo GABA-A/benzodiazepínico tem sítios distintos; a potência depende da afinidade pelo sítio alosteric.' },
-        { id:'fc66', syllabusId:'far', front':'O receptor principal dos opioides é o receptor mu (μ), responsável pela analgesia, depressão respiratória e dependência física.', back:'Receptores κ (kappa) produzem discórise e sedação; receptores δ (delta) envolvidos na modulação da dor inflamatória.' },
-        { id:'fc67', syllabusId:'far', front:'A varfarina inibe a vitamina K epóxido redutase (VKOR), reduzindo a síntese dos fatores de coagulação dependentes de vitamina K (FII, FVII, FIX, FX).', back:'O antídoto é a vitamina K1 (fitoquinona); o PCC (plasma rico em fatores de coagulação) também é usado em emergências.' },
-        { id:'fc68', syllabusId:'far', front:'A heparina ativa a antitrombina III, que inibe diretamente a trombina e o fator Xa, exercendo efeito anticoagulante rápido e não dependente de vitamina K.', back:'Não requer monitoramento INR; monitoriza-se APTT; contraindicação em risco de sangramento maior.' },
+        { id:'fc65', syllabusId:'far', front:'Os benzodiazepínicos potencializam a ação do GABA no receptor GABA-A, aumentando a abertura do canal de Cl⁻ e promovendo hiperpolarização neuronal.', back:'O complexo GABA-A/benzodiazepínico tem sítios distintos; a potência depende da afinidade pelo sítio alostérico; os benzodiazepínicos aumentam a frequência de abertura do canal de Cl⁻.' },
+        { id:'fc66', syllabusId:'far', front:'O receptor principal dos opioides é o receptor mu (μ), responsável pela analgesia, depressão respiratória e dependência física.', back:'Receptores κ (kappa) produzem disforia e sedação; receptores δ (delta) estão envolvidos na modulação da dor inflamatória.' },
+        { id:'fc67', syllabusId:'far', front:'A varfarina inibe a vitamina K epóxido redutase (VKOR), reduzindo a síntese dos fatores de coagulação dependentes de vitamina K (FII, FVII, FIX, FX).', back:'O antídoto é a vitamina K1 (fitoquinona); o concentrado de complexo protrombínico (CCP) ou o plasma fresco congelado também é usado em emergências.' },
+        { id:'fc68', syllabusId:'far', front:'A heparina ativa a antitrombina III, que inibe diretamente a trombina e o fator Xa, exercendo efeito anticoagulante rápido e não dependente de vitamina K.', back:'A heparina não fracionada é monitorada pelo TTPa (não pelo INR); o antídoto é o sulfato de protamina.' },
         { id:'fc69', syllabusId:'tox', front:'DL50 (Dose Letal 50) é a dose de uma substância que provoca a morte de 50% dos indivíduos expostos em um teste definido (geralmente em animais).', back:'É um parâmetro de toxicidade aguda; quanto menor o DL50, maior a toxicidade; não se aplica diretamente a humanos sem ajustes de espécie.' },
-        { id:'fc70', syllabusId:'tox', front:'Atropina competitivamente bloqueia os receptores muscarínicos, invertendo os efeitos de intoxicação por organofosforados e antimuscarínicos.', back:'Associação com pralidoxima (oxima) which reativa a acetilcolinesterase; doses iniciais de 2-5 mg a cada 5-10 min até 20 mg.' },
-        { id:'fc71', syllabusId:'tox', front:'N-acetilcisteína é o antídoto de escolha para a intoxicação por paracetamol (acetaminofeno), repondo o glutatión hepático e facilitando a excreção conjugada.', back:'Mais eficaz se administrado dentro das primeiras 8-10 h; via oral ou endovenosa; dose inicial 140 mg/kg.' },
-        { id:'fc72', syllabusId:'tox', front:'Etanol e fomepizol (4-metilpiridina) são antídotos para intoxicação por metanol, competindo com a álcool desidrogenase para evitar formação de ácido fórmico tóxico.', back:'Fomepizol é mais caro mas mais seguro; evita cegueira e morte; hemodiálise também indicada.' },
-        { id:'fc73', syllabusId:'tox', front:'Naloxona é um antagonista opioide competitivo que reverte rapidamente os efeitos de overdose de opioides (depressão respiratória, sedação).', back:'Não tem efeito sobre outros fármacos; administração por via endovenosa, intramuscular ou nasal; efeito inicial em 2 min.' },
-        { id:'fc74', syllabusId:'fg', front:'Digitálicos (digitoxina e digoxina) inibem a bomba Na⁺/K⁺-ATPase nos miócárdios, aumentando acontractilidade cardíaca e ralentando o nó sinoatrial.', back:'Indicados para insuficiência cardíaca congestiva e controle da frequência atrial; índice terapêutico estreito requer monitoramento sorológico.' },
-        { id:'fc75', syllabusId:'fg', front:'A morfina é o alcaloide principal obtido da Papaver somniferum (papoula); outros incluem codeína, thebaina e noscapina.', back:'A codeína é um pró-fármaco metabolizado pela CYP2D6 à morfina; usada como analgésico e antitússico.' },
-        { id:'fc76', syllabusId:'fg', front:'A atropina é o alcaloide principal obtido da Atropa belladonna (belladona); também contém hioscina e escopolamina.', back:'Anticolinérgicos usados para bronquospasmo, síndrome do intestino irritável e como midral; efeito antiessecretório.' },
-        { id:'fc77', syllabusId:'fg', front:'A quinina, obtida da Casca dequina (Cinchona officinalis), é o fármaco de escolha para malária sensível à cloroquina; também usada como anestésico local.', back:'Age inibindo a heme polymerase da malária; efeitos colaterais incluem tinnitus e hipoglicemia.' },
-        { id:'fc78', syllabusId:'br', front:'O método de Kjeldahl determina o nitrogênio total na amostra, usado como parâmetro estimativo para cálculo de teor proteico (fator conversão 6,25).', back:'Princípio: digestão ácida com H₂SO₄, destilação em borato de sódio, titulometria com NaOH; padrão AOAC.' },
-        { id:'fc79', syllabusId:'br', front:'O método de Soxhlet extrai lipídios (extrato etéreo) de amostras sólidas em ciclos de percolação contínua com solvente fresco.', back:'Princípio: o solvente (petróleo/éter de petróleo) dissolve lipídios; o aparelho permite refluxo contínuo por horas.' },
-        { id:'fc80', syllabusId:'qb', front:'A Lei de Beer-Lambert estabelece a relação direta entre a absorbância (A), a concentração (c) do absorvente e o caminho óptico (l): A = ε·c·l.', back:'ε é o coeficiente de extinção molar; a lei assume radiação monocromática, soluções não saturadas e caminho ótico constante.' },
-        { id:'fc81', syllabusId:'qb', front:'O HPLC (High Performance Liquid Chromatography) separa, identifica e quantifica componentes de uma mistura usando uma fase móvel fluida e uma fase estacionária por partição ou adsorção.', back:'Tipos: HPLC normal (fase polar móvel, fase não polar estacionária) e reversed-phase (oposta); detector UV ou MS acoplado.' },
-        { id:'fc82', syllabusId:'crim', front:'A cena do crime deve ser isolada, preservada e fotografada/filmada antes de qualquer movimentação de vestígios, para evitar contaminação ou perda de provas.', back:'Rede de isolamento, uso de EPI, boletim de ocorrência preliminar; cadeia de custódia desde a coleta à análise laboratorial.' },
-        { id:'fc83', syllabusId:'crim', front':'A cadeia de custódia na perícia criminal registra de forma contínua a posse e a integridade dos vestígios desde a coleta até a análise laboratorial, garantindo sua admissibilidade judicial.', back:'Cada transferência deve ser documentada (data, hora, responsável, finalidade); ausência de registros pode invalidar as evidências.' },
-        { id:'fc84', syllabusId:'pt', front:'A crase ocorre na fusão da preposição "a" com artigo masculino ou feminino (a + a = à; a + os = aos), regra ortográfica da língua portuguesa.', back:'Exemplos: à casa, aos alunos; não se confunde com "a" (artigo) ou "as" (pronome demonstrativo)' },
-        { id:'fc85', syllabusId:'rl', front:'A negação da proposição "Todo A é B" é "Algum A não é B", seguindo a lógica quantificacional de oposição de quantificadores universais e particulares.', back:'Em lógica de predicados: ¬∀x(Ax → Bx) ≡ ∃x(Ax ∧ ¬Bx); traduz-se "não todo A é B".' },
+        { id:'fc70', syllabusId:'tox', front:'A atropina bloqueia competitivamente os receptores muscarínicos, revertendo os efeitos muscarínicos da intoxicação por organofosforados e carbamatos.', back:'Associa-se a pralidoxima (oxima), que reativa a acetilcolinesterase; a atropina é repetida até a atropinização (secreções brônquicas secas).' },
+        { id:'fc71', syllabusId:'tox', front:'N-acetilcisteína é o antídoto de escolha para a intoxicação por paracetamol (acetaminofeno), repondo a glutationa hepática e facilitando a excreção conjugada.', back:'É mais eficaz quando administrada nas primeiras 8–10 h após a ingestão, por via oral ou intravenosa.' },
+        { id:'fc72', syllabusId:'tox', front:'Etanol e fomepizol (4-metilpirazol) são antídotos para intoxicação por metanol, atuando sobre a álcool desidrogenase para evitar formação de ácido fórmico tóxico.', back:'O fomepizol inibe a enzima e o etanol compete com o metanol por ela; a hemodiálise também pode ser indicada.' },
+        { id:'fc73', syllabusId:'tox', front:'Naloxona é um antagonista opioide competitivo que reverte rapidamente os efeitos de overdose de opioides (depressão respiratória, sedação).', back:'Pode ser administrada por via intravenosa, intramuscular ou intranasal; tem meia-vida curta, então a sedação pode voltar.' },
+        { id:'fc74', syllabusId:'fg', front:'Digitálicos (digitoxina e digoxina) inibem a bomba Na⁺/K⁺-ATPase nos miócitos cardíacos, aumentando a contratilidade e reduzindo a condução no nó atrioventricular.', back:'Indicados para insuficiência cardíaca congestiva e controle da frequência atrial; índice terapêutico estreito requer monitoramento da concentração sérica.' },
+        { id:'fc75', syllabusId:'fg', front:'A morfina é o alcaloide principal obtido da Papaver somniferum (papoula); outros incluem codeína, tebaína, papaverina e noscapina.', back:'A codeína é um pró-fármaco metabolizado pela CYP2D6 à morfina; usada como analgésico e antitússico.' },
+        { id:'fc76', syllabusId:'fg', front:'A atropina é o alcaloide principal obtido da Atropa belladonna (belladona); também contém escopolamina (hioscina).', back:'Anticolinérgicos usados como midriáticos, antiespasmódicos e antissecretores, e na intoxicação por organofosforados.' },
+        { id:'fc77', syllabusId:'fg', front:'A quinina, obtida da casca da quina (Cinchona spp.), é um antimalárico usado sobretudo na malária por P. falciparum resistente à cloroquina.', back:'Age inibindo a polimerização do heme no parasita; efeitos adversos incluem cinchonismo (zumbido) e hipoglicemia.' },
+        { id:'fc78', syllabusId:'br', front:'O método de Kjeldahl determina o nitrogênio total na amostra, usado como parâmetro estimativo para cálculo de teor proteico (fator conversão 6,25).', back:'Etapas: digestão com H₂SO₄ e catalisador, destilação da amônia com NaOH recolhida em ácido bórico e titulação com ácido padronizado.' },
+        { id:'fc79', syllabusId:'br', front:'O método de Soxhlet extrai lipídios (extrato etéreo) de amostras sólidas em ciclos de percolação contínua com solvente fresco.', back:'O solvente (éter etílico ou éter de petróleo) dissolve os lipídios; o aparelho permite refluxo contínuo por horas.' },
+        { id:'fc80', syllabusId:'qb', front:'A Lei de Beer-Lambert estabelece a relação direta entre a absorbância (A), a concentração (c) do absorvente e o caminho óptico (l): A = ε·c·l.', back:'ε é o coeficiente de extinção molar; a lei assume radiação monocromática, soluções diluídas e ausência de interações entre as moléculas absorventes.' },
+        { id:'fc81', syllabusId:'qb', front:'O HPLC (High Performance Liquid Chromatography) separa, identifica e quantifica componentes de uma mistura usando uma fase móvel fluida e uma fase estacionária por partição ou adsorção.', back:'Na fase normal, a fase estacionária é polar e a móvel apolar; na fase reversa (a mais usada) ocorre o inverso. Detectores comuns: UV-Vis e espectrometria de massas.' },
+        { id:'fc82', syllabusId:'crim', front:'A cena do crime deve ser isolada, preservada e fotografada/filmada antes de qualquer movimentação de vestígios, para evitar contaminação ou perda de provas.', back:'Isolamento da área, uso de EPI e registro fotográfico; a cadeia de custódia acompanha o vestígio da coleta até o descarte (arts. 158-A a 158-F do CPP).' },
+        { id:'fc83', syllabusId:'crim', front:'A cadeia de custódia na perícia criminal registra de forma contínua a posse e a integridade dos vestígios desde a coleta até a análise laboratorial, garantindo sua admissibilidade judicial.', back:'Cada transferência deve ser documentada (data, hora, responsável, finalidade); ausência de registros pode invalidar as evidências.' },
+        { id:'fc84', syllabusId:'pt', front:'A crase ocorre na fusão da preposição "a" com o artigo feminino "a(s)" (a + a = à) ou com os pronomes aquele(s), aquela(s) e aquilo.', back:'Exemplos: fui à escola, refiro-me àquilo. Não há crase antes de palavra masculina: "a pé", "aos alunos" (a + os, sem crase).' },
+        { id:'fc85', syllabusId:'rl', front:'A negação da proposição "Todo A é B" é "Algum A não é B", seguindo a lógica quantificacional de oposição de quantificadores universais e particulares.', back:'Em lógica de predicados: ¬∀x(Ax → Bx) ≡ ∃x(Ax ∧ ¬Bx); lê-se "existe ao menos um A que não é B".' },
         { id:'fc86', syllabusId:'inf', front:'O protocolo HTTPS fornece comunicação criptografada entre cliente e servidor, garantindo confidencialidade (via criptografia assimétrica/simétrica), integridade (hash) e autenticação (certificado X.509).', back:'O handshake TLS estabelece chaves simétricas para criptografia de sessão; o certificado válido evita ataques MITM.' }
       ],
 questions: [
-        { id:'q01', syllabusId:'dc', stem:'São fundamentos da República Federativa do Brasil, EXCETO:', options:['Soberania','Cidadania','Dignidade da pessoa humana','Separação dos Poderes'], answer:3, explanation:'A separação dos Poderes (art. 60, §4º da CF) é cláusula pétrea de controle interno, não figurece entre os fundamentos nacionais do art. 1º, que são soberania, cidadania, dignidade da pessoa humana e valores sociais do trabalho e da livre iniciativa.' },
-        { id:'q02', syllabusId:'dc', stem:'O remédio constitucional adequado para proteger a liberdade de locomoção é:', options:['Habeas data','Mandado de segurança','Habeas corpus','Ação popular'], answer:2, explanation:'O habeas corpus (art. 5º, LXH, CF) tem por finalidade garantir a liberdade de locomoção contra ilegalidade ou abuso de poder estatal.' },
-        { id:'q03', syllabusId:'da', stem:'São princípios expressos da Administração Pública no art. 37 da CF, EXCETO:', options:['Legalidade','Impessoalidade','Razoabilidade','Publicidade'], answer:2, explanation:'A razoabilidade, embora implícita na boa-fé objetiva, não consta entre os princípios expressos do art. 37, que são legalidade, impessoalidade, moralidade, publicidade e eficiência (LIMPE).' },
-        { id:'q04', syllabusId:'da', stem:'A Lei nº 14.133/2021 dispõe sobre:', options:['Licitações e contratos administrativos','Improbidade administrativa','Processo administrativo disciplinar','Crimes de responsabilidade'], answer:0, explanation:'A Lei nº 14.133/2021 é a nova Lei de Licitações e Contratos Administrativos, que revogou a Lei nº 8.666/1991.' },
-        { id:'q05', syllabusId:'dp', stem:'Segundo o princípio da legalidade penal, não há crime sem:', options:['Sentença judicial','Lei anterior que o defina','Denúncia do Ministério Público','Inquérito policial'], answer:1, explanation:'Nullum crimen sine lege (art. 5º, II, CF): exige lei anterior que defina o tipo penal e a respectiva cominação.' },
+        { id:'q01', syllabusId:'dc', stem:'São fundamentos da República Federativa do Brasil, EXCETO:', options:['Soberania','Cidadania','Dignidade da pessoa humana','Separação dos Poderes'], answer:3, explanation:'A separação dos Poderes (art. 60, §4º da CF) é princípio fundamental (art. 2º) e cláusula pétrea, mas não está entre os fundamentos do art. 1º: soberania, cidadania, dignidade da pessoa humana, valores sociais do trabalho e da livre iniciativa e pluralismo político.' },
+        { id:'q02', syllabusId:'dc', stem:'O remédio constitucional adequado para proteger a liberdade de locomoção é:', options:['Habeas data','Mandado de segurança','Habeas corpus','Ação popular'], answer:2, explanation:'O habeas corpus (art. 5º, LXVIII, CF) tem por finalidade garantir a liberdade de locomoção contra ilegalidade ou abuso de poder estatal.' },
+        { id:'q03', syllabusId:'da', stem:'São princípios expressos da Administração Pública no art. 37 da CF, EXCETO:', options:['Legalidade','Impessoalidade','Razoabilidade','Publicidade'], answer:2, explanation:'A razoabilidade é princípio implícito e não consta entre os princípios expressos do art. 37, que são legalidade, impessoalidade, moralidade, publicidade e eficiência (LIMPE).' },
+        { id:'q04', syllabusId:'da', stem:'A Lei nº 14.133/2021 dispõe sobre:', options:['Licitações e contratos administrativos','Improbidade administrativa','Processo administrativo disciplinar','Crimes de responsabilidade'], answer:0, explanation:'A Lei nº 14.133/2021 é a nova Lei de Licitações e Contratos Administrativos, que substituiu a Lei nº 8.666/1993.' },
+        { id:'q05', syllabusId:'dp', stem:'Segundo o princípio da legalidade penal, não há crime sem:', options:['Sentença judicial','Lei anterior que o defina','Denúncia do Ministério Público','Inquérito policial'], answer:1, explanation:'Nullum crimen sine lege (art. 5º, XXXIX, CF, e art. 1º do CP): exige lei anterior que defina o tipo penal e a respectiva cominação.' },
         { id:'q06', syllabusId:'dp', stem:'A lei penal mais benéfica:', options:['Aplica-se apenas a fatos futuros','Retroage em benefício do réu','Nunca retroage','Só retroage após o trânsito em julgado'], answer:1, explanation:'Art. 2º do CP: a lei posterior mais benéfica aplica-se aos fatos anteriores, retroagindo os efeitos penais em favor do réu.' },
-        { id:'q07', syllabusId:'dpp', stem:'O inquérito policial é:', options:['Peça acusatória obrigatória','Procedimento administrativo, inquisitivo e dispensável','Fase judicial contraditória','Condição de procedibilidade da ação penal pública incondicionada'], answer:1, explanation:'O inquérito policial é procedimento administrativo inquisitivo (art. 151 do CPP), dispensável para a promoção da ação penal pública incondicionada.' },
+        { id:'q07', syllabusId:'dpp', stem:'O inquérito policial é:', options:['Peça acusatória obrigatória','Procedimento administrativo, inquisitivo e dispensável','Fase judicial contraditória','Condição de procedibilidade da ação penal pública incondicionada'], answer:1, explanation:'O inquérito policial é procedimento administrativo inquisitivo (arts. 4º a 23 do CPP), dispensável para a promoção da ação penal pública incondicionada.' },
         { id:'q08', syllabusId:'dpp', stem:'A cadeia de custódia está prevista no:', options:['Código Civil','Código Penal','Código de Processo Penal (art. 158-A)','Código Tributário Nacional'], answer:2, explanation:'A disciplina da cadeia de custódia encontra-se no art. 158-A do CPP, que rege o rastreamento dos vestígios da coleta à análise.' },
         { id:'q09', syllabusId:'le', stem:'A Lei nº 11.343/2006 dispõe sobre:', options:['Crimes hediondos','Drogas (política e crimes)','Desarmamento','Organizações criminosas'], answer:1, explanation:'A Lei nº 11.343/2006 é a Política Nacional de Drogas, que estabelece as diretrizes e bases para as ações concernentes às drogas.' },
         { id:'q10', syllabusId:'le', stem:'O crime de tortura é tratado pela Lei:', options:['8.072/1990','9.455/1997','9.613/1998','12.850/2013'], answer:1, explanation:'A Lei nº 9.455/1997 define o crime de tortura e as respectivas penas (art. 1º).' },
         { id:'q11', syllabusId:'far', stem:'A farmacocinética estuda:', options:['O mecanismo de ação dos fármacos','O que o organismo faz com o fármaco (ADME)','Apenas interações medicamentosas','Apenas efeitos colaterais'], answer:1, explanation:'Farmacocinética: estudo do que o organismo faz com o fármaco, englobando absorção, distribuição, metabolismo e excreção (ADME).' },
         { id:'q12', syllabusId:'far', stem:'Os AINEs atuam principalmente inibindo:', options:['Canais de cálcio','Ciclo-oxigenases (COX)','Receptores opioides','Bombas de prótons'], answer:1, explanation:'AINEs (anti-inflamatórios não esteroides) inibem as ciclo-oxigenases (COX-1 e COX-2), reduzindo a síntese de prostaglandinas.' },
-        { id:'q13', syllabusId:'far', stem:'A varfarina exerce ação anticoagulante inibindo:', options:['A trombina diretamente','A vitamina K epóxido redutora','A antitrombina III','A ciclo-oxigenase'], answer:1, explanation:'A varfarina inibe a vitamina K epóxido redutase ( VKOR), impedindo a carboxilação dos fatores de coagulação dependentes de vitamina K.' },
-        { id:'q14', syllabusId:'tox', stem:'O antídoto utilizado na intoxicação por paracetamol é:', options:['Naloxona','N-acetilcisteína','Flumazenil','Atropina'], answer:1, explanation:'A N-acetilcisteína repõe o glutatión hepático e é o antídoto de escolha para a intoxicação aguda por paracetamol.' },
-        { id:'q15', syllabusId:'tox', stem:'Na intoxicação por organofosforados, utiliza-se:', options:['Atropina (e pralidoxima)','Etanol','Deferoxamina','Hidroxocobalamina'], answer:0, explanation:'Associação de atropina (blocka efeitos muscarínicos) com pralidoxima (rema a acetilcolinesterase) é o protocolo padrão.' },
-        { id:'q16', syllabusId:'tox', stem:'A intoxicação por monóxido de carbono pode ser avaliada pela dosagem de:', options:['Meta-hemoglobina','Carboxihemoglobina','Bilirrubina','Creatinina'], answer:1, explanation:'A carboxihemoglobina (COHgb) formação é o marcador bioquímico padrão para diagnóstico de intoxicação por CO.' },
+        { id:'q13', syllabusId:'far', stem:'A varfarina exerce ação anticoagulante inibindo:', options:['A trombina diretamente','A vitamina K epóxido redutase','A antitrombina III','A ciclo-oxigenase'], answer:1, explanation:'A varfarina inibe a vitamina K epóxido redutase (VKOR), impedindo a carboxilação dos fatores de coagulação dependentes de vitamina K.' },
+        { id:'q14', syllabusId:'tox', stem:'O antídoto utilizado na intoxicação por paracetamol é:', options:['Naloxona','N-acetilcisteína','Flumazenil','Atropina'], answer:1, explanation:'A N-acetilcisteína repõe a glutationa hepática e é o antídoto de escolha para a intoxicação aguda por paracetamol.' },
+        { id:'q15', syllabusId:'tox', stem:'Na intoxicação por organofosforados, utiliza-se:', options:['Atropina (e pralidoxima)','Etanol','Deferoxamina','Hidroxocobalamina'], answer:0, explanation:'Associação de atropina (bloqueia os efeitos muscarínicos) com pralidoxima (reativa a acetilcolinesterase) é o protocolo padrão.' },
+        { id:'q16', syllabusId:'tox', stem:'A intoxicação por monóxido de carbono pode ser avaliada pela dosagem de:', options:['Meta-hemoglobina','Carboxihemoglobina','Bilirrubina','Creatinina'], answer:1, explanation:'A carboxi-hemoglobina (COHb) é o marcador bioquímico padrão para diagnóstico de intoxicação por CO.' },
         { id:'q17', syllabusId:'fg', stem:'A espécie Papaver somniferum é fonte do alcaloide:', options:['Quinina','Morfina','Atropina','Digitoxina'], answer:1, explanation:'A Papaver somniferum (papoula) é a principal fonte natural de morfina e outros opioides fenantrenos.' },
         { id:'q18', syllabusId:'br', stem:'O método de Kjeldahl é utilizado para determinar:', options:['Lipídios','Proteínas (nitrogênio total)','Cinzas','Umidade'], answer:1, explanation:'O método de Kjeldahl quantifica o nitrogênio total da amostra, sendo usado como parâmetro estimativo de teor proteico.' },
         { id:'q19', syllabusId:'qb', stem:'A Lei de Beer-Lambert relaciona a absorbância com:', options:['Temperatura e pressão','Concentração e caminho óptico','pH e condutividade','Massa molecular e densidade'], answer:1, explanation:'A lei estabelece a relação direta entre a absorbância, a concentração do absorvente e o caminho óptico percorrido.' },
-        { id:'q20', syllabusId:'crim', stem:'Preservar o local de crime é essencial para:', options:['Acelerar o julgamento','Evitar a contaminação e a perda de vestígios','Dispensar a perícia','Reduzir o inquérito'], answer:1, explanation:'A preservação da cena do crime ved a contaminação, alteração ou perda de vestígios técnicos, indispensáveis à perícia criminal.' },
+        { id:'q20', syllabusId:'crim', stem:'Preservar o local de crime é essencial para:', options:['Acelerar o julgamento','Evitar a contaminação e a perda de vestígios','Dispensar a perícia','Reduzir o inquérito'], answer:1, explanation:'A preservação da cena do crime evita a contaminação, alteração ou perda de vestígios técnicos, indispensáveis à perícia criminal.' },
         { id:'q21', syllabusId:'rl', stem:'A negação da proposição "Todo A é B" é:', options:['Nenhum A é B','Algum A não é B','Todo B é A','Algum B é A'], answer:1, explanation:'A negação universal ("todo") particulariza para "existe ao menos um A que não é B", seguindo a lógica quantificacional de oposição.' },
-        { id:'q22', syllabusId:'pt', stem:'O emprego da crase ocorre, tipicamente, na fusão de:', options:['Preposição "a" com artigo "a(s)"','Preposição "de" com artigo','Verbo com preposição','Pronome com conjunção'], answer:0, explanation:'A crase é a regra de ortografia que determina a junção da preposição "a" com artigo femininoso "a(s)" (ex.: à casa, às alunos).' },
+        { id:'q22', syllabusId:'pt', stem:'O emprego da crase ocorre, tipicamente, na fusão de:', options:['Preposição "a" com artigo "a(s)"','Preposição "de" com artigo','Verbo com preposição','Pronome com conjunção'], answer:0, explanation:'A crase é a fusão da preposição "a" com o artigo feminino "a(s)" (ex.: vou à praia, às vezes).' },
         { id:'q23', syllabusId:'inf', stem:'O protocolo HTTPS tem como principal função:', options:['Aumentar a velocidade da rede','Garantir comunicação criptografada entre cliente e servidor','Bloquear anúncios','Compactar arquivos'], answer:1, explanation:'O HTTPS (HTTP over SSL/TLS) fornece criptografia, autenticação e integridade da comunicação entre cliente e servidor.' }
       ]
     };
@@ -499,7 +561,7 @@ questions: [
           content: { flashcards: [], questions: [] },
           activeRun: null,
           streak: { current:0, longest:0, lastStudyDate:null },
-          settings: { sound:true, theme:'dark', cardSpeed:1, questionCountPerBlock:4, passThreshold:60 }
+          settings: { sound:true, theme:'dark', fontSize:16, questionCountPerBlock:4, passThreshold:60 }
         };
       }
       function migrate(saved){
@@ -516,7 +578,7 @@ questions: [
       function get(){ return state; }
       function emit(){
         listeners.slice().forEach(function(fn){
-          try{ fn(state); }catch(e){ console.error(e); }
+          try{ fn(state); }catch(e){ window.reportError('Falha ao atualizar a tela: ' + e.message, e); }
         });
       }
       function set(patch){ Object.assign(state, patch); emit(); persist(); }
@@ -801,7 +863,7 @@ questions: [
       function onCleanup(fn){ cleanup = fn; }
       function go(name, params){
         if(!routes[name]) name = 'home';
-        if(cleanup){ try{ cleanup(); }catch(e){ console.error(e); } cleanup = null; }
+        if(cleanup){ try{ cleanup(); }catch(e){ window.reportError('Falha ao sair da tela: ' + e.message, e); } cleanup = null; }
         current = name;
         render(params);
       }
@@ -810,7 +872,14 @@ questions: [
         var vp = document.getElementById('viewport');
         vp.scrollTop = 0;
         vp.innerHTML = '';
-        (routes[current] || routes.home)(vp, params);
+        try{
+          (routes[current] || routes.home)(vp, params);
+        }catch(e){
+          window.reportError('Falha ao abrir a tela "' + current + '": ' + e.message, e);
+          vp.innerHTML = '<section class="view"><h1 class="h1">Algo deu errado</h1><div class="card"><p class="muted">Esta tela não abriu. O erro aparece no topo e no console (F12).</p><button class="btn-primary" id="err-home" style="margin-top:12px">Voltar ao início</button></div></section>';
+          var b = vp.querySelector('#err-home');
+          if(b) b.addEventListener('click', function(){ Router.go('home'); });
+        }
         updateTabbar();
         updateHeader();
       }
@@ -912,7 +981,8 @@ questions: [
         var weak = weakNodeIds();
         var weakQs = weakQuestionIds();
 
-        var warmSrc = weak[0] || null;
+        // Aquecimento vem de outro conteúdo (fraco, se houver) para não esgotar os cards do conteúdo principal.
+        var warmSrc = weak.filter(function(id){ return id !== main.id && (counts[id] || 0) > 0; })[0] || null;
         if(!warmSrc){
           var others = s.syllabus.filter(function(n){ return n.id !== main.id && (counts[n.id] || 0) > 0; });
           if(others.length) warmSrc = others[Math.floor(rng() * others.length)].id;
@@ -923,19 +993,20 @@ questions: [
         }
         warm.forEach(function(c){ queue.push({ kind:'card', refId:c.id, syllabusId:c.syllabusId }); });
 
+        var qPerBlock = U.clamp(parseInt(s.settings.questionCountPerBlock, 10) || P.blockSize, 1, 10);
         var mainCards = takeCards(main.id, P.mainCards, rng, usedCards);
         var blocks = 0;
         for(var i=0;i<mainCards.length;i++){
           queue.push({ kind:'card', refId:mainCards[i].id, syllabusId:mainCards[i].syllabusId });
           if((i+1) % P.blockSize === 0){
-            takeQuestions([main.id].concat(weak), P.blockSize, rng, usedQs, weakQs).forEach(function(q){
+            takeQuestions([main.id].concat(weak), qPerBlock, rng, usedQs, weakQs).forEach(function(q){
               queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
             });
             blocks++;
           }
         }
         if(blocks === 0 && mainCards.length){
-          takeQuestions([main.id].concat(weak), P.blockSize, rng, usedQs, weakQs).forEach(function(q){
+          takeQuestions([main.id].concat(weak), qPerBlock, rng, usedQs, weakQs).forEach(function(q){
             queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
           });
         }
@@ -1041,7 +1112,16 @@ questions: [
         });
         Router.go('summary');
       }
-      return { start:start, startReinforce:startReinforce, finish:finish, build:build, params:P };
+      // Sair no meio: com respostas, fecha a run e mostra o sumário; sem respostas, descarta.
+      function exit(){
+        var r = Store.get().activeRun;
+        if(!r){ Router.go('home'); return; }
+        if(r.answers && r.answers.length){ finish(); return; }
+        Store.set({ activeRun: null });
+        toast('Run descartada.');
+        Router.go('home');
+      }
+      return { start:start, startReinforce:startReinforce, finish:finish, exit:exit, build:build, params:P };
     })();
 
     var Stats = (function(){
@@ -1164,8 +1244,9 @@ questions: [
     }
 
     function applyTheme(){
-      var t = Store.get().settings.theme || 'dark';
-      document.documentElement.setAttribute('data-theme', t);
+      var st = Store.get().settings;
+      document.documentElement.setAttribute('data-theme', st.theme || 'dark');
+      document.documentElement.style.setProperty('--fs', String((st.fontSize || 16) / 16));
     }
     function toggleTheme(){
       Store.update(function(s){
@@ -1369,7 +1450,7 @@ questions: [
         if(!r) return;
         var item = r.queue[r.index];
         if(!item) return;
-        if(e.key === 'Escape'){ e.preventDefault(); Engine.finish(); return; }
+        if(e.key === 'Escape'){ e.preventDefault(); Engine.exit(); return; }
         if(item.kind === 'card'){
           if(e.key === ' ' || e.key === 'ArrowDown'){
             e.preventDefault();
@@ -1412,6 +1493,7 @@ questions: [
         }
       }, { passive:true });
 
+      vp.querySelector('#run-exit').addEventListener('click', function(){ Engine.exit(); });
       Router.onCleanup(function(){ document.removeEventListener('keydown', onKey); });
       document.addEventListener('keydown', onKey);
       paint();
@@ -1599,67 +1681,222 @@ questions: [
 
     function renderSettings(vp){
       var s = Store.get();
-      var settings = s.settings || {sound: true, theme: 'dark', cardSpeed: 1, questionCountPerBlock: 4, passThreshold: 60};
+      var settings = s.settings;
       var theme = settings.theme;
+      var fs = settings.fontSize || 16;
+      var qc = settings.questionCountPerBlock;
+      function opt(v, cur, label){ return '<option value="' + v + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + label + '</option>'; }
       vp.innerHTML =
         '<section class="view">' +
           '<p class="eyebrow">Ajustes</p>' +
           '<h1 class="h1">Configurações</h1>' +
           '<div class="card">' +
             '<label class="field"><span>Tema</span>' +
-              '<select id="theme" aria-label="Tema do app">' +
-                '<option value="dark" ' + (theme === 'dark' ? 'selected' : '') + '>Escuro</option>' +
-                '<option value="light" ' + (theme === 'light' ? 'selected' : '') + '>Claro</option>' +
-              '</select>' +
+              '<select id="theme" aria-label="Tema do app">' + opt('dark', theme, 'Escuro') + opt('light', theme, 'Claro') + '</select>' +
             '</label>' +
             '<label class="field"><span>Tamanho do texto</span>' +
-              '<select id="font-size" aria-label="Tamanho da fonte">' +
-                '<option value="14" ' + (settings.cardSpeed === 1 ? 'selected' : '') + '>Padrão (14px)</option>' +
-                '<option value="16" ' + (settings.cardSpeed === 2 ? 'selected' : '') + '>16px</option>' +
-                '<option value="18" ' + (settings.cardSpeed === 3 ? 'selected' : '') + '>18px</option>' +
-              '</select>' +
-            '</label>' +
-            '<label class="field"><span>Velocidade de cards</span>' +
-              '<select id="card-speed" aria-label="Velocidade dos cards">' +
-                '<option value="1" ' + (settings.cardSpeed === 1 ? 'selected' : '') + '>Normal</option>' +
-                '<option value="2" ' + (settings.cardSpeed === 2 ? 'selected' : '') + '>Rápida</option>' +
-                '<option value="3" ' + (settings.cardSpeed === 3 ? 'selected' : '') + '>Lenta</option>' +
-              '</select>' +
+              '<select id="font-size" aria-label="Tamanho do texto nos cards">' + opt(14, fs, 'Pequeno') + opt(16, fs, 'Médio') + opt(18, fs, 'Grande') + opt(20, fs, 'Muito grande') + '</select>' +
             '</label>' +
             '<label class="field"><span>Questões por bloco</span>' +
-              '<select id="question-count" aria-label="Questões por bloco">' +
-                '<option value="2" ' + (settings.questionCountPerBlock === 2 ? 'selected' : '') + '>2</option>' +
-                '<option value="4" ' + (settings.questionCountPerBlock === 4 ? 'selected' : '') + '>4</option>' +
-                '<option value="6" ' + (settings.questionCountPerBlock === 6 ? 'selected' : '') + '>6</option>' +
-              '</select>' +
+              '<select id="question-count" aria-label="Questões por bloco">' + opt(2, qc, '2') + opt(4, qc, '4') + opt(6, qc, '6') + '</select>' +
             '</label>' +
-            '<label class="field"><span>Pass threshold</span>' +
-              '<input type="number" id="pass-threshold" min="50" max="95" aria-label="Nota mínima para aprovação" value="' + settings.passThreshold + '">' +
+            '<label class="field"><span>Meta de acerto (%)</span>' +
+              '<input type="number" id="pass-threshold" min="50" max="95" step="5" inputmode="numeric" aria-label="Meta de acerto em porcentagem" value="' + settings.passThreshold + '">' +
             '</label>' +
-            '<label class="field"><span>Som</span>' +
-              '<input type="checkbox" id="sound" ' + (settings.sound ? 'checked' : '') + ' aria-label="Liga/desliga sons">' +
+            '<label class="field"><span>Som ao acertar</span>' +
+              '<input type="checkbox" id="sound" ' + (settings.sound ? 'checked' : '') + ' aria-label="Liga ou desliga o som">' +
             '</label>' +
-            '<button class="btn-primary" id="settings-save" style="margin-top:12px; width:100%">Salvar</button>' +
+            '<button class="btn-primary" id="settings-save" style="margin-top:12px">Salvar</button>' +
+          '</div>' +
+          '<div class="card">' +
+            '<h2 class="h2">Backup dos seus dados</h2>' +
+            '<p class="muted">Seu progresso fica salvo só neste navegador. Exporte um backup para não perder nada ou para levar para outro aparelho.</p>' +
+            '<div class="row" style="margin-top:12px">' +
+              '<button class="btn-ghost" id="backup-export">Exportar backup</button>' +
+              '<button class="btn-ghost" id="backup-import">Restaurar backup</button>' +
+            '</div>' +
+            '<input type="file" id="backup-file" accept=".json,application/json" hidden>' +
+            '<button class="btn-danger" id="backup-reset">Apagar todos os dados</button>' +
+            '<div class="confirm-box" id="reset-confirm" hidden>' +
+              '<p class="muted">Isso apaga runs, progresso, plano e conteúdo importado deste navegador. Não dá para desfazer sem um backup.</p>' +
+              '<div class="row" style="margin-top:10px">' +
+                '<button class="btn-ghost" id="backup-reset-cancel" style="margin-top:0">Cancelar</button>' +
+                '<button class="btn-danger solid" id="backup-reset-confirm" style="margin-top:0">Apagar tudo</button>' +
+              '</div>' +
+            '</div>' +
+            '<p class="hint">Armazenamento: ' + (Persistence.isPersistent() ? 'salvo neste navegador' : 'temporário (exporte antes de fechar)') + '</p>' +
           '</div>' +
         '</section>';
-      document.getElementById('settings-save').addEventListener('click', function(){
-        var ns = {
-          sound: document.getElementById('sound').checked,
-          theme: document.getElementById('theme').value,
-          cardSpeed: parseInt(document.getElementById('card-speed').value, 10),
-          questionCountPerBlock: parseInt(document.getElementById('question-count').value, 10),
-          passThreshold: parseInt(document.getElementById('pass-threshold').value, 10)
-        };
+      vp.querySelector('#settings-save').addEventListener('click', function(){
+        var th = parseInt(vp.querySelector('#pass-threshold').value, 10);
+        var ns = Object.assign({}, Store.get().settings, {
+          sound: vp.querySelector('#sound').checked,
+          theme: vp.querySelector('#theme').value,
+          fontSize: parseInt(vp.querySelector('#font-size').value, 10) || 16,
+          questionCountPerBlock: parseInt(vp.querySelector('#question-count').value, 10) || 4,
+          passThreshold: isNaN(th) ? 60 : U.clamp(th, 50, 95)
+        });
         Store.update(function(st){ st.settings = ns; });
-        toast('Configurações salvas.');
-        Router.go('plan');
+        applyTheme();
+        toast(isNaN(th) || th !== ns.passThreshold ? 'Salvo. Meta de acerto ajustada para ' + ns.passThreshold + '%.' : 'Configurações salvas.');
+        Router.go('settings');
+      });
+      bindBackup(vp);
+    }
+
+    function downloadJson(obj, filename){
+      var blob = new Blob([JSON.stringify(obj, null, 2)], { type:'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }
+
+    function exportBackup(){
+      try{
+        Persistence.save(Store.get());
+        downloadJson(Store.get(), 'reels-concurso-backup-' + U.todayStr() + '.json');
+        toast('Backup exportado.');
+      }catch(e){ window.reportError('Falha ao exportar backup: ' + e.message, e); }
+    }
+
+    function restoreBackup(file, done){
+      var reader = new FileReader();
+      reader.onload = function(){
+        var obj;
+        try{ obj = JSON.parse(reader.result); }
+        catch(e){ toast('Arquivo inválido: não é um JSON.'); return done && done(false); }
+        if(!obj || typeof obj !== 'object' || !Array.isArray(obj.runs) || !obj.settings){
+          toast('Este arquivo não é um backup do Reels de Concurso.');
+          return done && done(false);
+        }
+        Persistence.save(obj);
+        Store.init();
+        if(!Store.get().syllabus.length) Store.set({ syllabus: SEED.syllabus.map(function(n){ return Object.assign({}, n); }) });
+        Persistence.save(Store.get());
+        applyTheme();
+        toast('Backup restaurado: ' + Store.get().runs.length + ' runs.');
+        done && done(true);
+      };
+      reader.onerror = function(){ toast('Falha ao ler o arquivo.'); };
+      reader.readAsText(file);
+    }
+
+    function bindBackup(vp){
+      var file = vp.querySelector('#backup-file');
+      var exp = vp.querySelector('#backup-export');
+      if(exp) exp.addEventListener('click', exportBackup);
+      var imp = vp.querySelector('#backup-import');
+      if(imp) imp.addEventListener('click', function(){ file.click(); });
+      if(file) file.addEventListener('change', function(){
+        var f = file.files && file.files[0];
+        if(!f) return;
+        restoreBackup(f, function(){ file.value = ''; Router.go(Router.get()); });
+      });
+      var reset = vp.querySelector('#backup-reset');
+      var box = vp.querySelector('#reset-confirm');
+      if(reset && box){
+        reset.addEventListener('click', function(){ box.hidden = false; reset.hidden = true; });
+        vp.querySelector('#backup-reset-cancel').addEventListener('click', function(){ box.hidden = true; reset.hidden = false; });
+        vp.querySelector('#backup-reset-confirm').addEventListener('click', function(){
+          var fresh = Store.defaults();
+          fresh.syllabus = SEED.syllabus.map(function(n){ return Object.assign({}, n); });
+          Persistence.save(fresh);
+          Store.init();
+          applyTheme();
+          toast('Dados apagados. Comece de novo quando quiser.');
+          Router.go('settings');
+        });
+      }
+    }
+
+    function renderCoach(vp){
+      var s = Store.get();
+      var goal = s.profile.dailyGoalMinutes || 120;
+      var today = Data.minutesToday();
+      var pct = Math.min(100, Math.round((today / goal) * 100));
+      var sm = Stats.summary();
+      var weakTop = Stats.weakRanking(1)[0];
+      var weak = null;
+      if(weakTop){
+        var wi = (s.weakItems || {})[weakTop.id] || {};
+        var wn = Data.node(weakTop.kind === 'question' ? wi.syllabusId : weakTop.id);
+        weak = { name: wn ? wn.name : weakTop.name };
+      }
+      var runsToday = (s.runs || []).filter(function(r){ return r.endedAt && U.todayStr(new Date(r.endedAt)) === U.todayStr(); }).length;
+      var sch = Planner.schedule();
+      var hour = new Date().getHours();
+      var key = U.todayStr();
+      var checks = (s.coach && s.coach.day === key) ? s.coach.done : {};
+      var routine = [
+        { id:'agua', label:'Água e celular no modo foco' },
+        { id:'run1', label:'Primeira run do dia' },
+        { id:'reforco', label:'Reforço dos pontos fracos' },
+        { id:'teoria', label:'30 min de teoria (videoaula ou PDF)' },
+        { id:'revisao', label:'Revisão rápida antes de dormir' }
+      ];
+
+      var msg;
+      if(runsToday === 0) msg = 'Hoje ainda não teve estudo. Use a regra dos 5 minutos: comece com uma run curta, sem compromisso de continuar.';
+      else if(pct >= 100) msg = 'Meta do dia batida! O que vier agora é bônus. Descansar também faz parte do plano.';
+      else msg = 'Você já fez ' + runsToday + (runsToday === 1 ? ' run' : ' runs') + ' hoje (' + U.fmtDuration(today) + '). Faltam ' + U.fmtDuration(goal - today) + ' para a meta.';
+
+      var focus;
+      if(hour < 12) focus = 'Manhã: bom horário para disciplinas de maior peso, como Farmacologia e Toxicologia.';
+      else if(hour < 18) focus = 'Tarde: alterne flashcards com questões para manter o foco.';
+      else focus = 'Noite: priorize revisão e reforço. Deixe conteúdo novo para amanhã cedo.';
+
+      var tips = [];
+      if(weak) tips.push('Seu ponto mais fraco agora: <b>' + U.esc(weak.name.length > 70 ? weak.name.slice(0, 68) + '…' : weak.name) + '</b>. Faça um reforço.');
+      if(sch.configured && sch.behind) tips.push('O plano está <b>atrasado</b>. Some uma run extra por dia nesta semana.');
+      if(sch.configured && !sch.behind) tips.push('Plano <b>em dia</b>. Faltam ' + sch.remainDays + ' dias para a prova.');
+      if(!sch.configured) tips.push('Defina a <b>data da prova</b> na aba Plano para eu calcular seu ritmo.');
+      if(sm.runs >= 3 && sm.accuracy < 60) tips.push('Seu acerto geral está em <b>' + sm.accuracy + '%</b>. Antes das questões, revise a teoria do conteúdo principal.');
+      if(sm.streak >= 3) tips.push('<b>' + sm.streak + ' dias</b> seguidos. Não quebre a sequência!');
+
+      vp.innerHTML =
+        '<section class="view">' +
+          '<p class="eyebrow">Coach</p>' +
+          '<h1 class="h1">Seu treino de hoje</h1>' +
+          '<div class="card">' +
+            '<div class="plan-head"><span class="plan-name">Meta diária</span><span class="sum-pct ' + (pct >= 100 ? 'ok' : (pct >= 50 ? 'warn' : 'bad')) + '">' + today + ' / ' + goal + ' min</span></div>' +
+            '<div class="bar goal-bar"><span style="width:' + pct + '%"></span></div>' +
+            '<p class="muted" style="margin-top:12px">' + U.esc(msg) + '</p>' +
+            '<button class="btn-primary" id="coach-5min" style="margin-top:14px">' + (runsToday === 0 ? 'Começar só 5 minutos' : 'Fazer mais uma run') + '</button>' +
+            (weak ? '<button class="btn-ghost" id="coach-reinforce">Reforçar pontos fracos</button>' : '') +
+          '</div>' +
+          '<div class="card soft"><h2 class="h2">Janela de foco</h2><p class="muted">' + U.esc(focus) + '</p></div>' +
+          '<div class="card"><h2 class="h2">Dicas para você</h2>' + tips.map(function(t){ return '<p class="tip">' + t + '</p>'; }).join('') + '</div>' +
+          '<div class="card"><h2 class="h2">Rotina de hoje</h2>' +
+            routine.map(function(r){
+              var on = !!checks[r.id];
+              return '<label class="check' + (on ? ' done' : '') + '"><input type="checkbox" data-id="' + r.id + '"' + (on ? ' checked' : '') + '><span>' + U.esc(r.label) + '</span></label>';
+            }).join('') +
+          '</div>' +
+        '</section>';
+
+      vp.querySelector('#coach-5min').addEventListener('click', function(){
+        var r = Store.get().activeRun;
+        if(r && r.status === 'active') Router.go('run'); else Engine.start();
+      });
+      var rb = vp.querySelector('#coach-reinforce');
+      if(rb) rb.addEventListener('click', function(){ Engine.startReinforce(); });
+      vp.querySelectorAll('.check input').forEach(function(cb){
+        cb.addEventListener('change', function(){
+          Store.update(function(st){
+            if(!st.coach || st.coach.day !== key) st.coach = { day:key, done:{} };
+            st.coach.done[cb.dataset.id] = cb.checked;
+          });
+          cb.parentNode.classList.toggle('done', cb.checked);
+        });
       });
     }
 
     var Views = {
       home: function(vp){
         var s = Store.get();
-        var name = (s.profile && s.profile.name) ? ', ' + s.profile.name : '';
+        var name = (s.profile && s.profile.name) ? ', ' + U.esc(s.profile.name) : '';
         var hasActive = !!(s.activeRun && s.activeRun.status === 'active');
         var persistent = Persistence.isPersistent();
         vp.innerHTML =
@@ -1667,7 +1904,7 @@ questions: [
             '<p class="eyebrow">Sua próxima run</p>' +
             '<h1 class="greeting">' + U.greeting() + name + '</h1>' +
             '<p class="sub">Um toque para começar. Sem menus, sem atrito.</p>' +
-            (!persistent ? '<div class="banner warning" id="persist-banner">Suas alterações não serão salvas automaticamente. <button class="btn-small" id="export-btn">Exportar</button> <button class="btn-small" id="import-btn">Importar</button></div>' : '') +
+            (!persistent ? '<div class="banner warning" id="persist-banner">Este navegador não está salvando seus dados. Exporte um backup antes de fechar. <button type="button" id="banner-export">Exportar</button> <button type="button" id="banner-settings">Backup</button></div>' : '') +
             '<div class="card">' +
               '<div class="hero-stats">' +
                 '<div class="hstat"><span class="hnum">' + s.streak.current + '</span><span class="hlabel">streak</span></div>' +
@@ -1687,6 +1924,10 @@ questions: [
             '</div>' +
           '</section>';
 
+        var be = vp.querySelector('#banner-export');
+        if(be) be.addEventListener('click', exportBackup);
+        var bs = vp.querySelector('#banner-settings');
+        if(bs) bs.addEventListener('click', function(){ Router.go('settings'); });
         var btn = vp.querySelector('#start-run');
         btn.addEventListener('click', function(){
           if(hasActive) Router.go('run'); else Engine.start();
@@ -1722,6 +1963,7 @@ questions: [
         html +=
           '<div class="card">' +
             '<h2 class="h2">Configuração</h2>' +
+            '<label class="field"><span>Seu nome</span><input type="text" id="cfg-name" maxlength="30" autocomplete="given-name" placeholder="Como quer ser chamada" value="' + U.esc(s.profile.name || '') + '"></label>' +
             '<label class="field"><span>Data da prova</span><input type="date" id="cfg-exam" value="' + (s.profile.examDate || '') + '"></label>' +
             '<label class="field"><span>Meta diária (min)</span><input type="number" id="cfg-goal" min="15" step="15" value="' + (s.profile.dailyGoalMinutes || 120) + '"></label>' +
             '<label class="field"><span>Início do plano</span><input type="date" id="cfg-start" value="' + (s.profile.startDate || U.todayStr()) + '"></label>' +
@@ -1747,13 +1989,13 @@ questions: [
         }
 
         Object.keys(groups).forEach(function(g){
-          html += '<div class="card"><h2 class="h2">' + g + '</h2><ul class="plan-list">';
+          html += '<div class="card"><h2 class="h2">' + U.esc(g) + '</h2><ul class="plan-list">';
           groups[g].forEach(function(n){
             var info = planMap[n.id] || { pct:0, target:null };
             html +=
               '<li class="plan-item">' +
                 '<div class="plan-head">' +
-                  '<span class="plan-name">' + n.name + '</span>' +
+                  '<span class="plan-name">' + U.esc(n.name) + '</span>' +
                   '<span class="weight">peso ' + (n.weight || 0) + '</span>' +
                 '</div>' +
                 '<div class="plan-meta">' + Data.countFlashcards(n.id) + ' cards · ' + Data.countQuestions(n.id) + ' questões' +
@@ -1780,8 +2022,12 @@ questions: [
           var exam = vp.querySelector('#cfg-exam').value;
           var goal = parseInt(vp.querySelector('#cfg-goal').value, 10);
           var start = vp.querySelector('#cfg-start').value;
+          var name = vp.querySelector('#cfg-name').value.trim().slice(0, 30);
+          if(exam && exam <= U.todayStr()){ toast('A data da prova precisa ser no futuro.'); return; }
+          if(exam && start && start >= exam){ toast('O início do plano precisa ser antes da prova.'); return; }
           Store.update(function(st){
             st.profile = Object.assign({}, st.profile, {
+              name: name,
               examDate: exam || null,
               dailyGoalMinutes: isNaN(goal) ? 120 : Math.max(15, goal),
               startDate: start || U.todayStr()
@@ -1817,7 +2063,7 @@ questions: [
       },
       stats: renderStats,
       review: placeholder('Revisão', 'Sprint 7', 'Fila de revisão espaçada (SRS) e reforços.'),
-      coach: placeholder('Coach', 'Sprint 7', 'Rotina, janela de foco e regra dos 5 minutos.'),
+      coach: renderCoach,
       settings: renderSettings,
     };
 
@@ -1841,6 +2087,12 @@ questions: [
     function init(){
       var backend = Persistence.init();
       Store.init();
+      // Streak quebrado: se o último estudo foi antes de ontem, a sequência atual volta a 0.
+      var stk = Store.get().streak;
+      if(stk.lastStudyDate && stk.current){
+        var gap = Math.round((U.parseDate(U.todayStr()) - U.parseDate(stk.lastStudyDate)) / 86400000);
+        if(gap > 1) Store.update(function(st){ st.streak.current = 0; });
+      }
       if(!Store.get().syllabus.length){
         Store.set({ syllabus: SEED.syllabus.map(function(n){ return Object.assign({}, n); }) });
       }
