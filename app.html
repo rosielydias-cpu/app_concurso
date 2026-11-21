@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Reels de Concurso</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2337d99a'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --font: system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --bg:#0a0e13; --surface:#111823; --surface-2:#182231; --border:#23303f;
+    --text:#e9f0f8; --muted:#8b98aa;
+    --accent:#37d99a; --accent-2:#3aa0ff; --danger:#ff5c7a; --warn:#ffc94d; --ok:#37d99a;
+    --radius:18px; --radius-sm:12px;
+    --header-h:58px; --tab-h:64px;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  html[data-theme="light"]{
+    --bg:#f4f6fb; --surface:#ffffff; --surface-2:#eef2f8; --border:#dce3ee;
+    --text:#0e1620; --muted:#5d6b7d;
+    --shadow:0 10px 30px rgba(20,40,70,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  html,body{height:100%}
+  body{
+    font-family:var(--font);
+    background:var(--bg); color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column;
+    height:100vh; height:100dvh; overflow:hidden;
+    overscroll-behavior:none;
+  }
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+  #app-header{
+    flex:0 0 auto; height:var(--header-h);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 16px; background:var(--surface); border-bottom:1px solid var(--border);
+  }
+  .brand{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; letter-spacing:.2px}
+  .brand-dot{width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+  .header-right{display:flex; align-items:center; gap:8px}
+  .streak{display:inline-flex; align-items:center; gap:5px; color:var(--muted); font-size:14px; font-weight:600}
+  .streak svg{width:16px; height:16px; color:var(--warn)}
+  .icon-btn{
+    width:40px; height:40px; display:grid; place-items:center;
+    border:1px solid var(--border); border-radius:12px;
+    background:var(--surface-2); color:var(--text); cursor:pointer;
+  }
+  .icon-btn svg{width:20px; height:20px}
+
+  #viewport{
+    flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:20px 16px calc(24px + env(safe-area-inset-bottom));
+  }
+
+  #tabbar{
+    flex:0 0 auto; height:var(--tab-h); display:flex;
+    background:var(--surface); border-top:1px solid var(--border);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .tab{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px; background:none; border:0; color:var(--muted);
+    font-size:10.5px; font-weight:600; cursor:pointer; padding:6px 2px;
+  }
+  .tab svg{width:22px; height:22px}
+  .tab.active{color:var(--accent)}
+
+  #toast{
+    position:fixed; left:50%; bottom:calc(var(--tab-h) + 20px);
+    transform:translateX(-50%) translateY(20px);
+    background:var(--surface-2); color:var(--text); border:1px solid var(--border);
+    padding:12px 16px; border-radius:12px; font-size:13.5px; max-width:90vw;
+    opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+    z-index:50; box-shadow:var(--shadow); text-align:center;
+  }
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  .view{max-width:640px; margin:0 auto; animation:fade .25s ease}
+  @keyframes fade{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+  .eyebrow{font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:var(--accent); font-weight:700}
+  .greeting{font-size:26px; font-weight:800; margin-top:6px; line-height:1.15}
+  .h1{font-size:24px; font-weight:800; margin-top:6px}
+  .h2{font-size:15px; font-weight:700; margin-bottom:10px}
+  .sub{color:var(--muted); margin-top:6px; font-size:14px}
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-top:16px}
+  .soft{background:var(--surface-2)}
+  .hero-stats{display:flex; justify-content:space-between; gap:8px; margin-bottom:16px}
+  .hstat{flex:1; text-align:center; background:var(--surface-2); border-radius:12px; padding:12px 6px}
+  .hnum{display:block; font-size:26px; font-weight:800}
+  .hlabel{font-size:11.5px; color:var(--muted); font-weight:600}
+  .btn-primary{
+    width:100%; padding:16px; border:0; border-radius:14px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#04120c; font-weight:800; font-size:16px; cursor:pointer;
+    box-shadow:var(--shadow); transition:transform .08s ease;
+  }
+  .btn-primary:active{transform:scale(.98)}
+  .hint{text-align:center; color:var(--muted); font-size:12.5px; margin-top:10px}
+  .steps{list-style:none; display:grid; gap:8px; font-size:14px; color:var(--muted)}
+  .steps b{color:var(--accent); margin-right:4px}
+  .muted{color:var(--muted); font-size:14px; line-height:1.5}
+  .badge{
+    display:inline-block; margin-top:12px; font-size:12px; font-weight:700; color:var(--accent);
+    background:rgba(55,217,154,.12); border:1px solid rgba(55,217,154,.3);
+    padding:6px 10px; border-radius:999px;
+  }
+  .badge.ok-badge{color:var(--ok); background:rgba(55,217,154,.12); border-color:rgba(55,217,154,.3)}
+  .badge.warn-badge{color:var(--warn); background:rgba(255,201,77,.12); border-color:rgba(255,201,77,.3)}
+  .btn-ghost{
+    width:100%; margin-top:10px; padding:14px; border:1px solid var(--border); border-radius:14px;
+    background:var(--surface-2); color:var(--text); font-weight:700; font-size:15px; cursor:pointer;
+  }
+  .plan-list{list-style:none; display:grid; gap:16px}
+  .plan-item{display:block}
+  .plan-head{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .plan-name{font-weight:700; font-size:14.5px}
+  .weight{
+    font-size:11px; font-weight:700; color:var(--accent-2);
+    background:rgba(58,160,255,.12); border:1px solid rgba(58,160,255,.3);
+    padding:3px 8px; border-radius:999px; white-space:nowrap;
+  }
+  .plan-meta{font-size:12px; color:var(--muted); margin:4px 0 8px}
+  .field{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--border)}
+  .field:last-of-type{border-bottom:0}
+  .field > span{font-size:13.5px; color:var(--muted); font-weight:600}
+  .field input{background:var(--surface-2); border:1px solid var(--border); border-radius:10px; color:var(--text); padding:10px 12px; font-size:14px; font-family:var(--font); max-width:180px}
+  .week-dist{display:flex; gap:6px; margin-top:14px; flex-wrap:wrap}
+  .day-chip{flex:1; min-width:44px; display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px; border-radius:10px; background:var(--surface-2); border:1px solid var(--border); font-size:11px; color:var(--muted); text-align:center}
+  .day-chip b{font-size:11.5px; color:var(--text)}
+  .day-chip.on{border-color:var(--accent); color:var(--accent)}
+  .heatmap{display:grid; grid-template-rows:repeat(7,12px); grid-auto-flow:column; grid-auto-columns:12px; gap:3px; margin:8px 0 10px; overflow-x:auto; padding-bottom:2px}
+  .hm-cell{width:12px; height:12px; border-radius:3px; background:var(--surface-2); border:1px solid var(--border)}
+  .hm-cell.empty{background:transparent; border-color:transparent}
+  .hm-cell.lvl0{background:var(--surface-2)}
+  .hm-cell.lvl1{background:rgba(55,217,154,.18); border-color:rgba(55,217,154,.25)}
+  .hm-cell.lvl2{background:rgba(55,217,154,.38); border-color:rgba(55,217,154,.45)}
+  .hm-cell.lvl3{background:rgba(55,217,154,.62); border-color:rgba(55,217,154,.7)}
+  .hm-cell.lvl4{background:rgba(55,217,154,.9); border-color:rgba(55,217,154,.95)}
+  .hm-legend{display:flex; align-items:center; gap:4px; font-size:11px; color:var(--muted)}
+  .chart-line{width:100%; height:90px; display:block; margin-top:8px}
+  .chart-bars{width:100%; height:auto; display:block; margin-top:6px}
+  .bar{height:8px; border-radius:999px; background:var(--surface-2); overflow:hidden; border:1px solid var(--border)}
+  .bar > span{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0; transition:width .3s}
+  .run-view{padding-top:6px}
+  .run-top{display:flex; align-items:center; gap:10px; margin-bottom:16px}
+  .run-progress{flex:1; height:8px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border); overflow:hidden}
+  .run-progress #run-progress-fill{height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .25s}
+  .run-counter{font-size:12px; color:var(--muted); font-weight:700; min-width:44px; text-align:right}
+  .run-score-wrap{display:inline-flex; align-items:center; gap:4px; color:var(--warn); font-weight:700; font-size:13px}
+  .run-score-wrap svg{width:15px; height:15px}
+  .banner{padding:8px 12px; background:var(--warn); color:#04120c; font-size:12px; margin-bottom:12px; border-radius:var(--radius-sm)}
+  .banner.warning{background:var(--danger)}
+  .banner button{margin-left:8px; background:transparent; border:0; color inherit; padding:0; font:inherit; cursor:pointer}
+  .reel{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; min-height:58vh; display:flex; flex-direction:column; gap:14px; animation:fade .2s ease}
+  .reel-tag{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); font-weight:700}
+  .reel-tag span{color:var(--accent-2)}
+  .reel-q{font-size:20px; font-weight:700; line-height:1.35}
+  .reel-a{font-size:16px; line-height:1.5; background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; animation:fade .2s ease}
+  .card-controls{display:flex; gap:10px; margin-top:auto}
+  .btn-no,.btn-yes{flex:1; padding:16px; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer}
+  .btn-no{background:var(--surface-2); color:var(--text); border:1px solid var(--border)}
+  .btn-yes{background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#04120c; border:0}
+  .swipe-hint{text-align:center; color:var(--muted); font-size:12px; margin-top:auto}
+  .opts{display:grid; gap:10px; margin-top:4px}
+  .opt{display:flex; align-items:flex-start; gap:10px; text-align:left; padding:14px; border:1px solid var(--border); border-radius:12px; background:var(--surface-2); color:var(--text); font-size:15px; line-height:1.35; cursor:pointer; transition:transform .08s, border-color .15s}
+  .opt:active{transform:scale(.99)}
+  .opt:disabled{cursor:default}
+  .opt-letter{flex:0 0 auto; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:var(--surface); border:1px solid var(--border); font-size:12px; font-weight:800; color:var(--muted)}
+  .opt.correct{border-color:var(--ok); background:rgba(55,217,154,.12)}
+  .opt.correct .opt-letter{background:var(--ok); color:#04120c; border-color:var(--ok)}
+  .opt.wrong{border-color:var(--danger); background:rgba(255,92,122,.12)}
+  .opt.wrong .opt-letter{background:var(--danger); color:#fff; border-color:var(--danger)}
+  .feedback{margin-top:auto; display:grid; gap:10px; animation:fade .2s ease; padding-left:12px}
+  .feedback.ok{border-left:3px solid var(--ok)}
+  .feedback.bad{border-left:3px solid var(--danger)}
+  .fb-title{font-weight:800; font-size:15px}
+  .feedback.ok .fb-title{color:var(--ok)}
+  .feedback.bad .fb-title{color:var(--danger)}
+  .fb-exp{font-size:13.5px; color:var(--muted); line-height:1.45}
+  .sum-pct{font-size:12px; font-weight:800}
+  .sum-pct.ok{color:var(--ok)}
+  .sum-pct.warn{color:var(--warn)}
+  .sum-pct.bad{color:var(--danger)}
+  .bar > span.ok{background:var(--ok)}
+  .bar > span.warn{background:var(--warn)}
+  .bar > span.bad{background:var(--danger)}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important}
+  }
+</style>
+</head>
+<body>
+  <header id="app-header">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span class="brand-name">Reels de Concurso</span>
+    </div>
+    <div class="header-right">
+      <span class="streak" title="Sequência de estudo">
+        <svg viewBox="0 0 24 24"><path d="M12 3c.8 3-2 4.2-2 7a2 2 0 0 0 4 0c0-1-.4-1.8-.4-1.8C16 10 17.5 12 17.5 14.5a5.5 5.5 0 1 1-11 0C6.5 10 10 8 12 3z"/></svg>
+        <b id="streak-count">0</b>
+      </span>
+      <button class="icon-btn" id="theme-toggle" aria-label="Alternar tema">
+        <svg viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="viewport" aria-live="polite"></main>
+
+  <nav id="tabbar" aria-label="Navegação principal">
+    <button class="tab active" data-route="home">
+      <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/></svg>
+      <span>Início</span>
+    </button>
+    <button class="tab" data-route="plan">
+      <svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>
+      <span>Plano</span>
+    </button>
+    <button class="tab" data-route="stats">
+      <svg viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-6"/><path d="M3 20h18"/></svg>
+      <span>Progresso</span>
+    </button>
+    <button class="tab" data-route="coach">
+      <svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg>
+      <span>Coach</span>
+    </button>
+    <button class="tab" data-route="settings">
+      <svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="7" cy="17" r="2.2"/></svg>
+      <span>Ajustes</span>
+    </button>
+  </nav>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="modal-root"></div>
+
+  <script>
+  (function(){
+    'use strict';
+
+    var U = {
+      clamp: function(v,a,b){ return Math.max(a, Math.min(b, v)); },
+      uid: function(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); },
+      mulberry32: function(seed){
+        var a = seed >>> 0;
+        return function(){
+          a |= 0; a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      },
+      todayStr: function(d){
+        d = d || new Date();
+        var dd = ('0' + d.getDate()).slice(-2);
+        var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+        return d.getFullYear() + '-' + mm + '-' + dd;
+      },
+      parseDate: function(str){
+        if(!str) return null;
+        var d = new Date(str + 'T00:00:00');
+        return isNaN(d.getTime()) ? null : d;
+      },
+      addDays: function(d, n){ var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; },
+      fmtDate: function(d){
+        if(!d) return '—';
+        var dd = ('0' + d.getDate()).slice(-2);
+        var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+        return dd + '/' + mm + '/' + d.getFullYear();
+      },
+      fmtDuration: function(min){
+        min = Math.round(min);
+        if(min < 60) return min + ' min';
+        var h = Math.floor(min/60), m = min % 60;
+        return m ? h + 'h ' + m + 'min' : h + 'h';
+      },
+      debounce: function(fn, ms){
+        var t;
+        return function(){
+          var args = arguments, ctx = this;
+          clearTimeout(t);
+          t = setTimeout(function(){ fn.apply(ctx, args); }, ms);
+        };
+      },
+      esc: function(s){
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(ch){
+          return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+        });
+      },
+      greeting: function(){
+        var h = new Date().getHours();
+        return h < 12 ? 'Bom dia' : (h < 18 ? 'Boa tarde' : 'Boa noite');
+      }
+    };
+
+    var SEED = {
+      syllabus: [
+        { id:'dc', name:'Direito Constitucional', parentId:null, weight:8, order:1, discipline:'Direito' },
+        { id:'da', name:'Direito Administrativo', parentId:null, weight:6, order:2, discipline:'Admin' },
+        { id:'dp', name:'Direito Penal', parentId:null, weight:8, order:3, discipline:'Direito' },
+        { id:'dpp', name:'Direito Processual Penal', parentId:null, weight:8, order:4, discipline:'Processo' },
+        { id:'le', name:'Legislação Especial', parentId:null, weight:6, order:5, discipline:'Legislação' },
+        { id:'far', name:'Farmacologia', parentId:null, weight:10, order:6, discipline:'Farmácia' },
+        { id:'tox', name:'Toxicologia', parentId:null, weight:8, order:7, discipline:'Farmácia' },
+        { id:'fg', name:'Farmacognosia', parentId:null, weight:6, order:8, discipline:'Farmácia' },
+        { id:'br', name:'Bromatologia', parentId:null, weight:6, order:9, discipline:'Farmácia' },
+        { id:'qb', name:'Química e Bioquímica', parentId:null, weight:6, order:10, discipline:'Farmácia' },
+        { id:'crim', name:'Criminalística', parentId:null, weight:6, order:11, discipline:'Criminalística' },
+        { id:'pt', name:'Língua Portuguesa', parentId:null, weight:6, order:12, discipline:'Básicas' },
+        { id:'rl', name:'Raciocínio Lógico', parentId:null, weight:4, order:13, discipline:'Básicas' },
+        { id:'inf', name:'Informática', parentId:null, weight:4, order:14, discipline:'Básicas' }
+      ],
+      flashcards: [
+        { id:'fc01', syllabusId:'dc', front:'Quais são os fundamentos da República (art. 1º da CF)?', back:'Soberania, cidadania, dignidade da pessoa humana, valores sociais do trabalho e da livre iniciativa e pluralismo político.' },
+        { id:'fc02', syllabusId:'dc', front:'Quais são os objetivos fundamentais da República (art. 3º da CF)?', back:'Construir uma sociedade livre, justa e solidária; garantir o desenvolvimento nacional; erradicar a pobreza e a marginalização; e promover o bem de todos, sem preconceitos.' },
+        { id:'fc03', syllabusId:'dc', front:'O que protege o habeas corpus?', back:'A liberdade de locomoção, contra ilegalidade ou abuso de poder.' },
+        { id:'fc04', syllabusId:'dc', front:'O que protege o mandado de segurança?', back:'Direito líquido e certo não amparado por habeas corpus ou habeas data.' },
+        { id:'fc05', syllabusId:'dc', front:'Quando cabe mandado de injunção?', back:'Na falta de norma regulamentadora que torne inviável o exercício de direitos constitucionais.' },
+        { id:'fc06', syllabusId:'dc', front:'A segurança pública é dever de quem (art. 144 da CF)?', back:'É dever do Estado, direito e responsabilidade de todos.' },
+        { id:'fc07', syllabusId:'da', front:'Quais são os princípios expressos da Administração Pública (art. 37 da CF)?', back:'Legalidade, impessoalidade, moralidade, publicidade e eficiência (LIMPE).' },
+        { id:'fc08', syllabusId:'da', front:'Quais são os atributos do ato administrativo?', back:'Presunção de legitimidade, imperatividade, autoexecutoriedade e tipicidade.' },
+        { id:'fc09', syllabusId:'da', front:'O que é o poder de polícia?', back:'Atividade administrativa que limita ou condiciona direitos e liberdades em favor do interesse público.' },
+        { id:'fc10', syllabusId:'da', front:'Qual é a lei geral de licitações e contratos vigente?', back:'Lei nº 14.133/2021.' },
+        { id:'fc11', syllabusId:'dp', front:'O que diz o princípio da legalidade penal?', back:'Não há crime sem lei anterior que o defina, nem pena sem prévia cominação legal.' },
+        { id:'fc12', syllabusId:'dp', front:'A lei penal mais benéfica retroage?', back:'Sim. A lei posterior mais benéfica aplica-se aos fatos anteriores (art. 2º do CP).' },
+        { id:'fc13', syllabusId:'dp', front:'Quais são os elementos do crime na teoria tripartite?', back:'Fato típico, ilícito (antijurídico) e culpável.' },
+        { id:'fc14', syllabusId:'dp', front:'Qual a diferença entre dolo e culpa?', back:'Dolo: vontade ou assunção do risco de produzir o resultado. Culpa: conduta por imprudência, negligência ou imperícia.' },
+        { id:'fc15', syllabusId:'dp', front:'Cite um exemplo de qualificadora do homicídio.', back:'Motivo torpe, meio cruel, recurso que dificulte a defesa da vítima ou feminicídio.' },
+        { id:'fc16', syllabusId:'dpp', front:'Qual é a natureza do inquérito policial?', back:'Procedimento administrativo, inquisitivo, informativo e dispensável.' },
+        { id:'fc17', syllabusId:'dpp', front:'A ação penal pública incondicionada depende de representação?', back:'Não. É promovida pelo Ministério Público independentemente da vontade da vítima.' },
+        { id:'fc18', syllabusId:'dpp', front:'O que é a cadeia de custódia?', back:'Rastreamento dos vestígios desde a coleta até a análise, garantindo sua integridade e idoneidade (art. 158-A do CPP).' },
+        { id:'fc19', syllabusId:'dpp', front:'Quais são as espécies de prisão processual?', back:'Prisão em flagrante, prisão preventiva e prisão temporária.' },
+        { id:'fc20', syllabusId:'le', front:'Qual lei trata das drogas?', back:'Lei nº 11.343/2006.' },
+        { id:'fc21', syllabusId:'le', front:'Qual lei define os crimes hediondos?', back:'Lei nº 8.072/1990.' },
+        { id:'fc22', syllabusId:'le', front:'Qual é o Estatuto do Desarmamento?', back:'Lei nº 10.826/2003.' },
+        { id:'fc23', syllabusId:'le', front:'Qual lei trata de organização criminosa?', back:'Lei nº 12.850/2013.' },
+        { id:'fc24', syllabusId:'le', front:'Qual lei trata do abuso de autoridade?', back:'Lei nº 13.869/2019.' },
+        { id:'fc25', syllabusId:'far', front:'O que estuda a farmacocinética?', back:'O que o organismo faz com o fármaco: absorção, distribuição, metabolismo e excreção (ADME).' },
+        { id:'fc26', syllabusId:'far', front:'O que estuda a farmacodinâmica?', back:'O que o fármaco faz com o organismo: mecanismo de ação e efeitos.' },
+        { id:'fc27', syllabusId:'far', front:'O que caracteriza a fase I da biotransformação?', back:'Reações de oxidação, redução e hidrólise, mediadas principalmente pelo citocromo P450.' },
+        { id:'fc28', syllabusId:'far', front:'O que caracteriza a fase II da biotransformação?', back:'Reações de conjugação (glicuronidação, sulfatação, acetilação) que aumentam a hidrossolubilidade.' },
+        { id:'fc29', syllabusId:'far', front:'Qual é o mecanismo de ação dos AINEs?', back:'Inibição das ciclo-oxigenases (COX), reduzindo a síntese de prostaglandinas.' },
+        { id:'fc30', syllabusId:'far', front:'Qual é o mecanismo de ação dos betalactâmicos?', back:'Inibição da síntese da parede bacteriana (peptidoglicano).' },
+        { id:'fc31', syllabusId:'far', front:'Qual é o alvo dos benzodiazepínicos?', back:'Potencializam a ação do GABA no receptor GABA-A.' },
+        { id:'fc32', syllabusId:'far', front:'Qual é o receptor principal dos opioides?', back:'O receptor mu (μ).' },
+        { id:'fc33', syllabusId:'far', front:'Qual é o mecanismo da varfarina?', back:'Inibe a vitamina K epóxido redutase, reduzindo os fatores de coagulação dependentes de vitamina K.' },
+        { id:'fc34', syllabusId:'far', front:'Qual é o mecanismo da heparina?', back:'Ativa a antitrombina III, inibindo a trombina e o fator Xa.' },
+        { id:'fc35', syllabusId:'tox', front:'O que é DL50?', back:'Dose que provoca a morte de 50% dos indivíduos expostos.' },
+        { id:'fc36', syllabusId:'tox', front:'Qual o antídoto para organofosforados?', back:'Atropina associada à pralidoxima (oxima).' },
+        { id:'fc37', syllabusId:'tox', front:'Qual o antídoto para intoxicação por paracetamol?', back:'N-acetilcisteína.' },
+        { id:'fc38', syllabusId:'tox', front:'Qual o antídoto para intoxicação por metanol?', back:'Etanol ou fomepizol.' },
+        { id:'fc39', syllabusId:'tox', front:'Qual o antídoto para intoxicação por opioides?', back:'Naloxona.' },
+        { id:'fc40', syllabusId:'tox', front:'Qual o antídoto para intoxicação por benzodiazepínicos?', back:'Flumazenil.' },
+        { id:'fc41', syllabusId:'tox', front:'Qual marcador indica intoxicação por monóxido de carbono?', back:'Carboxihemoglobina.' },
+        { id:'fc42', syllabusId:'tox', front:'Quais amostras são comuns na toxicologia forense?', back:'Sangue, urina, humor vítreo, vísceras e cabelo.' },
+        { id:'fc43', syllabusId:'fg', front:'Qual princípio ativo é obtido da Digitalis purpurea?', back:'Digitálicos (digitoxina e digoxina).' },
+        { id:'fc44', syllabusId:'fg', front:'Qual alcaloide é obtido da Papaver somniferum?', back:'Morfina.' },
+        { id:'fc45', syllabusId:'fg', front:'Qual princípio ativo é obtido da Atropa belladonna?', back:'Atropina.' },
+        { id:'fc46', syllabusId:'fg', front:'Qual princípio ativo é obtido da Cinchona?', back:'Quinina.' },
+        { id:'fc47', syllabusId:'br', front:'O que o método de Kjeldahl determina?', back:'O nitrogênio total, usado para estimar proteínas.' },
+        { id:'fc48', syllabusId:'br', front:'O que o método de Soxhlet determina?', back:'Lipídios (extrato etéreo).' },
+        { id:'fc49', syllabusId:'qb', front:'O que relaciona a Lei de Beer-Lambert?', back:'Absorbância com concentração da amostra e caminho óptico.' },
+        { id:'fc50', syllabusId:'qb', front:'O que é o HPLC?', back:'Cromatografia líquida de alta eficiência, usada para separar e quantificar compostos.' },
+        { id:'fc51', syllabusId:'crim', front:'O que deve ser preservado no local de crime?', back:'A cena e os vestígios, isolando a área para evitar contaminação e perda de provas.' },
+        { id:'fc52', syllabusId:'crim', front:'Qual a finalidade da cadeia de custódia na perícia?', back:'Registrar de forma contínua a posse e a integridade dos vestígios.' },
+        { id:'fc53', syllabusId:'pt', front:'Quando ocorre a crase?', back:'Na fusão da preposição "a" com o artigo "a(s)" ou com pronome demonstrativo.' },
+        { id:'fc54', syllabusId:'pt', front:'O que é coesão textual?', back:'A articulação entre as partes do texto por meio de conectivos e retomadas.' },
+        { id:'fc55', syllabusId:'rl', front:'Qual é a negação de "Todo A é B"?', back:'"Algum A não é B".' },
+        { id:'fc56', syllabusId:'rl', front:'O que é uma proposição lógica?', back:'Uma sentença declarativa que pode ser valorada como verdadeira ou falsa.' },
+        { id:'fc57', syllabusId:'inf', front:'O que o HTTPS garante?', back:'Comunicação criptografada entre cliente e servidor, com confidencialidade e integridade.' },
+        { id:'fc58', syllabusId:'inf', front:'O que é backup incremental?', back:'Cópia apenas dos dados alterados desde o último backup.' },
+        { id:'fc59', syllabusId:'far', front:'Receptores acoplados à proteína G (GPCRs) são a maior superfamília de receptores de membrana, transduzindo sinais via proteínas G α, βγ e efetores segundos mensageiros.', back:'GPCRs acionam vias como cAMP, IP3/DAG e Ca²⁺ dependendo da subunidade α; envolvem troca de GDP por GTP.' },
+        { id:'fc60', syllabusId:'far', front':'Canais iônicos transmembrana podem ser considerados receptores farmacológicos.', back:'Canais iônicos (ex.: Na⁺, K⁺, Ca²⁺) são receptores para fármacos que modulam sua condução; diferem dos GPCRs ao não acoplarem a proteínas G.' },
+        { id:'fc61', syllabusId:'far', front:'A fase I da biotransformação envolve principalmente reações de oxidação, redução e hidrólise, mediadas pelo citocromo P450.', back:'O citocromo P450 (CYP) localizado no RETículo endoplasmático realiza hidrólise, redução, oxidação e desmetilação de fármacos lipofílicos.' },
+        { id:'fc62', syllabusId:'far', front:'A fase II da biotransformação consiste em reações de conjugação (glicuronidação, sulfatação, acetilação) que aumentam a hidrossolubilidade dos fármacos para excreção renal.', back:'Fármacos fases I e II tornam-se mais polar; conjugações comuns: glicuronídeos, sulfatos, acetilas, glicil- glicina.' },
+        { id:'fc63', syllabusId:'far', front:'Os AINEs inibem as ciclo-oxigenases (COX-1 e COX-2), reduzindo a síntese de prostaglandinas, responsáveis pela inflamação, dor e febre.', back:'COX-1 está presente em tecidos normais; COX-2 é induzida na inflamação. Fármacos seletivos COX-2 reduzem efeitos gastrointestinales.' },
+        { id:'fc64', syllabusId:'far', front:'Os betalactâmicos (penicilinas, cefalosporinas) inibem a síntese da parede bacteriana ao bloquear a transpeptidação do peptidoglicano.', back:'A ligação cruzada do peptidoglicano é essencial para a integridade da parede bacteriana; a inibição leva à lise celular.' },
+        { id:'fc65', syllabusId:'far', front':'Os benzodiazepínicos potencializam a ação do GABA no receptor GABA-A, aumentando a abertura do canal de Cl⁻ e promovendo hiperpolarização neuronal.', back:'O complexo GABA-A/benzodiazepínico tem sítios distintos; a potência depende da afinidade pelo sítio alosteric.' },
+        { id:'fc66', syllabusId:'far', front':'O receptor principal dos opioides é o receptor mu (μ), responsável pela analgesia, depressão respiratória e dependência física.', back:'Receptores κ (kappa) produzem discórise e sedação; receptores δ (delta) envolvidos na modulação da dor inflamatória.' },
+        { id:'fc67', syllabusId:'far', front:'A varfarina inibe a vitamina K epóxido redutase (VKOR), reduzindo a síntese dos fatores de coagulação dependentes de vitamina K (FII, FVII, FIX, FX).', back:'O antídoto é a vitamina K1 (fitoquinona); o PCC (plasma rico em fatores de coagulação) também é usado em emergências.' },
+        { id:'fc68', syllabusId:'far', front:'A heparina ativa a antitrombina III, que inibe diretamente a trombina e o fator Xa, exercendo efeito anticoagulante rápido e não dependente de vitamina K.', back:'Não requer monitoramento INR; monitoriza-se APTT; contraindicação em risco de sangramento maior.' },
+        { id:'fc69', syllabusId:'tox', front:'DL50 (Dose Letal 50) é a dose de uma substância que provoca a morte de 50% dos indivíduos expostos em um teste definido (geralmente em animais).', back:'É um parâmetro de toxicidade aguda; quanto menor o DL50, maior a toxicidade; não se aplica diretamente a humanos sem ajustes de espécie.' },
+        { id:'fc70', syllabusId:'tox', front:'Atropina competitivamente bloqueia os receptores muscarínicos, invertendo os efeitos de intoxicação por organofosforados e antimuscarínicos.', back:'Associação com pralidoxima (oxima) which reativa a acetilcolinesterase; doses iniciais de 2-5 mg a cada 5-10 min até 20 mg.' },
+        { id:'fc71', syllabusId:'tox', front:'N-acetilcisteína é o antídoto de escolha para a intoxicação por paracetamol (acetaminofeno), repondo o glutatión hepático e facilitando a excreção conjugada.', back:'Mais eficaz se administrado dentro das primeiras 8-10 h; via oral ou endovenosa; dose inicial 140 mg/kg.' },
+        { id:'fc72', syllabusId:'tox', front:'Etanol e fomepizol (4-metilpiridina) são antídotos para intoxicação por metanol, competindo com a álcool desidrogenase para evitar formação de ácido fórmico tóxico.', back:'Fomepizol é mais caro mas mais seguro; evita cegueira e morte; hemodiálise também indicada.' },
+        { id:'fc73', syllabusId:'tox', front:'Naloxona é um antagonista opioide competitivo que reverte rapidamente os efeitos de overdose de opioides (depressão respiratória, sedação).', back:'Não tem efeito sobre outros fármacos; administração por via endovenosa, intramuscular ou nasal; efeito inicial em 2 min.' },
+        { id:'fc74', syllabusId:'fg', front:'Digitálicos (digitoxina e digoxina) inibem a bomba Na⁺/K⁺-ATPase nos miócárdios, aumentando acontractilidade cardíaca e ralentando o nó sinoatrial.', back:'Indicados para insuficiência cardíaca congestiva e controle da frequência atrial; índice terapêutico estreito requer monitoramento sorológico.' },
+        { id:'fc75', syllabusId:'fg', front:'A morfina é o alcaloide principal obtido da Papaver somniferum (papoula); outros incluem codeína, thebaina e noscapina.', back:'A codeína é um pró-fármaco metabolizado pela CYP2D6 à morfina; usada como analgésico e antitússico.' },
+        { id:'fc76', syllabusId:'fg', front:'A atropina é o alcaloide principal obtido da Atropa belladonna (belladona); também contém hioscina e escopolamina.', back:'Anticolinérgicos usados para bronquospasmo, síndrome do intestino irritável e como midral; efeito antiessecretório.' },
+        { id:'fc77', syllabusId:'fg', front:'A quinina, obtida da Casca dequina (Cinchona officinalis), é o fármaco de escolha para malária sensível à cloroquina; também usada como anestésico local.', back:'Age inibindo a heme polymerase da malária; efeitos colaterais incluem tinnitus e hipoglicemia.' },
+        { id:'fc78', syllabusId:'br', front:'O método de Kjeldahl determina o nitrogênio total na amostra, usado como parâmetro estimativo para cálculo de teor proteico (fator conversão 6,25).', back:'Princípio: digestão ácida com H₂SO₄, destilação em borato de sódio, titulometria com NaOH; padrão AOAC.' },
+        { id:'fc79', syllabusId:'br', front:'O método de Soxhlet extrai lipídios (extrato etéreo) de amostras sólidas em ciclos de percolação contínua com solvente fresco.', back:'Princípio: o solvente (petróleo/éter de petróleo) dissolve lipídios; o aparelho permite refluxo contínuo por horas.' },
+        { id:'fc80', syllabusId:'qb', front:'A Lei de Beer-Lambert estabelece a relação direta entre a absorbância (A), a concentração (c) do absorvente e o caminho óptico (l): A = ε·c·l.', back:'ε é o coeficiente de extinção molar; a lei assume radiação monocromática, soluções não saturadas e caminho ótico constante.' },
+        { id:'fc81', syllabusId:'qb', front:'O HPLC (High Performance Liquid Chromatography) separa, identifica e quantifica componentes de uma mistura usando uma fase móvel fluida e uma fase estacionária por partição ou adsorção.', back:'Tipos: HPLC normal (fase polar móvel, fase não polar estacionária) e reversed-phase (oposta); detector UV ou MS acoplado.' },
+        { id:'fc82', syllabusId:'crim', front:'A cena do crime deve ser isolada, preservada e fotografada/filmada antes de qualquer movimentação de vestígios, para evitar contaminação ou perda de provas.', back:'Rede de isolamento, uso de EPI, boletim de ocorrência preliminar; cadeia de custódia desde a coleta à análise laboratorial.' },
+        { id:'fc83', syllabusId:'crim', front':'A cadeia de custódia na perícia criminal registra de forma contínua a posse e a integridade dos vestígios desde a coleta até a análise laboratorial, garantindo sua admissibilidade judicial.', back:'Cada transferência deve ser documentada (data, hora, responsável, finalidade); ausência de registros pode invalidar as evidências.' },
+        { id:'fc84', syllabusId:'pt', front:'A crase ocorre na fusão da preposição "a" com artigo masculino ou feminino (a + a = à; a + os = aos), regra ortográfica da língua portuguesa.', back:'Exemplos: à casa, aos alunos; não se confunde com "a" (artigo) ou "as" (pronome demonstrativo)' },
+        { id:'fc85', syllabusId:'rl', front:'A negação da proposição "Todo A é B" é "Algum A não é B", seguindo a lógica quantificacional de oposição de quantificadores universais e particulares.', back:'Em lógica de predicados: ¬∀x(Ax → Bx) ≡ ∃x(Ax ∧ ¬Bx); traduz-se "não todo A é B".' },
+        { id:'fc86', syllabusId:'inf', front:'O protocolo HTTPS fornece comunicação criptografada entre cliente e servidor, garantindo confidencialidade (via criptografia assimétrica/simétrica), integridade (hash) e autenticação (certificado X.509).', back:'O handshake TLS estabelece chaves simétricas para criptografia de sessão; o certificado válido evita ataques MITM.' }
+      ],
+questions: [
+        { id:'q01', syllabusId:'dc', stem:'São fundamentos da República Federativa do Brasil, EXCETO:', options:['Soberania','Cidadania','Dignidade da pessoa humana','Separação dos Poderes'], answer:3, explanation:'A separação dos Poderes (art. 60, §4º da CF) é cláusula pétrea de controle interno, não figurece entre os fundamentos nacionais do art. 1º, que são soberania, cidadania, dignidade da pessoa humana e valores sociais do trabalho e da livre iniciativa.' },
+        { id:'q02', syllabusId:'dc', stem:'O remédio constitucional adequado para proteger a liberdade de locomoção é:', options:['Habeas data','Mandado de segurança','Habeas corpus','Ação popular'], answer:2, explanation:'O habeas corpus (art. 5º, LXH, CF) tem por finalidade garantir a liberdade de locomoção contra ilegalidade ou abuso de poder estatal.' },
+        { id:'q03', syllabusId:'da', stem:'São princípios expressos da Administração Pública no art. 37 da CF, EXCETO:', options:['Legalidade','Impessoalidade','Razoabilidade','Publicidade'], answer:2, explanation:'A razoabilidade, embora implícita na boa-fé objetiva, não consta entre os princípios expressos do art. 37, que são legalidade, impessoalidade, moralidade, publicidade e eficiência (LIMPE).' },
+        { id:'q04', syllabusId:'da', stem:'A Lei nº 14.133/2021 dispõe sobre:', options:['Licitações e contratos administrativos','Improbidade administrativa','Processo administrativo disciplinar','Crimes de responsabilidade'], answer:0, explanation:'A Lei nº 14.133/2021 é a nova Lei de Licitações e Contratos Administrativos, que revogou a Lei nº 8.666/1991.' },
+        { id:'q05', syllabusId:'dp', stem:'Segundo o princípio da legalidade penal, não há crime sem:', options:['Sentença judicial','Lei anterior que o defina','Denúncia do Ministério Público','Inquérito policial'], answer:1, explanation:'Nullum crimen sine lege (art. 5º, II, CF): exige lei anterior que defina o tipo penal e a respectiva cominação.' },
+        { id:'q06', syllabusId:'dp', stem:'A lei penal mais benéfica:', options:['Aplica-se apenas a fatos futuros','Retroage em benefício do réu','Nunca retroage','Só retroage após o trânsito em julgado'], answer:1, explanation:'Art. 2º do CP: a lei posterior mais benéfica aplica-se aos fatos anteriores, retroagindo os efeitos penais em favor do réu.' },
+        { id:'q07', syllabusId:'dpp', stem:'O inquérito policial é:', options:['Peça acusatória obrigatória','Procedimento administrativo, inquisitivo e dispensável','Fase judicial contraditória','Condição de procedibilidade da ação penal pública incondicionada'], answer:1, explanation:'O inquérito policial é procedimento administrativo inquisitivo (art. 151 do CPP), dispensável para a promoção da ação penal pública incondicionada.' },
+        { id:'q08', syllabusId:'dpp', stem:'A cadeia de custódia está prevista no:', options:['Código Civil','Código Penal','Código de Processo Penal (art. 158-A)','Código Tributário Nacional'], answer:2, explanation:'A disciplina da cadeia de custódia encontra-se no art. 158-A do CPP, que rege o rastreamento dos vestígios da coleta à análise.' },
+        { id:'q09', syllabusId:'le', stem:'A Lei nº 11.343/2006 dispõe sobre:', options:['Crimes hediondos','Drogas (política e crimes)','Desarmamento','Organizações criminosas'], answer:1, explanation:'A Lei nº 11.343/2006 é a Política Nacional de Drogas, que estabelece as diretrizes e bases para as ações concernentes às drogas.' },
+        { id:'q10', syllabusId:'le', stem:'O crime de tortura é tratado pela Lei:', options:['8.072/1990','9.455/1997','9.613/1998','12.850/2013'], answer:1, explanation:'A Lei nº 9.455/1997 define o crime de tortura e as respectivas penas (art. 1º).' },
+        { id:'q11', syllabusId:'far', stem:'A farmacocinética estuda:', options:['O mecanismo de ação dos fármacos','O que o organismo faz com o fármaco (ADME)','Apenas interações medicamentosas','Apenas efeitos colaterais'], answer:1, explanation:'Farmacocinética: estudo do que o organismo faz com o fármaco, englobando absorção, distribuição, metabolismo e excreção (ADME).' },
+        { id:'q12', syllabusId:'far', stem:'Os AINEs atuam principalmente inibindo:', options:['Canais de cálcio','Ciclo-oxigenases (COX)','Receptores opioides','Bombas de prótons'], answer:1, explanation:'AINEs (anti-inflamatórios não esteroides) inibem as ciclo-oxigenases (COX-1 e COX-2), reduzindo a síntese de prostaglandinas.' },
+        { id:'q13', syllabusId:'far', stem:'A varfarina exerce ação anticoagulante inibindo:', options:['A trombina diretamente','A vitamina K epóxido redutora','A antitrombina III','A ciclo-oxigenase'], answer:1, explanation:'A varfarina inibe a vitamina K epóxido redutase ( VKOR), impedindo a carboxilação dos fatores de coagulação dependentes de vitamina K.' },
+        { id:'q14', syllabusId:'tox', stem:'O antídoto utilizado na intoxicação por paracetamol é:', options:['Naloxona','N-acetilcisteína','Flumazenil','Atropina'], answer:1, explanation:'A N-acetilcisteína repõe o glutatión hepático e é o antídoto de escolha para a intoxicação aguda por paracetamol.' },
+        { id:'q15', syllabusId:'tox', stem:'Na intoxicação por organofosforados, utiliza-se:', options:['Atropina (e pralidoxima)','Etanol','Deferoxamina','Hidroxocobalamina'], answer:0, explanation:'Associação de atropina (blocka efeitos muscarínicos) com pralidoxima (rema a acetilcolinesterase) é o protocolo padrão.' },
+        { id:'q16', syllabusId:'tox', stem:'A intoxicação por monóxido de carbono pode ser avaliada pela dosagem de:', options:['Meta-hemoglobina','Carboxihemoglobina','Bilirrubina','Creatinina'], answer:1, explanation:'A carboxihemoglobina (COHgb) formação é o marcador bioquímico padrão para diagnóstico de intoxicação por CO.' },
+        { id:'q17', syllabusId:'fg', stem:'A espécie Papaver somniferum é fonte do alcaloide:', options:['Quinina','Morfina','Atropina','Digitoxina'], answer:1, explanation:'A Papaver somniferum (papoula) é a principal fonte natural de morfina e outros opioides fenantrenos.' },
+        { id:'q18', syllabusId:'br', stem:'O método de Kjeldahl é utilizado para determinar:', options:['Lipídios','Proteínas (nitrogênio total)','Cinzas','Umidade'], answer:1, explanation:'O método de Kjeldahl quantifica o nitrogênio total da amostra, sendo usado como parâmetro estimativo de teor proteico.' },
+        { id:'q19', syllabusId:'qb', stem:'A Lei de Beer-Lambert relaciona a absorbância com:', options:['Temperatura e pressão','Concentração e caminho óptico','pH e condutividade','Massa molecular e densidade'], answer:1, explanation:'A lei estabelece a relação direta entre a absorbância, a concentração do absorvente e o caminho óptico percorrido.' },
+        { id:'q20', syllabusId:'crim', stem:'Preservar o local de crime é essencial para:', options:['Acelerar o julgamento','Evitar a contaminação e a perda de vestígios','Dispensar a perícia','Reduzir o inquérito'], answer:1, explanation:'A preservação da cena do crime ved a contaminação, alteração ou perda de vestígios técnicos, indispensáveis à perícia criminal.' },
+        { id:'q21', syllabusId:'rl', stem:'A negação da proposição "Todo A é B" é:', options:['Nenhum A é B','Algum A não é B','Todo B é A','Algum B é A'], answer:1, explanation:'A negação universal ("todo") particulariza para "existe ao menos um A que não é B", seguindo a lógica quantificacional de oposição.' },
+        { id:'q22', syllabusId:'pt', stem:'O emprego da crase ocorre, tipicamente, na fusão de:', options:['Preposição "a" com artigo "a(s)"','Preposição "de" com artigo','Verbo com preposição','Pronome com conjunção'], answer:0, explanation:'A crase é a regra de ortografia que determina a junção da preposição "a" com artigo femininoso "a(s)" (ex.: à casa, às alunos).' },
+        { id:'q23', syllabusId:'inf', stem:'O protocolo HTTPS tem como principal função:', options:['Aumentar a velocidade da rede','Garantir comunicação criptografada entre cliente e servidor','Bloquear anúncios','Compactar arquivos'], answer:1, explanation:'O HTTPS (HTTP over SSL/TLS) fornece criptografia, autenticação e integridade da comunicação entre cliente e servidor.' }
+      ]
+    };
+
+    var Persistence = (function(){
+      var KEY = 'reels_concurso_v1';
+      var backend = 'memory';
+      var mem = null;
+
+      function probe(storage){
+        try{
+          var k = '__probe__';
+          storage.setItem(k, '1');
+          var ok = storage.getItem(k) === '1';
+          storage.removeItem(k);
+          return ok;
+        }catch(e){ return false; }
+      }
+      function init(){
+        if(typeof localStorage !== 'undefined' && probe(localStorage)) backend = 'localStorage';
+        else if(typeof sessionStorage !== 'undefined' && probe(sessionStorage)) backend = 'sessionStorage';
+        else backend = 'memory';
+        return backend;
+      }
+      var isPersistent = function(){ return backend !== 'memory'; };
+      function exportJson(){
+        var data = Persistence.load();
+        return { data: data, persistent: isPersistent() };
+      }
+      function importJson(obj){
+        var version = (obj && obj.version) ? Number(obj.version) : null;
+        if(version !== 1 && version !== null) return false;
+        Persistence.save(obj);
+        return true;
+      }
+      function store(){
+        if(backend === 'localStorage') return localStorage;
+        if(backend === 'sessionStorage') return sessionStorage;
+        return null;
+      }
+      function save(obj){
+        var s = store();
+        if(!s){ mem = obj; return false; }
+        try{ s.setItem(KEY, JSON.stringify(obj)); return true; }
+        catch(e){ mem = obj; return false; }
+      }
+      function load(){
+        var s = store();
+        if(!s) return mem;
+        try{
+          var raw = s.getItem(KEY);
+          return raw ? JSON.parse(raw) : null;
+        }catch(e){ return null; }
+      }
+      return {
+        init: init, save: save, load: load,
+        backend: function(){ return backend; },
+        isPersistent: function(){ return backend !== 'memory'; }
+      };
+    })();
+
+    var Store = (function(){
+      var state = null;
+      var listeners = [];
+      var persist = U.debounce(function(){ Persistence.save(state); }, 150);
+
+      function defaults(){
+        return {
+          version: 1,
+          profile: { name:'', examDate:null, dailyGoalMinutes:120, weekdayOnly:[1,2,3,4,5,6], startDate:null },
+          syllabus: [], runs: [], cards: {}, progress: {}, weakItems: {},
+          content: { flashcards: [], questions: [] },
+          activeRun: null,
+          streak: { current:0, longest:0, lastStudyDate:null },
+          settings: { sound:true, theme:'dark', cardSpeed:1, questionCountPerBlock:4, passThreshold:60 }
+        };
+      }
+      function migrate(saved){
+        var base = defaults();
+        if(!saved || typeof saved !== 'object') return base;
+        var out = Object.assign(base, saved);
+        out.profile = Object.assign(defaults().profile, saved.profile || {});
+        out.streak = Object.assign(defaults().streak, saved.streak || {});
+        out.settings = Object.assign(defaults().settings, saved.settings || {});
+        out.content = Object.assign(defaults().content, saved.content || {});
+        return out;
+      }
+      function init(){ state = migrate(Persistence.load()); return state; }
+      function get(){ return state; }
+      function emit(){
+        listeners.slice().forEach(function(fn){
+          try{ fn(state); }catch(e){ console.error(e); }
+        });
+      }
+      function set(patch){ Object.assign(state, patch); emit(); persist(); }
+      function update(fn){ fn(state); emit(); persist(); }
+      function subscribe(fn){
+        listeners.push(fn);
+        return function(){
+          var i = listeners.indexOf(fn);
+          if(i >= 0) listeners.splice(i,1);
+        };
+      }
+      return { init:init, get:get, set:set, update:update, subscribe:subscribe, defaults:defaults };
+    })();
+
+    var Data = (function(){
+      function state(){ return Store.get(); }
+      function allFlashcards(){ return SEED.flashcards.concat(state().content.flashcards || []); }
+      function allQuestions(){ return SEED.questions.concat(state().content.questions || []); }
+      function countFlashcards(sid){
+        var n = 0;
+        allFlashcards().forEach(function(c){ if(c.syllabusId === sid) n++; });
+        return n;
+      }
+      function countQuestions(sid){
+        var n = 0;
+        allQuestions().forEach(function(q){ if(q.syllabusId === sid) n++; });
+        return n;
+      }
+      function progressPct(sid){
+        var p = state().progress[sid];
+        if(!p || !p.total) return 0;
+        return Math.round((p.correct / p.total) * 100);
+      }
+      function node(id){
+        var arr = state().syllabus || [];
+        for(var i=0;i<arr.length;i++){ if(arr[i].id === id) return arr[i]; }
+        return null;
+      }
+      function minutesToday(){
+        var today = U.todayStr();
+        var total = 0;
+        (state().runs || []).forEach(function(r){
+          if(r.endedAt && U.todayStr(new Date(r.endedAt)) === today){
+            total += Math.max(0, (r.endedAt - r.startedAt) / 60000);
+          }
+        });
+        return Math.round(total);
+      }
+      function validateContent(obj){
+        var errors = [];
+        var sylIds = {};
+        (state().syllabus || []).forEach(function(n){ sylIds[n.id] = true; });
+        if(obj && obj.syllabus){
+          if(!Array.isArray(obj.syllabus)) errors.push('"syllabus" deve ser uma lista.');
+          else obj.syllabus.forEach(function(n, i){
+            if(!n || !n.id || !n.name) errors.push('syllabus[' + i + '] sem "id" ou "name".');
+            else sylIds[n.id] = true;
+          });
+        }
+        if(obj && obj.flashcards){
+          if(!Array.isArray(obj.flashcards)) errors.push('"flashcards" deve ser uma lista.');
+          else obj.flashcards.forEach(function(c, i){
+            if(!c || !c.id || !c.front || !c.back) errors.push('flashcards[' + i + '] precisa de id, front e back.');
+            else if(!sylIds[c.syllabusId]) errors.push('flashcards[' + i + '] usa syllabusId inexistente: ' + c.syllabusId);
+          });
+        }
+        if(obj && obj.questions){
+          if(!Array.isArray(obj.questions)) errors.push('"questions" deve ser uma lista.');
+          else obj.questions.forEach(function(q, i){
+            if(!q || !q.id || !q.stem) errors.push('questions[' + i + '] precisa de id e stem.');
+            else if(!Array.isArray(q.options) || q.options.length < 2) errors.push('questions[' + i + '] precisa de ao menos 2 opções.');
+            else if(typeof q.answer !== 'number' || q.answer < 0 || q.answer >= q.options.length) errors.push('questions[' + i + '] tem answer inválido.');
+            else if(!sylIds[q.syllabusId]) errors.push('questions[' + i + '] usa syllabusId inexistente: ' + q.syllabusId);
+          });
+        }
+        if(!obj || (!obj.syllabus && !obj.flashcards && !obj.questions)){
+          errors.push('O JSON precisa conter "syllabus", "flashcards" ou "questions".');
+        }
+        return errors;
+      }
+      function importContent(obj){
+        var errors = validateContent(obj);
+        var added = { syllabus:0, flashcards:0, questions:0 };
+        if(errors.length) return { ok:false, errors:errors, added:added };
+        Store.update(function(s){
+          if(obj.syllabus){
+            var haveS = {};
+            s.syllabus.forEach(function(n){ haveS[n.id] = true; });
+            obj.syllabus.forEach(function(n){ if(!haveS[n.id]){ s.syllabus.push(n); haveS[n.id] = true; added.syllabus++; } });
+          }
+          if(obj.flashcards){
+            var haveF = {};
+            s.content.flashcards.forEach(function(c){ haveF[c.id] = true; });
+            obj.flashcards.forEach(function(c){ if(!haveF[c.id]){ s.content.flashcards.push(c); haveF[c.id] = true; added.flashcards++; } });
+          }
+          if(obj.questions){
+            var haveQ = {};
+            s.content.questions.forEach(function(q){ haveQ[q.id] = true; });
+            obj.questions.forEach(function(q){ if(!haveQ[q.id]){ s.content.questions.push(q); haveQ[q.id] = true; added.questions++; } });
+          }
+        });
+        return { ok:true, errors:[], added:added };
+      }
+      return {
+        allFlashcards: allFlashcards, allQuestions: allQuestions,
+        countFlashcards: countFlashcards, countQuestions: countQuestions,
+        progressPct: progressPct, node: node, minutesToday: minutesToday, validateContent: validateContent, importContent: importContent
+      };
+    })();
+
+    var Planner = (function(){
+      function totalItems(){ return Data.allFlashcards().length + Data.allQuestions().length; }
+      function studiedItems(){
+        var s = Store.get();
+        var t = 0;
+        Object.keys(s.progress || {}).forEach(function(k){ t += (s.progress[k].seen || 0); });
+        return t;
+      }
+      function runsPerDay(){
+        var s = Store.get();
+        var perRun = 30;
+        return Math.max(1, Math.round((s.profile.dailyGoalMinutes || 120) / perRun));
+      }
+      function schedule(){
+        var s = Store.get();
+        var exam = U.parseDate(s.profile.examDate);
+        var start = U.parseDate(s.profile.startDate) || U.parseDate(U.todayStr());
+        var now = new Date();
+        if(!exam) return { configured:false };
+        var totalDays = Math.max(1, Math.round((exam - start) / 86400000));
+        var elapsedDays = Math.max(0, Math.round((now - start) / 86400000));
+        var remainDays = Math.max(0, Math.round((exam - now) / 86400000));
+        var total = totalItems();
+        var studied = studiedItems();
+        var weeksRemain = Math.max(0.1, remainDays / 7);
+        var requiredPerWeek = Math.ceil(total / weeksRemain);
+        var elapsedFrac = Math.min(1, elapsedDays / totalDays);
+        var expected = Math.round(total * elapsedFrac);
+        var behind = studied < expected * 0.85;
+        return {
+          configured:true, exam:exam, start:start, now:now,
+          totalDays:totalDays, elapsedDays:elapsedDays, remainDays:remainDays,
+          total:total, studied:studied, weeksRemain:weeksRemain,
+          requiredPerWeek:requiredPerWeek, expected:expected, behind:behind,
+          progressPct: total ? Math.min(100, Math.round((studied / total) * 100)) : 0
+        };
+      }
+      function disciplinePlan(){
+        var s = Store.get();
+        var sch = schedule();
+        if(!sch.configured) return [];
+        var nodes = s.syllabus.slice().sort(function(a,b){ return (a.order || 0) - (b.order || 0); });
+        var totalWeight = nodes.reduce(function(a,n){ return a + (n.weight || 1); }, 0) || 1;
+        var cum = 0;
+        return nodes.map(function(n){
+          cum += (n.weight || 1);
+          var frac = cum / totalWeight;
+          var target = U.addDays(sch.start, Math.round(sch.totalDays * frac));
+          var p = s.progress[n.id] || { seen:0 };
+          var count = Data.countFlashcards(n.id) + Data.countQuestions(n.id);
+          var studied = p.seen || 0;
+          var pct = count ? Math.min(100, Math.round((studied / count) * 100)) : 0;
+          return { node:n, target:target, pct:pct, count:count, studied:studied };
+        });
+      }
+      function weeklyDistribution(){
+        var s = Store.get();
+        var active = s.profile.weekdayOnly || [1,2,3,4,5,6];
+        var rpd = runsPerDay();
+        var labels = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+        return labels.map(function(lb, i){
+          var on = active.indexOf(i) >= 0;
+          return { dow:i, label:lb, runs: on ? rpd : 0, active:on };
+        });
+      }
+      return { totalItems:totalItems, studiedItems:studiedItems, runsPerDay:runsPerDay, schedule:schedule, disciplinePlan:disciplinePlan, weeklyDistribution:weeklyDistribution };
+    })();
+
+    var Scheduler = (function(){
+      function nodeScore(node, counts, lastId){
+        var s = Store.get();
+        var w = s.weakItems && s.weakItems[node.id];
+        var weakScore = (w && w.kind === 'node') ? (w.score || 0) : 0;
+        var p = s.progress[node.id] || { seen:0 };
+        var seen = p.seen || 0;
+        var count = counts[node.id] || 0;
+        var coverage = count ? Math.min(1, seen / count) : 0;
+        var priority = 1 - coverage;
+        var due = 0;
+        var c = (s.cards || {})[node.id];
+        if(c && c.dueAt){ due = Math.max(0, (Date.now() - c.dueAt) / 86400000); }
+        var delay = seen === 0 ? 3 : 0;
+        var score = (node.weight || 1) * (1 + weakScore * 2 + due * 0.5 + priority + delay * 0.2);
+        if(node.id === lastId) score = 0;
+        return score;
+      }
+      function choose(rng, counts, lastId, minCards){
+        var s = Store.get();
+        var eligible = s.syllabus.filter(function(n){ return (counts[n.id] || 0) > 0; });
+        var strong = eligible.filter(function(n){ return (counts[n.id] || 0) >= (minCards || 0); });
+        var base = strong.length ? strong : eligible;
+        var pool = base.filter(function(n){ return n.id !== lastId; });
+        if(!pool.length) pool = base;
+        if(!pool.length) return null;
+        var scored = pool.map(function(n){ return { node:n, score: Math.max(0.0001, nodeScore(n, counts, lastId)) }; });
+        var total = scored.reduce(function(a,x){ return a + x.score; }, 0);
+        var r = rng() * total;
+        for(var i=0;i<scored.length;i++){ r -= scored[i].score; if(r <= 0) return scored[i].node; }
+        return scored[scored.length-1].node;
+      }
+      return { choose:choose, nodeScore:nodeScore };
+    })();
+
+    var Reviewer = (function(){
+      function computeAndStore(run){
+        var threshold = Store.get().settings.passThreshold || 60;
+        var byNode = {}, byQuestion = {};
+        (run.answers || []).forEach(function(a){
+          if(!byNode[a.syllabusId]) byNode[a.syllabusId] = { total:0, correct:0 };
+          byNode[a.syllabusId].total++;
+          if(a.correct) byNode[a.syllabusId].correct++;
+          if(a.kind === 'question'){
+            if(!byQuestion[a.refId]) byQuestion[a.refId] = { total:0, correct:0, syllabusId:a.syllabusId };
+            byQuestion[a.refId].total++;
+            if(a.correct) byQuestion[a.refId].correct++;
+          }
+        });
+
+        Store.update(function(st){
+          var w = st.weakItems || (st.weakItems = {});
+          Object.keys(byNode).forEach(function(id){
+            var d = byNode[id];
+            var acc = d.total ? d.correct / d.total : 1;
+            var node = Data.node(id);
+            var weight = node ? (node.weight || 1) : 1;
+            var p = st.progress[id] || { seen:0, correct:0, total:0, streak:0 };
+            p.seen += d.total;
+            p.correct += d.correct;
+            p.total += d.total;
+            st.progress[id] = p;
+            if(acc * 100 < threshold){
+              var prev = (w[id] && w[id].kind === 'node') ? w[id] : { score:0, reviews:0 };
+              w[id] = {
+                score: (1 - acc) + (prev.score || 0) * 0.5 + weight * 0.05,
+                lastSeenAt: Date.now(),
+                reviews: (prev.reviews || 0) + 1,
+                kind: 'node',
+                ttl: 3
+              };
+            }else if(w[id] && w[id].kind === 'node'){
+              w[id].score = Math.max(0, (w[id].score || 0) * 0.6);
+              if(w[id].score < 0.05) delete w[id];
+            }
+          });
+          Object.keys(byQuestion).forEach(function(qid){
+            var d = byQuestion[qid];
+            var prev = (w[qid] && w[qid].kind === 'question') ? w[qid] : { score:0, reviews:0 };
+            if(d.correct < d.total){
+              w[qid] = {
+                score: (prev.score || 0) + (d.total - d.correct),
+                lastSeenAt: Date.now(),
+                reviews: (prev.reviews || 0) + 1,
+                kind: 'question',
+                ttl: 3,
+                syllabusId: d.syllabusId
+              };
+            }else if(w[qid] && w[qid].kind === 'question'){
+              w[qid].score = Math.max(0, (w[qid].score || 0) - 1);
+              if(w[qid].score <= 0) delete w[qid];
+            }
+          });
+        });
+      }
+      return { computeAndStore: computeAndStore };
+    })();
+
+    var Router = (function(){
+      var current = 'home';
+      var routes = {};
+      var cleanup = null;
+      function register(name, fn){ routes[name] = fn; }
+      function onCleanup(fn){ cleanup = fn; }
+      function go(name, params){
+        if(!routes[name]) name = 'home';
+        if(cleanup){ try{ cleanup(); }catch(e){ console.error(e); } cleanup = null; }
+        current = name;
+        render(params);
+      }
+      function get(){ return current; }
+      function render(params){
+        var vp = document.getElementById('viewport');
+        vp.scrollTop = 0;
+        vp.innerHTML = '';
+        (routes[current] || routes.home)(vp, params);
+        updateTabbar();
+        updateHeader();
+      }
+      return { register:register, go:go, get:get, render:render, onCleanup:onCleanup };
+    })();
+
+    var Audio = (function(){
+      var ctx = null;
+      function ensure(){
+        if(ctx) return ctx;
+        try{
+          var AC = window.AudioContext || window.webkitAudioContext;
+          if(AC) ctx = new AC();
+        }catch(e){ ctx = null; }
+        return ctx;
+      }
+      function beep(freq, dur, type){
+        if(!Store.get().settings.sound) return;
+        var c = ensure();
+        if(!c) return;
+        try{
+          var o = c.createOscillator(), g = c.createGain();
+          o.type = type || 'sine';
+          o.frequency.value = freq;
+          o.connect(g); g.connect(c.destination);
+          var t = c.currentTime;
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(0.12, t + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+          o.start(t); o.stop(t + dur + 0.03);
+        }catch(e){}
+      }
+      return { correct: function(){ beep(880, 0.12, 'sine'); } };
+    })();
+
+    var Engine = (function(){
+      var P = { warmupCards:4, mainCards:8, blockSize:4, reinforceCards:4, reinforceQuestions:4 };
+
+      function shuffle(arr, rng){
+        var a = arr.slice();
+        for(var i=a.length-1;i>0;i--){ var j=Math.floor(rng()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+        return a;
+      }
+      function byNode(items, nodeId){ return items.filter(function(x){ return x.syllabusId === nodeId; }); }
+      function chooseMain(rng, counts){
+        var s = Store.get();
+        var lastId = s.runs.length ? (s.runs[s.runs.length-1].mainSyllabusId || null) : null;
+        return Scheduler.choose(rng, counts, lastId, P.blockSize);
+      }
+      function weakNodeIds(){
+        var w = Store.get().weakItems || {};
+        return Object.keys(w).filter(function(id){ return w[id] && w[id].kind === 'node' && w[id].score > 0; })
+          .sort(function(a,b){ return w[b].score - w[a].score; });
+      }
+      function weakQuestionIds(){
+        var w = Store.get().weakItems || {};
+        return Object.keys(w).filter(function(id){ return w[id] && w[id].kind === 'question' && w[id].score > 0; })
+          .sort(function(a,b){ return w[b].score - w[a].score; });
+      }
+      function takeCards(nodeId, n, rng, used){
+        if(!nodeId || n <= 0) return [];
+        var cards = byNode(Data.allFlashcards(), nodeId).filter(function(c){ return !used[c.id]; });
+        cards = shuffle(cards, rng).slice(0, n);
+        cards.forEach(function(c){ used[c.id] = true; });
+        return cards;
+      }
+      function takeQuestions(nodeIds, n, rng, used, weakQIds){
+        if(n <= 0) return [];
+        var out = [];
+        var all = Data.allQuestions();
+        if(weakQIds && weakQIds.length){
+          var map = {};
+          all.forEach(function(q){ map[q.id] = q; });
+          for(var i=0;i<weakQIds.length && out.length<n;i++){
+            var q = map[weakQIds[i]];
+            if(q && !used[q.id]){ out.push(q); used[q.id] = true; }
+          }
+        }
+        if(out.length < n){
+          var pool = [];
+          nodeIds.forEach(function(id){ pool = pool.concat(byNode(all, id)); });
+          pool = shuffle(pool, rng);
+          for(var j=0;j<pool.length && out.length<n;j++){
+            if(!used[pool[j].id]){ out.push(pool[j]); used[pool[j].id] = true; }
+          }
+        }
+        return out;
+      }
+      function build(){
+        var rng = U.mulberry32((Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0);
+        var s = Store.get();
+        var allCards = Data.allFlashcards();
+        var counts = {};
+        allCards.forEach(function(c){ counts[c.syllabusId] = (counts[c.syllabusId] || 0) + 1; });
+        var main = chooseMain(rng, counts);
+        if(!main) return null;
+        var usedCards = {}, usedQs = {};
+        var queue = [];
+        var weak = weakNodeIds();
+        var weakQs = weakQuestionIds();
+
+        var warmSrc = weak[0] || null;
+        if(!warmSrc){
+          var others = s.syllabus.filter(function(n){ return n.id !== main.id && (counts[n.id] || 0) > 0; });
+          if(others.length) warmSrc = others[Math.floor(rng() * others.length)].id;
+        }
+        var warm = takeCards(warmSrc, P.warmupCards, rng, usedCards);
+        if(warm.length < P.warmupCards){
+          warm = warm.concat(takeCards(main.id, P.warmupCards - warm.length, rng, usedCards));
+        }
+        warm.forEach(function(c){ queue.push({ kind:'card', refId:c.id, syllabusId:c.syllabusId }); });
+
+        var mainCards = takeCards(main.id, P.mainCards, rng, usedCards);
+        var blocks = 0;
+        for(var i=0;i<mainCards.length;i++){
+          queue.push({ kind:'card', refId:mainCards[i].id, syllabusId:mainCards[i].syllabusId });
+          if((i+1) % P.blockSize === 0){
+            takeQuestions([main.id].concat(weak), P.blockSize, rng, usedQs, weakQs).forEach(function(q){
+              queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
+            });
+            blocks++;
+          }
+        }
+        if(blocks === 0 && mainCards.length){
+          takeQuestions([main.id].concat(weak), P.blockSize, rng, usedQs, weakQs).forEach(function(q){
+            queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
+          });
+        }
+
+        if(weak.length || weakQs.length){
+          var wsrc = weak.length ? weak[0] : main.id;
+          takeCards(wsrc, P.reinforceCards, rng, usedCards).forEach(function(c){
+            queue.push({ kind:'card', refId:c.id, syllabusId:c.syllabusId });
+          });
+          takeQuestions(weak.length ? weak : [main.id], P.reinforceQuestions, rng, usedQs, weakQs).forEach(function(q){
+            queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
+          });
+        }
+
+        var weakMap = Store.get().weakItems || {};
+        var reinforced = {};
+        queue.forEach(function(it){
+          if(weakMap[it.refId] && weakMap[it.refId].kind === 'question') reinforced[it.refId] = true;
+          if(weakMap[it.syllabusId] && weakMap[it.syllabusId].kind === 'node') reinforced[it.syllabusId] = true;
+        });
+
+        return { queue: queue, mainSyllabusId: main.id, reinforcedIds: Object.keys(reinforced) };
+      }
+      function decayWeak(ids){
+        if(!ids || !ids.length) return;
+        Store.update(function(st){
+          var w = st.weakItems || {};
+          ids.forEach(function(id){
+            if(w[id]){ w[id].ttl = (w[id].ttl || 0) - 1; if(w[id].ttl <= 0) delete w[id]; }
+          });
+        });
+      }
+      function beginRun(queue, mainId, reinforcedIds){
+        var run = {
+          id: U.uid(),
+          startedAt: Date.now(),
+          endedAt: null,
+          mainSyllabusId: mainId || null,
+          queue: queue,
+          index: 0,
+          answers: [],
+          score: 0,
+          status: 'active',
+          reinforcedIds: reinforcedIds || []
+        };
+        Store.set({ activeRun: run });
+        Router.go('run');
+      }
+      function start(){
+        var built = build();
+        if(!built || !built.queue.length){ toast('Sem conteúdo suficiente para iniciar a run.'); return; }
+        decayWeak(built.reinforcedIds);
+        beginRun(built.queue, built.mainSyllabusId, built.reinforcedIds);
+      }
+      function startReinforce(){
+        var rng = U.mulberry32((Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0);
+        var weak = weakNodeIds();
+        var weakQs = weakQuestionIds();
+        if(!weak.length && !weakQs.length){ toast('Nenhum item fraco para reforçar agora.'); return; }
+        var usedCards = {}, usedQs = {};
+        var queue = [];
+        weak.forEach(function(id){
+          takeCards(id, 3, rng, usedCards).forEach(function(c){
+            queue.push({ kind:'card', refId:c.id, syllabusId:c.syllabusId });
+          });
+        });
+        takeQuestions(weak, 8, rng, usedQs, weakQs).forEach(function(q){
+          queue.push({ kind:'question', refId:q.id, syllabusId:q.syllabusId });
+        });
+        if(!queue.length){ toast('Nenhum item fraco disponível.'); return; }
+        beginRun(queue, weak[0] || null, weak.concat(weakQs));
+      }
+      function updateStreak(st){
+        var today = U.todayStr();
+        if(st.streak.lastStudyDate === today) return;
+        if(st.streak.lastStudyDate){
+          var d1 = new Date(st.streak.lastStudyDate + 'T00:00:00');
+          var d2 = new Date(today + 'T00:00:00');
+          var diff = Math.round((d2 - d1) / 86400000);
+          st.streak.current = diff === 1 ? (st.streak.current || 0) + 1 : 1;
+        }else{
+          st.streak.current = 1;
+        }
+        st.streak.lastStudyDate = today;
+        st.streak.longest = Math.max(st.streak.longest || 0, st.streak.current);
+      }
+      function finish(){
+        Store.update(function(st){
+          var r = st.activeRun;
+          if(!r) return;
+          r.status = 'done';
+          r.endedAt = Date.now();
+          r.accuracy = r.answers.length ? Math.round((r.score / r.answers.length) * 100) : 0;
+          r.passed = r.accuracy >= (st.settings.passThreshold || 60);
+          updateStreak(st);
+        });
+        var run = Store.get().activeRun;
+        if(run) Reviewer.computeAndStore(run);
+        Store.update(function(st){
+          if(!st.activeRun) return;
+          st.runs.push(st.activeRun);
+          st.activeRun = null;
+        });
+        Router.go('summary');
+      }
+      return { start:start, startReinforce:startReinforce, finish:finish, build:build, params:P };
+    })();
+
+    var Stats = (function(){
+      function dayKey(ts){ return U.todayStr(new Date(ts)); }
+      function runs(){ return Store.get().runs || []; }
+      function summary(){
+        var s = Store.get();
+        var rs = runs();
+        var totalMs = 0, answers = 0, correct = 0;
+        var days = {};
+        rs.forEach(function(r){
+          if(r.endedAt && r.startedAt) totalMs += Math.max(0, r.endedAt - r.startedAt);
+          (r.answers || []).forEach(function(a){ answers++; if(a.correct) correct++; });
+          if(r.endedAt) days[dayKey(r.endedAt)] = true;
+        });
+        return {
+          streak: s.streak.current || 0,
+          longest: s.streak.longest || 0,
+          totalMinutes: Math.round(totalMs / 60000),
+          runs: rs.length,
+          answers: answers,
+          accuracy: answers ? Math.round((correct / answers) * 100) : 0,
+          studyDays: Object.keys(days).length
+        };
+      }
+      function dailyMap(){
+        var map = {};
+        runs().forEach(function(r){
+          if(!r.endedAt) return;
+          var k = dayKey(r.endedAt);
+          if(!map[k]) map[k] = { minutes:0, answers:0, correct:0, runs:0 };
+          map[k].minutes += Math.max(0, (r.endedAt - r.startedAt) / 60000);
+          map[k].runs++;
+          (r.answers || []).forEach(function(a){ map[k].answers++; if(a.correct) map[k].correct++; });
+        });
+        return map;
+      }
+      function heatmap(days){
+        days = days || 84;
+        var map = dailyMap();
+        var today = U.parseDate(U.todayStr());
+        var out = [];
+        for(var i=days-1;i>=0;i--){
+          var d = U.addDays(today, -i);
+          var k = U.todayStr(d);
+          var m = map[k] || { minutes:0 };
+          var level = 0;
+          if(m.minutes >= 90) level = 4;
+          else if(m.minutes >= 60) level = 3;
+          else if(m.minutes >= 30) level = 2;
+          else if(m.minutes > 0) level = 1;
+          out.push({ key:k, date:d, minutes:Math.round(m.minutes), level:level });
+        }
+        return out;
+      }
+      function accuracySeries(limit){
+        limit = limit || 20;
+        var rs = runs().filter(function(r){ return r.endedAt && r.answers && r.answers.length; });
+        return rs.slice(-limit).map(function(r){
+          var c = 0;
+          r.answers.forEach(function(a){ if(a.correct) c++; });
+          return { accuracy: Math.round((c / r.answers.length) * 100), at: r.endedAt };
+        });
+      }
+      function byDiscipline(){
+        var s = Store.get();
+        var nodeDisc = {};
+        s.syllabus.forEach(function(n){ nodeDisc[n.id] = n.discipline || 'Outros'; });
+        var agg = {};
+        runs().forEach(function(r){
+          (r.answers || []).forEach(function(a){
+            var d = nodeDisc[a.syllabusId] || 'Outros';
+            if(!agg[d]) agg[d] = { total:0, correct:0 };
+            agg[d].total++;
+            if(a.correct) agg[d].correct++;
+          });
+        });
+        return Object.keys(agg).map(function(d){
+          return { discipline:d, total:agg[d].total, correct:agg[d].correct, pct: agg[d].total ? Math.round((agg[d].correct / agg[d].total) * 100) : 0 };
+        }).sort(function(a,b){ return b.total - a.total; });
+      }
+      function weakRanking(limit){
+        limit = limit || 6;
+        var s = Store.get();
+        var w = s.weakItems || {};
+        var names = {};
+        s.syllabus.forEach(function(n){ names[n.id] = n.name; });
+        Data.allQuestions().forEach(function(q){ names[q.id] = q.stem; });
+        return Object.keys(w).map(function(id){
+          return { id:id, kind:w[id].kind, score:w[id].score || 0, name: names[id] || id };
+        }).sort(function(a,b){ return b.score - a.score; }).slice(0, limit);
+      }
+      return { summary:summary, heatmap:heatmap, accuracySeries:accuracySeries, byDiscipline:byDiscipline, weakRanking:weakRanking, dailyMap:dailyMap };
+    })();
+
+    var toastTimer = null;
+    function toast(msg, ms){
+      var el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ el.classList.remove('show'); }, ms || 2400);
+    }
+
+    function downloadTemplate(){
+      var tpl = {
+        syllabus: [{ id:'tema-exemplo', name:'Tema de exemplo', parentId:'far', weight:5, order:99, discipline:'Farmácia' }],
+        flashcards: [{ id:'fc-exemplo-1', syllabusId:'far', front:'Pergunta?', back:'Resposta.' }],
+        questions: [{ id:'q-exemplo-1', syllabusId:'far', stem:'Enunciado?', options:['A','B','C','D'], answer:0, explanation:'Explicação.' }]
+      };
+      try{
+        var blob = new Blob([JSON.stringify(tpl, null, 2)], { type:'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = 'modelo-conteudo.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+        toast('Modelo JSON baixado.');
+      }catch(e){ toast('Não foi possível baixar o modelo.'); }
+    }
+
+    function applyTheme(){
+      var t = Store.get().settings.theme || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    }
+    function toggleTheme(){
+      Store.update(function(s){
+        s.settings = Object.assign({}, s.settings, { theme: s.settings.theme === 'dark' ? 'light' : 'dark' });
+      });
+      applyTheme();
+    }
+    function updateHeader(){
+      var el = document.getElementById('streak-count');
+      if(el) el.textContent = Store.get().streak.current;
+    }
+    function updateTabbar(){
+      var cur = Router.get();
+      document.querySelectorAll('#tabbar .tab').forEach(function(btn){
+        btn.classList.toggle('active', btn.dataset.route === cur);
+      });
+    }
+
+    function placeholder(title, sprint, desc){
+      return function(vp){
+        vp.innerHTML =
+          '<section class="view">' +
+            '<p class="eyebrow">Em construção</p>' +
+            '<h1 class="h1">' + title + '</h1>' +
+            '<div class="card">' +
+              '<p class="muted">' + desc + '</p>' +
+              '<span class="badge">Planejado para a ' + sprint + '</span>' +
+            '</div>' +
+          '</section>';
+      };
+    }
+
+    function renderRun(vp){
+      var s = Store.get();
+      var run = s.activeRun;
+      if(!run || run.status !== 'active'){
+        vp.innerHTML =
+          '<section class="view">' +
+            '<p class="eyebrow">Run</p>' +
+            '<h1 class="h1">Nenhuma run ativa</h1>' +
+            '<div class="card">' +
+              '<p class="muted">Inicie uma run para estudar flashcards e questões em ritmo de reels.</p>' +
+              '<button class="btn-primary" id="run-start" style="margin-top:14px">Estudar agora</button>' +
+            '</div>' +
+          '</section>';
+        vp.querySelector('#run-start').addEventListener('click', function(){ Engine.start(); });
+        return;
+      }
+
+      var cardMap = {}, qMap = {}, nodeMap = {};
+      Data.allFlashcards().forEach(function(c){ cardMap[c.id] = c; });
+      Data.allQuestions().forEach(function(q){ qMap[q.id] = q; });
+      s.syllabus.forEach(function(n){ nodeMap[n.id] = n; });
+
+      vp.innerHTML =
+        '<section class="view run-view">' +
+          '<div class="run-top">' +
+            '<button class="icon-btn" id="run-exit" aria-label="Encerrar run">' +
+              '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+            '</button>' +
+            '<div class="run-progress"><div id="run-progress-fill"></div></div>' +
+            '<span class="run-counter" id="run-counter">0/0</span>' +
+            '<span class="run-score-wrap"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.5 6 .9-4.4 4.3 1 6-5.3-2.8L6.7 19.7l1-6L3.3 9.4l6-.9z"/></svg><b id="run-score">0</b></span>' +
+          '</div>' +
+          '<div id="run-stage"></div>' +
+        '</section>';
+
+      var stage = vp.querySelector('#run-stage');
+      var fill = vp.querySelector('#run-progress-fill');
+      var counter = vp.querySelector('#run-counter');
+      var scoreEl = vp.querySelector('#run-score');
+      var revealed = false;
+      var locked = false;
+
+      function nodeName(sid){ var n = nodeMap[sid]; return n ? n.name : 'Conteúdo'; }
+
+      function chrome(){
+        var r = Store.get().activeRun;
+        if(!r) return;
+        var total = r.queue.length;
+        var pct = total ? Math.round((r.index / total) * 100) : 0;
+        fill.style.width = pct + '%';
+        counter.textContent = r.index + '/' + total;
+        scoreEl.textContent = r.score;
+      }
+
+      function record(kind, refId, syllabusId, correct){
+        Store.update(function(st){
+          var r = st.activeRun;
+          if(!r) return;
+          r.answers.push({ kind:kind, refId:refId, syllabusId:syllabusId, correct:!!correct, ts:Date.now() });
+          if(correct) r.score += 1;
+        });
+      }
+
+      function advance(){
+        Store.update(function(st){ if(st.activeRun) st.activeRun.index += 1; });
+        revealed = false;
+        locked = false;
+        paint();
+      }
+
+      function paint(){
+        var r = Store.get().activeRun;
+        if(!r) return;
+        if(r.index >= r.queue.length){ Engine.finish(); return; }
+        chrome();
+        var item = r.queue[r.index];
+        if(item.kind === 'card') paintCard(item); else paintQuestion(item);
+      }
+
+      function paintCard(item){
+        var card = cardMap[item.refId];
+        if(!card){ advance(); return; }
+        revealed = false;
+        stage.innerHTML =
+          '<div class="reel">' +
+            '<div class="reel-tag">Flashcard · <span>' + U.esc(nodeName(item.syllabusId)) + '</span></div>' +
+            '<div class="reel-q">' + U.esc(card.front) + '</div>' +
+            '<button class="btn-primary" id="reveal">Mostrar resposta</button>' +
+            '<div class="reel-a" id="card-back" hidden>' + U.esc(card.back) + '</div>' +
+            '<div class="card-controls" id="card-controls" hidden>' +
+              '<button class="btn-no" id="ans-no">Não sei</button>' +
+              '<button class="btn-yes" id="ans-yes">Sei</button>' +
+            '</div>' +
+            '<p class="swipe-hint" id="swipe-hint">Toque em mostrar · arraste para cima</p>' +
+          '</div>';
+        var back = stage.querySelector('#card-back');
+        var controls = stage.querySelector('#card-controls');
+        var revealBtn = stage.querySelector('#reveal');
+        var hint = stage.querySelector('#swipe-hint');
+        revealBtn.addEventListener('click', function(){
+          if(revealed) return;
+          revealed = true;
+          back.hidden = false;
+          controls.hidden = false;
+          revealBtn.hidden = true;
+          hint.textContent = 'Avalie: não sei ou sei';
+        });
+        stage.querySelector('#ans-no').addEventListener('click', function(){
+          if(locked) return; locked = true;
+          record('card', card.id, card.syllabusId, false);
+          advance();
+        });
+        stage.querySelector('#ans-yes').addEventListener('click', function(){
+          if(locked) return; locked = true;
+          record('card', card.id, card.syllabusId, true);
+          Audio.correct();
+          advance();
+        });
+      }
+
+      function paintQuestion(item){
+        var q = qMap[item.refId];
+        if(!q){ advance(); return; }
+        var letters = ['A','B','C','D','E','F'];
+        var optsHtml = q.options.map(function(t, i){
+          return '<button class="opt" data-i="' + i + '"><span class="opt-letter">' + letters[i] + '</span><span>' + U.esc(t) + '</span></button>';
+        }).join('');
+        stage.innerHTML =
+          '<div class="reel">' +
+            '<div class="reel-tag">Questão · <span>' + U.esc(nodeName(item.syllabusId)) + '</span></div>' +
+            '<div class="reel-q">' + U.esc(q.stem) + '</div>' +
+            '<div class="opts" id="opts">' + optsHtml + '</div>' +
+            '<div class="feedback" id="q-feedback" hidden>' +
+              '<p class="fb-title"></p>' +
+              '<p class="fb-exp"></p>' +
+              '<button class="btn-primary" id="q-next">Próxima</button>' +
+            '</div>' +
+          '</div>';
+        var answered = false;
+        var optEls = stage.querySelectorAll('.opt');
+        optEls.forEach(function(btn, idx){
+          btn.addEventListener('click', function(){
+            if(answered) return;
+            answered = true;
+            var correct = idx === q.answer;
+            record('question', q.id, q.syllabusId, correct);
+            optEls.forEach(function(b, i){
+              b.disabled = true;
+              if(i === q.answer) b.classList.add('correct');
+              else if(i === idx) b.classList.add('wrong');
+            });
+            var fb = stage.querySelector('#q-feedback');
+            fb.hidden = false;
+            fb.classList.add(correct ? 'ok' : 'bad');
+            fb.querySelector('.fb-title').textContent = correct ? 'Correto' : 'Incorreto';
+            fb.querySelector('.fb-exp').textContent = q.explanation || '';
+            if(correct) Audio.correct();
+            chrome();
+          });
+        });
+        stage.querySelector('#q-next').addEventListener('click', function(){
+          if(locked) return; locked = true;
+          advance();
+        });
+      }
+
+      function onKey(e){
+        var r = Store.get().activeRun;
+        if(!r) return;
+        var item = r.queue[r.index];
+        if(!item) return;
+        if(e.key === 'Escape'){ e.preventDefault(); Engine.finish(); return; }
+        if(item.kind === 'card'){
+          if(e.key === ' ' || e.key === 'ArrowDown'){
+            e.preventDefault();
+            if(!revealed){ var rb = stage.querySelector('#reveal'); if(rb) rb.click(); }
+            else { var yes = stage.querySelector('#ans-yes'); if(yes) yes.click(); }
+          }else if(revealed && (e.key === '1' || e.key === '2')){
+            e.preventDefault();
+            var b = stage.querySelector(e.key === '1' ? '#ans-no' : '#ans-yes');
+            if(b) b.click();
+          }
+        }else{
+          var fb = stage.querySelector('#q-feedback');
+          if(fb && !fb.hidden){
+            if(e.key === ' ' || e.key === 'ArrowDown' || e.key === 'Enter'){
+              e.preventDefault();
+              var nx = stage.querySelector('#q-next'); if(nx) nx.click();
+            }
+          }else{
+            var idx = parseInt(e.key, 10) - 1;
+            var opts = stage.querySelectorAll('.opt');
+            if(idx >= 0 && idx < opts.length){ e.preventDefault(); opts[idx].click(); }
+          }
+        }
+      }
+
+      var touchStartY = null;
+      stage.addEventListener('touchstart', function(e){
+        if(e.touches.length === 1) touchStartY = e.touches[0].clientY;
+      }, { passive:true });
+      stage.addEventListener('touchend', function(e){
+        if(touchStartY === null) return;
+        var endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : touchStartY;
+        var dy = touchStartY - endY;
+        touchStartY = null;
+        if(dy > 50){
+          var r = Store.get().activeRun; if(!r) return;
+          var item = r.queue[r.index]; if(!item || item.kind !== 'card') return;
+          if(!revealed){ var rb = stage.querySelector('#reveal'); if(rb) rb.click(); }
+          else { var yes = stage.querySelector('#ans-yes'); if(yes) yes.click(); }
+        }
+      }, { passive:true });
+
+      Router.onCleanup(function(){ document.removeEventListener('keydown', onKey); });
+      document.addEventListener('keydown', onKey);
+      paint();
+    }
+
+    function renderSummary(vp){
+      var s = Store.get();
+      var run = s.runs.length ? s.runs[s.runs.length-1] : null;
+      if(!run){
+        vp.innerHTML =
+          '<section class="view">' +
+            '<p class="eyebrow">Sumário</p>' +
+            '<h1 class="h1">Nenhuma run concluída</h1>' +
+            '<div class="card">' +
+              '<p class="muted">Conclua uma run para ver o sumário.</p>' +
+              '<button class="btn-primary" id="sum-start" style="margin-top:14px">Estudar agora</button>' +
+            '</div>' +
+          '</section>';
+        vp.querySelector('#sum-start').addEventListener('click', function(){ Engine.start(); });
+        return;
+      }
+
+      var total = run.answers.length;
+      var correct = 0;
+      var byNode = {};
+      run.answers.forEach(function(a){
+        if(a.correct) correct++;
+        if(!byNode[a.syllabusId]) byNode[a.syllabusId] = { total:0, correct:0 };
+        byNode[a.syllabusId].total++;
+        if(a.correct) byNode[a.syllabusId].correct++;
+      });
+      var acc = total ? Math.round((correct / total) * 100) : 0;
+      var durMin = Math.max(0, Math.round(((run.endedAt || Date.now()) - run.startedAt) / 60000));
+      var nodeName = {};
+      s.syllabus.forEach(function(n){ nodeName[n.id] = n.name; });
+
+      var rows = Object.keys(byNode).map(function(id){
+        var d = byNode[id];
+        var pct = d.total ? Math.round((d.correct / d.total) * 100) : 0;
+        var cls = pct >= 70 ? 'ok' : (pct >= 50 ? 'warn' : 'bad');
+        return '<li class="sum-row">' +
+          '<div class="plan-head"><span class="plan-name">' + U.esc(nodeName[id] || id) + '</span><span class="sum-pct ' + cls + '">' + pct + '%</span></div>' +
+          '<div class="plan-meta">' + d.correct + '/' + d.total + '</div>' +
+          '<div class="bar"><span class="' + cls + '" style="width:' + pct + '%"></span></div>' +
+        '</li>';
+      }).join('');
+
+      var threshold = s.settings.passThreshold || 60;
+      var passed = (typeof run.passed === 'boolean') ? run.passed : (acc >= threshold);
+      var passBadge = passed
+        ? '<span class="badge ok-badge">Meta batida</span>'
+        : '<span class="badge warn-badge">Abaixo de ' + threshold + '%</span>';
+
+      var phrase;
+      if(acc >= 80) phrase = 'Excelente ritmo. Pequenas runs diárias valem mais que maratonas.';
+      else if(acc >= 60) phrase = 'Bom desempenho. Amanhã comece pelos conteúdos mais fracos para consolidar.';
+      else phrase = 'Dia difícil não apaga o progresso. A próxima run já vem com reforço automático dos pontos fracos.';
+
+      var weak = s.weakItems || {};
+      var weakNodeNames = Object.keys(weak).filter(function(id){ return weak[id].kind === 'node'; })
+        .map(function(id){ return nodeName[id] || id; });
+      var weakQCount = Object.keys(weak).filter(function(id){ return weak[id].kind === 'question'; }).length;
+      var hasWeak = weakNodeNames.length > 0 || weakQCount > 0;
+      var weakText = [];
+      if(weakNodeNames.length) weakText.push(weakNodeNames.join(', '));
+      if(weakQCount) weakText.push(weakQCount + (weakQCount === 1 ? ' questão' : ' questões'));
+
+      var weakCard =
+        '<div class="card">' +
+          '<h2 class="h2">A reforçar na próxima run</h2>' +
+          (hasWeak
+            ? '<p class="muted">' + U.esc(weakText.join(' · ')) + '</p>' +
+              '<button class="btn-primary" id="sum-reinforce" style="margin-top:12px">Reforçar agora</button>'
+            : '<p class="muted">Nenhum item fraco pendente. Bom sinal — siga avançando no plano.</p>') +
+        '</div>';
+
+      var streakLine = 'Streak: ' + s.streak.current + (s.streak.current === 1 ? ' dia' : ' dias') + ' · XP: ' + (run.score * 10);
+
+      vp.innerHTML =
+        '<section class="view">' +
+          '<p class="eyebrow">Run concluída</p>' +
+          '<h1 class="h1">Seu sumário</h1>' +
+          '<div class="card">' +
+            '<div class="hero-stats">' +
+              '<div class="hstat"><span class="hnum">' + acc + '%</span><span class="hlabel">acerto</span></div>' +
+              '<div class="hstat"><span class="hnum">' + correct + '/' + total + '</span><span class="hlabel">acertos</span></div>' +
+              '<div class="hstat"><span class="hnum">' + durMin + '</span><span class="hlabel">min</span></div>' +
+            '</div>' +
+            passBadge +
+            '<p class="hint">' + U.esc(streakLine) + '</p>' +
+            '<button class="btn-primary" id="sum-new" style="margin-top:14px">Nova run</button>' +
+            '<button class="btn-ghost" id="sum-home">Voltar ao início</button>' +
+          '</div>' +
+          '<div class="card soft"><p class="muted">' + U.esc(phrase) + '</p></div>' +
+          '<div class="card"><h2 class="h2">Por conteúdo</h2><ul class="plan-list">' + (rows || '<li class="muted">Sem dados.</li>') + '</ul></div>' +
+          weakCard +
+        '</section>';
+
+      vp.querySelector('#sum-new').addEventListener('click', function(){ Engine.start(); });
+      vp.querySelector('#sum-home').addEventListener('click', function(){ Router.go('home'); });
+      var rb = vp.querySelector('#sum-reinforce');
+      if(rb) rb.addEventListener('click', function(){ Engine.startReinforce(); });
+    }
+
+    function renderStats(vp){
+      var sm = Stats.summary();
+      var days = Stats.heatmap(84);
+      var series = Stats.accuracySeries(20);
+      var discs = Stats.byDiscipline();
+      var weak = Stats.weakRanking(6);
+
+      var pad = days.length ? days[0].date.getDay() : 0;
+      var cells = '';
+      for(var i=0;i<pad;i++) cells += '<span class="hm-cell empty"></span>';
+      days.forEach(function(d){
+        cells += '<span class="hm-cell lvl' + d.level + '" title="' + U.fmtDate(d.date) + ' · ' + d.minutes + ' min"></span>';
+      });
+
+      var lineHtml;
+      if(series.length < 2){
+        lineHtml = '<p class="muted">Conclua mais runs para ver a evolução da taxa de acerto.</p>';
+      }else{
+        var W = 300, H = 90, pd = 6, n = series.length;
+        var pts = series.map(function(p, i){
+          var x = pd + (i / (n - 1)) * (W - 2 * pd);
+          var y = H - pd - (p.accuracy / 100) * (H - 2 * pd);
+          return x.toFixed(1) + ',' + y.toFixed(1);
+        }).join(' ');
+        lineHtml =
+          '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart-line" preserveAspectRatio="none">' +
+            '<line x1="0" y1="' + (H - pd) + '" x2="' + W + '" y2="' + (H - pd) + '" style="stroke:var(--border);stroke-width:1"/>' +
+            '<polyline points="' + pts + '" style="fill:none;stroke:var(--accent);stroke-width:2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
+          '</svg>' +
+          '<p class="hint">Última run: ' + series[series.length-1].accuracy + '% · ' + n + ' runs</p>';
+      }
+
+      var discChart = (function(){
+        if(!discs.length) return '<p class="muted">Sem respostas registradas ainda.</p>';
+        var rowH = 26, W = 340, H = discs.length * rowH + 6;
+        var bars = discs.map(function(d, i){
+          var y = i * rowH + 6;
+          var w = Math.max(0, (d.pct / 100) * 190);
+          var color = d.pct >= 70 ? 'var(--ok)' : (d.pct >= 50 ? 'var(--warn)' : 'var(--danger)');
+          var label = d.discipline.length > 14 ? d.discipline.slice(0, 13) + '…' : d.discipline;
+          return '<text x="0" y="' + (y + 9) + '" style="fill:var(--muted);font-size:10.5px">' + U.esc(label) + '</text>' +
+            '<rect x="100" y="' + y + '" width="190" height="10" rx="5" style="fill:var(--surface-2)"/>' +
+            '<rect x="100" y="' + y + '" width="' + w.toFixed(1) + '" height="10" rx="5" style="fill:' + color + '"/>' +
+            '<text x="294" y="' + (y + 9) + '" style="fill:var(--text);font-size:10.5px;font-weight:700">' + d.pct + '%</text>';
+        }).join('');
+        return '<svg viewBox="0 0 ' + W + ' ' + H + '" class="chart-bars" preserveAspectRatio="xMinYMin meet">' + bars + '</svg>';
+      })();
+
+      var weakRows = weak.length ? weak.map(function(w){
+        return '<li class="sum-row">' +
+          '<div class="plan-head"><span class="plan-name">' + U.esc(w.name) + '</span><span class="weight">' + (w.kind === 'question' ? 'questão' : 'conteúdo') + '</span></div>' +
+          '<div class="plan-meta">peso de reforço ' + w.score.toFixed(1) + '</div>' +
+        '</li>';
+      }).join('') : '<li class="muted">Nenhum item fraco pendente.</li>';
+
+      vp.innerHTML =
+        '<section class="view">' +
+          '<p class="eyebrow">Progresso</p>' +
+          '<h1 class="h1">Seu progresso</h1>' +
+          '<div class="card">' +
+            '<div class="hero-stats">' +
+              '<div class="hstat"><span class="hnum">' + sm.streak + '</span><span class="hlabel">streak</span></div>' +
+              '<div class="hstat"><span class="hnum">' + sm.longest + '</span><span class="hlabel">recorde</span></div>' +
+              '<div class="hstat"><span class="hnum">' + (sm.totalMinutes / 60).toFixed(1) + 'h</span><span class="hlabel">estudadas</span></div>' +
+            '</div>' +
+            '<p class="hint">' + sm.runs + ' runs · ' + sm.answers + ' respostas · ' + sm.accuracy + '% acerto geral · ' + sm.studyDays + ' dias estudados</p>' +
+          '</div>' +
+          '<div class="card">' +
+            '<h2 class="h2">Constância (12 semanas)</h2>' +
+            '<div class="heatmap">' + cells + '</div>' +
+            '<div class="hm-legend"><span>menos</span><span class="hm-cell lvl0"></span><span class="hm-cell lvl1"></span><span class="hm-cell lvl2"></span><span class="hm-cell lvl3"></span><span class="hm-cell lvl4"></span><span>mais</span></div>' +
+          '</div>' +
+          '<div class="card">' +
+            '<h2 class="h2">Taxa de acerto</h2>' +
+            lineHtml +
+          '</div>' +
+          '<div class="card"><h2 class="h2">Por disciplina</h2>' + discChart + '</div>' +
+          '<div class="card"><h2 class="h2">Conteúdos fracos</h2><ul class="plan-list">' + weakRows + '</ul></div>' +
+        '</section>';
+    }
+
+    function renderSettings(vp){
+      var s = Store.get();
+      var settings = s.settings || {sound: true, theme: 'dark', cardSpeed: 1, questionCountPerBlock: 4, passThreshold: 60};
+      var theme = settings.theme;
+      vp.innerHTML =
+        '<section class="view">' +
+          '<p class="eyebrow">Ajustes</p>' +
+          '<h1 class="h1">Configurações</h1>' +
+          '<div class="card">' +
+            '<label class="field"><span>Tema</span>' +
+              '<select id="theme" aria-label="Tema do app">' +
+                '<option value="dark" ' + (theme === 'dark' ? 'selected' : '') + '>Escuro</option>' +
+                '<option value="light" ' + (theme === 'light' ? 'selected' : '') + '>Claro</option>' +
+              '</select>' +
+            '</label>' +
+            '<label class="field"><span>Tamanho do texto</span>' +
+              '<select id="font-size" aria-label="Tamanho da fonte">' +
+                '<option value="14" ' + (settings.cardSpeed === 1 ? 'selected' : '') + '>Padrão (14px)</option>' +
+                '<option value="16" ' + (settings.cardSpeed === 2 ? 'selected' : '') + '>16px</option>' +
+                '<option value="18" ' + (settings.cardSpeed === 3 ? 'selected' : '') + '>18px</option>' +
+              '</select>' +
+            '</label>' +
+            '<label class="field"><span>Velocidade de cards</span>' +
+              '<select id="card-speed" aria-label="Velocidade dos cards">' +
+                '<option value="1" ' + (settings.cardSpeed === 1 ? 'selected' : '') + '>Normal</option>' +
+                '<option value="2" ' + (settings.cardSpeed === 2 ? 'selected' : '') + '>Rápida</option>' +
+                '<option value="3" ' + (settings.cardSpeed === 3 ? 'selected' : '') + '>Lenta</option>' +
+              '</select>' +
+            '</label>' +
+            '<label class="field"><span>Questões por bloco</span>' +
+              '<select id="question-count" aria-label="Questões por bloco">' +
+                '<option value="2" ' + (settings.questionCountPerBlock === 2 ? 'selected' : '') + '>2</option>' +
+                '<option value="4" ' + (settings.questionCountPerBlock === 4 ? 'selected' : '') + '>4</option>' +
+                '<option value="6" ' + (settings.questionCountPerBlock === 6 ? 'selected' : '') + '>6</option>' +
+              '</select>' +
+            '</label>' +
+            '<label class="field"><span>Pass threshold</span>' +
+              '<input type="number" id="pass-threshold" min="50" max="95" aria-label="Nota mínima para aprovação" value="' + settings.passThreshold + '">' +
+            '</label>' +
+            '<label class="field"><span>Som</span>' +
+              '<input type="checkbox" id="sound" ' + (settings.sound ? 'checked' : '') + ' aria-label="Liga/desliga sons">' +
+            '</label>' +
+            '<button class="btn-primary" id="settings-save" style="margin-top:12px; width:100%">Salvar</button>' +
+          '</div>' +
+        '</section>';
+      document.getElementById('settings-save').addEventListener('click', function(){
+        var ns = {
+          sound: document.getElementById('sound').checked,
+          theme: document.getElementById('theme').value,
+          cardSpeed: parseInt(document.getElementById('card-speed').value, 10),
+          questionCountPerBlock: parseInt(document.getElementById('question-count').value, 10),
+          passThreshold: parseInt(document.getElementById('pass-threshold').value, 10)
+        };
+        Store.update(function(st){ st.settings = ns; });
+        toast('Configurações salvas.');
+        Router.go('plan');
+      });
+    }
+
+    var Views = {
+      home: function(vp){
+        var s = Store.get();
+        var name = (s.profile && s.profile.name) ? ', ' + s.profile.name : '';
+        var hasActive = !!(s.activeRun && s.activeRun.status === 'active');
+        var persistent = Persistence.isPersistent();
+        vp.innerHTML =
+          '<section class="view view-home">' +
+            '<p class="eyebrow">Sua próxima run</p>' +
+            '<h1 class="greeting">' + U.greeting() + name + '</h1>' +
+            '<p class="sub">Um toque para começar. Sem menus, sem atrito.</p>' +
+            (!persistent ? '<div class="banner warning" id="persist-banner">Suas alterações não serão salvas automaticamente. <button class="btn-small" id="export-btn">Exportar</button> <button class="btn-small" id="import-btn">Importar</button></div>' : '') +
+            '<div class="card">' +
+              '<div class="hero-stats">' +
+                '<div class="hstat"><span class="hnum">' + s.streak.current + '</span><span class="hlabel">streak</span></div>' +
+                '<div class="hstat"><span class="hnum">' + Data.minutesToday() + '</span><span class="hlabel">min hoje</span></div>' +
+                '<div class="hstat"><span class="hnum">' + s.runs.length + '</span><span class="hlabel">runs</span></div>' +
+              '</div>' +
+              '<button class="btn-primary" id="start-run">' + (hasActive ? 'Retomar run' : 'Estudar agora') + '</button>' +
+              '<p class="hint">Meta diária: ' + U.fmtDuration(s.profile.dailyGoalMinutes) + '</p>' +
+            '</div>' +
+            '<div class="card soft">' +
+              '<h2 class="h2">Como funciona</h2>' +
+              '<ul class="steps">' +
+                '<li><b>1.</b> Flashcards em ritmo de reels.</li>' +
+                '<li><b>2.</b> Bloco de questões a cada 4 cards.</li>' +
+                '<li><b>3.</b> Sumário reforça o que você errou.</li>' +
+              '</ul>' +
+            '</div>' +
+          '</section>';
+
+        var btn = vp.querySelector('#start-run');
+        btn.addEventListener('click', function(){
+          if(hasActive) Router.go('run'); else Engine.start();
+        });
+      },
+      run: renderRun,
+      summary: renderSummary,
+      plan: function(vp){
+        var s = Store.get();
+        var sch = Planner.schedule();
+        var rpd = Planner.runsPerDay();
+
+        var groups = {};
+        s.syllabus.slice().sort(function(a,b){ return (a.order || 0) - (b.order || 0); }).forEach(function(n){
+          var g = n.discipline || 'Outros';
+          if(!groups[g]) groups[g] = [];
+          groups[g].push(n);
+        });
+        var totalCards = Data.allFlashcards().length;
+        var totalQuestions = Data.allQuestions().length;
+        var planMap = {};
+        Planner.disciplinePlan().forEach(function(x){ planMap[x.node.id] = x; });
+
+        var html =
+          '<section class="view">' +
+            '<p class="eyebrow">Planejamento global</p>' +
+            '<h1 class="h1">Plano de estudo</h1>' +
+            '<p class="sub">' + s.syllabus.length + ' conteúdos · ' + totalCards + ' flashcards · ' + totalQuestions + ' questões</p>' +
+            '<div class="card soft">' +
+              '<p class="muted">Conteúdo de estudo autoral e não oficial. Use Estratégia Concursos e Gran Cursos para a teoria e amplie o banco por importação JSON.</p>' +
+            '</div>';
+
+        html +=
+          '<div class="card">' +
+            '<h2 class="h2">Configuração</h2>' +
+            '<label class="field"><span>Data da prova</span><input type="date" id="cfg-exam" value="' + (s.profile.examDate || '') + '"></label>' +
+            '<label class="field"><span>Meta diária (min)</span><input type="number" id="cfg-goal" min="15" step="15" value="' + (s.profile.dailyGoalMinutes || 120) + '"></label>' +
+            '<label class="field"><span>Início do plano</span><input type="date" id="cfg-start" value="' + (s.profile.startDate || U.todayStr()) + '"></label>' +
+            '<button class="btn-primary" id="cfg-save" style="margin-top:12px">Salvar</button>' +
+            '<p class="hint">' + U.fmtDuration(s.profile.dailyGoalMinutes || 120) + '/dia ≈ ' + rpd + ' run(s)/dia</p>' +
+          '</div>';
+
+        if(sch.configured){
+          html +=
+            '<div class="card">' +
+              '<h2 class="h2">Ritmo do plano</h2>' +
+              '<div class="hero-stats">' +
+                '<div class="hstat"><span class="hnum">' + sch.remainDays + '</span><span class="hlabel">dias p/ prova</span></div>' +
+                '<div class="hstat"><span class="hnum">' + sch.requiredPerWeek + '</span><span class="hlabel">itens/semana</span></div>' +
+                '<div class="hstat"><span class="hnum">' + sch.progressPct + '%</span><span class="hlabel">coberto</span></div>' +
+              '</div>' +
+              '<span class="badge ' + (sch.behind ? 'warn-badge' : 'ok-badge') + '">' + (sch.behind ? 'Ritmo atrasado' : 'Em dia') + '</span>' +
+              '<p class="hint">Estudado ' + sch.studied + ' / esperado ~' + sch.expected + ' · total ' + sch.total + ' itens · prova ' + U.fmtDate(sch.exam) + '</p>' +
+              '<div class="week-dist">' + Planner.weeklyDistribution().map(function(d){
+                return '<span class="day-chip' + (d.active ? ' on' : '') + '">' + d.label + '<b>' + (d.active ? d.runs + ' run' : 'livre') + '</b></span>';
+              }).join('') + '</div>' +
+            '</div>';
+        }
+
+        Object.keys(groups).forEach(function(g){
+          html += '<div class="card"><h2 class="h2">' + g + '</h2><ul class="plan-list">';
+          groups[g].forEach(function(n){
+            var info = planMap[n.id] || { pct:0, target:null };
+            html +=
+              '<li class="plan-item">' +
+                '<div class="plan-head">' +
+                  '<span class="plan-name">' + n.name + '</span>' +
+                  '<span class="weight">peso ' + (n.weight || 0) + '</span>' +
+                '</div>' +
+                '<div class="plan-meta">' + Data.countFlashcards(n.id) + ' cards · ' + Data.countQuestions(n.id) + ' questões' +
+                  (info.target ? ' · meta ' + U.fmtDate(info.target) : '') + '</div>' +
+                '<div class="bar"><span style="width:' + info.pct + '%"></span></div>' +
+              '</li>';
+          });
+          html += '</ul></div>';
+        });
+
+        html +=
+          '<div class="card">' +
+            '<h2 class="h2">Ampliar conteúdo</h2>' +
+            '<p class="muted">Importe flashcards e questões em JSON. O conteúdo é validado antes de entrar.</p>' +
+            '<button class="btn-primary" id="import-btn" style="margin-top:12px">Importar conteúdo (JSON)</button>' +
+            '<button class="btn-ghost" id="template-btn">Baixar modelo JSON</button>' +
+            '<input type="file" id="import-file" accept=".json,application/json" hidden>' +
+          '</div>' +
+        '</section>';
+
+        vp.innerHTML = html;
+
+        vp.querySelector('#cfg-save').addEventListener('click', function(){
+          var exam = vp.querySelector('#cfg-exam').value;
+          var goal = parseInt(vp.querySelector('#cfg-goal').value, 10);
+          var start = vp.querySelector('#cfg-start').value;
+          Store.update(function(st){
+            st.profile = Object.assign({}, st.profile, {
+              examDate: exam || null,
+              dailyGoalMinutes: isNaN(goal) ? 120 : Math.max(15, goal),
+              startDate: start || U.todayStr()
+            });
+          });
+          toast('Plano atualizado.');
+          Router.go('plan');
+        });
+
+        var fileInput = vp.querySelector('#import-file');
+        vp.querySelector('#import-btn').addEventListener('click', function(){ fileInput.click(); });
+        vp.querySelector('#template-btn').addEventListener('click', function(){ downloadTemplate(); });
+        fileInput.addEventListener('change', function(){
+          var file = fileInput.files && fileInput.files[0];
+          if(!file) return;
+          var reader = new FileReader();
+          reader.onload = function(){
+            var obj;
+            try{ obj = JSON.parse(reader.result); }
+            catch(e){ toast('JSON inválido: ' + e.message); fileInput.value = ''; return; }
+            var res = Data.importContent(obj);
+            if(!res.ok){
+              toast('Importação recusada: ' + res.errors[0] + (res.errors.length > 1 ? ' (+' + (res.errors.length - 1) + ')' : ''));
+            }else{
+              toast('Importado: ' + res.added.flashcards + ' cards, ' + res.added.questions + ' questões, ' + res.added.syllabus + ' conteúdos.');
+              Router.go('plan');
+            }
+            fileInput.value = '';
+          };
+          reader.onerror = function(){ toast('Falha ao ler o arquivo.'); };
+          reader.readAsText(file);
+        });
+      },
+      stats: renderStats,
+      review: placeholder('Revisão', 'Sprint 7', 'Fila de revisão espaçada (SRS) e reforços.'),
+      coach: placeholder('Coach', 'Sprint 7', 'Rotina, janela de foco e regra dos 5 minutos.'),
+      settings: renderSettings,
+    };
+
+    function registerViews(){
+      Router.register('home', Views.home);
+      Router.register('run', Views.run);
+      Router.register('summary', Views.summary);
+      Router.register('plan', Views.plan);
+      Router.register('stats', Views.stats);
+      Router.register('review', Views.review);
+      Router.register('coach', Views.coach);
+      Router.register('settings', Views.settings);
+    }
+
+    function bindTabbar(){
+      document.querySelectorAll('#tabbar .tab').forEach(function(btn){
+        btn.addEventListener('click', function(){ Router.go(btn.dataset.route); });
+      });
+    }
+
+    function init(){
+      var backend = Persistence.init();
+      Store.init();
+      if(!Store.get().syllabus.length){
+        Store.set({ syllabus: SEED.syllabus.map(function(n){ return Object.assign({}, n); }) });
+      }
+      applyTheme();
+      registerViews();
+      bindTabbar();
+      window.addEventListener('beforeunload', function(){ Persistence.save(Store.get()); });
+      document.addEventListener('visibilitychange', function(){ if(document.hidden) Persistence.save(Store.get()); });
+      document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+      Router.go('home');
+      if(backend === 'memory'){
+        setTimeout(function(){ toast('Sessão não será salva (armazenamento indisponível).'); }, 700);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  })();
+  </script>
+</body>
+</html>
