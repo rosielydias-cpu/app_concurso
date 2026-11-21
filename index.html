@@ -4435,6 +4435,8 @@ questions: [
     function bindCloud(vp){
       var status = vp.querySelector('#cloud-status');
       function setStatus(msg){ if(status) status.textContent = msg || cloudStatusText(); }
+      // Só volta a Ajustes se a pessoa ainda estiver lá (não interrompe uma run iniciada nesse meio-tempo).
+      function backToSettings(){ if(Router.get() === 'settings') Router.go('settings'); }
       function busy(btn, on, label){ if(!btn) return; btn.disabled = on; if(label) btn.textContent = label; }
 
       var saveBtn = vp.querySelector('#cloud-save');
@@ -4455,7 +4457,7 @@ questions: [
         }).catch(function(e){
           Cloud.setCfg({ lastError:e.message });
           toast('Não conectou: ' + e.message);
-        }).then(function(){ Router.go('settings'); });
+        }).then(function(){ backToSettings(); });
       });
 
       var syncBtn = vp.querySelector('#cloud-sync');
@@ -4465,7 +4467,7 @@ questions: [
           return Cloud.pushNow();
         }).then(function(){
           toast(Cloud.cfg().lastError ? 'Erro: ' + Cloud.cfg().lastError : 'Sincronizado.');
-          Router.go('settings');
+          backToSettings();
         });
       });
 
@@ -4477,7 +4479,7 @@ questions: [
           var n = r.contagem || {};
           toast('Planilha preenchida: ' + n.materias + ' matérias, ' + n.cards + ' cards e ' + n.questoes + ' perguntas.');
           return cloudStartup();
-        }).then(function(){ Router.go('settings'); }).catch(function(e){
+        }).then(function(){ backToSettings(); }).catch(function(e){
           if(e.code === 'NOT_EMPTY'){
             busy(seedBtn, false, 'Enviar conteúdo do app para a planilha');
             if(box){ box.hidden = false; seedBtn.hidden = true; }
@@ -4485,7 +4487,7 @@ questions: [
           }
           Cloud.setCfg({ lastError:e.message });
           toast('Não foi possível enviar: ' + e.message);
-          Router.go('settings');
+          backToSettings();
         });
       }
       if(seedBtn) seedBtn.addEventListener('click', function(){ doSeed(false); });
